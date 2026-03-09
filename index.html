@@ -165,9 +165,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 <!-- WELCOME -->
 <div id="screen-welcome" class="screen active">
   <div class="wi">
-    <div class="wb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>GrowControl</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:28px">
+      <div class="wb" style="margin-bottom:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>GrowControl</div>
+      <button class="btn btn-g" style="font-size:11px;padding:5px 10px;display:flex;align-items:center;gap:5px" onclick="showTokenModal()" title="Configurar token GitHub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>GitHub</button>
+    </div>
     <h1 class="wt">Gestió de<br><strong>cultius</strong></h1>
-    <p class="ws">Selecciona una secció per continuar.</p>
+    <p class="ws" style="margin-bottom:44px">Selecciona una secció per continuar.</p>
     <div class="env-cards">
       <div class="ec indoor" onclick="enterEnv('indoor')">
         <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -311,7 +314,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 <div class="tc" id="toasts"></div>
 <script>
 // CONFIG
-const GH_TOKEN='POSA_EL_TEU_TOKEN_AQUI';
+let GH_TOKEN=localStorage.getItem('gc_token')||'';
 const GH_USER='ORSINISTUDIO';
 const GH_REPO='GrowControl';
 const GH_API=`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/data.json`;
@@ -330,6 +333,7 @@ let ghSha=null,saving=false,curEnv='indoor',openPId=null,activeWeek=null,photoCt
 
 // GITHUB
 async function loadGH(){
+  if(!GH_TOKEN){showTokenModal();return;}
   showSync('Carregant...');
   try{
     const r=await fetch(GH_API,{headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});
@@ -623,7 +627,7 @@ async function delPhoto(pid,phid){
   if(!confirm('Eliminar foto?'))return;
   const p=S.plants.find(x=>x.id===pid);if(!p||!p.photos)return;
   const ph=p.photos.find(x=>x.id===phid);if(!ph)return;
-  try{const gr=await fetch(`https://api.github.com/repos/${ORSINISTUDIO}/${GrowControl}/contents/${ph.ghPath}`,{headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){const fi=await gr.json();await fetch(`https://api.github.com/repos/${ORSINISTUDIO}/${GrowControl}/contents/${ph.ghPath}`,{method:'DELETE',headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:'Delete photo',sha:fi.sha})});}}catch(e){}
+  try{const gr=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${ph.ghPath}`,{headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){const fi=await gr.json();await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${ph.ghPath}`,{method:'DELETE',headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:'Delete photo',sha:fi.sha})});}}catch(e){}
   p.photos=p.photos.filter(x=>x.id!==phid);await save();openPlant(pid);toast('Foto eliminada');
 }
 function rdB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f);});}
@@ -1204,5 +1208,50 @@ document.addEventListener('keydown',e=>{
 
 (async()=>{await loadGH();rebuildGC();updateCounts();})();
 </script>
+
+<!-- TOKEN MODAL -->
+<div class="mo" id="modal-token" style="z-index:500">
+  <div class="md">
+    <div class="mh"><div class="mt">Configura GrowControl</div></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.6">Per sincronitzar les dades amb GitHub necessites un <strong>Personal Access Token</strong>. Es guarda només al teu navegador, mai al codi.</p>
+      <div class="fld">
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+      </div>
+      <p style="font-size:11px;color:var(--tx3);line-height:1.5">
+        Crea'l a <strong>GitHub → Settings → Developer settings → Personal access tokens → Fine-grained</strong><br>
+        Permís necessari: <strong>Contents</strong> (read & write) del repo GrowControl.
+      </p>
+    </div>
+    <div class="mf">
+      <button class="btn btn-p" onclick="saveToken()">Guardar i connectar</button>
+    </div>
+  </div>
+</div>
+<script>function showTokenModal(){
+  document.getElementById('modal-token').classList.add('open');
+  setTimeout(()=>document.getElementById('token-input').focus(),80);
+}
+async function saveToken(){
+  const t=document.getElementById('token-input').value.trim();
+  if(!t){toast('Cal introduir el token');return;}
+  // Quick validation
+  showSync('Verificant token...');
+  try{
+    const r=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}`,{headers:{'Authorization':`token ${t}`,'Accept':'application/vnd.github.v3+json'}});
+    if(r.status===401||r.status===403){toast('Token invàlid o sense permisos');hideSync();return;}
+    if(r.status===404){toast('Repo no trobat. Comprova que existeix GrowControl');hideSync();return;}
+  }catch(e){toast('Error de connexió');hideSync();return;}
+  localStorage.setItem('gc_token',t);
+  GH_TOKEN=t;
+  closeModal('modal-token');
+  loadGH().then(()=>{rebuildGC();updateCounts();});
+}
+function clearToken(){
+  localStorage.removeItem('gc_token');
+  GH_TOKEN='';
+  toast('Token eliminat. Recarrega la pàgina.');
+}</script>
 </body>
 </html>
