@@ -651,9 +651,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 10,
+      "name": "AMNESIA HAZE",
+      "breeder": "THE GREEN BRAND",
+      "type": "feminitzada",
+      "florDays": 80,
+      "stock": 2,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 10,
+  "nextSeedId": 11,
   "pcLots": [],
   "nextPCId": 1
 }
