@@ -573,9 +573,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 4,
+      "name": "AUTO SOMANGO XXL",
+      "breeder": "THE GREEN BRAND",
+      "type": "feminitzada",
+      "florDays": 75,
+      "stock": 1,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 4,
+  "nextSeedId": 5,
   "pcLots": [],
   "nextPCId": 1
 }
