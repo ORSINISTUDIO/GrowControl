@@ -1,0 +1,28 @@
+{
+  "plants": [
+    {
+      "id": 1,
+      "env": "indoor",
+      "name": "HC07",
+      "strain": "HELLCAT",
+      "phase": "veg",
+      "phaseStart": "2025-12-21",
+      "notes": "",
+      "florDays": null,
+      "health": "bo",
+      "log": [],
+      "photos": [],
+      "substrate": "",
+      "potSize": "",
+      "ph": "",
+      "ec": "",
+      "temp": "",
+      "hum": ""
+    }
+  ],
+  "nextId": 2,
+  "seeds": [],
+  "nextSeedId": 1,
+  "pcLots": [],
+  "nextPCId": 1
+}
