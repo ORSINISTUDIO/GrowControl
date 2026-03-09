@@ -534,8 +534,22 @@
     }
   ],
   "nextId": 29,
-  "seeds": [],
-  "nextSeedId": 1,
+  "seeds": [
+    {
+      "id": 1,
+      "name": "WHITE WIDOW",
+      "breeder": "EUROGROW",
+      "type": "feminitzada",
+      "florDays": 60,
+      "stock": 1,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
+    }
+  ],
+  "nextSeedId": 2,
   "pcLots": [],
   "nextPCId": 1
 }
