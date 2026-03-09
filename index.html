@@ -312,6 +312,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 </div>
 <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
 <div class="tc" id="toasts"></div>
+
+<!-- TOKEN MODAL -->
+<div class="mo" id="modal-token" style="z-index:500">
+  <div class="md">
+    <div class="mh"><div class="mt">Configura GrowControl</div></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.6">Per sincronitzar les dades amb GitHub necessites un <strong>Personal Access Token</strong>. Es guarda només al teu navegador, mai al codi.</p>
+      <div class="fld">
+        <label>GitHub Personal Access Token</label>
+        <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+      </div>
+      <p style="font-size:11px;color:var(--tx3);line-height:1.5">
+        Crea'l a <strong>GitHub → Settings → Developer settings → Personal access tokens → Fine-grained</strong><br>
+        Permís necessari: <strong>Contents</strong> (read & write) del repo GrowControl.
+      </p>
+    </div>
+    <div class="mf" style="justify-content:space-between">
+      <button class="btn btn-d" onclick="clearToken()" id="btn-clear-token" style="display:none">Eliminar token</button>
+      <button class="btn btn-p" onclick="saveToken()">Guardar i connectar</button>
+    </div>
+  </div>
+</div>
 <script>
 // CONFIG
 let GH_TOKEN=localStorage.getItem('gc_token')||'';
@@ -1255,7 +1277,7 @@ function clearToken(){
   setTimeout(()=>location.reload(),1000);
 }
 
-(async()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
   if(!localStorage.getItem('gc_token')){
     showTokenModal();
   } else {
@@ -1264,29 +1286,7 @@ function clearToken(){
     rebuildGC();
     updateCounts();
   }
-})();
+});
 </script>
-
-<!-- TOKEN MODAL -->
-<div class="mo" id="modal-token" style="z-index:500">
-  <div class="md">
-    <div class="mh"><div class="mt">Configura GrowControl</div></div>
-    <div class="mb">
-      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;line-height:1.6">Per sincronitzar les dades amb GitHub necessites un <strong>Personal Access Token</strong>. Es guarda només al teu navegador, mai al codi.</p>
-      <div class="fld">
-        <label>GitHub Personal Access Token</label>
-        <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
-      </div>
-      <p style="font-size:11px;color:var(--tx3);line-height:1.5">
-        Crea'l a <strong>GitHub → Settings → Developer settings → Personal access tokens → Fine-grained</strong><br>
-        Permís necessari: <strong>Contents</strong> (read & write) del repo GrowControl.
-      </p>
-    </div>
-    <div class="mf" style="justify-content:space-between">
-      <button class="btn btn-d" onclick="clearToken()" id="btn-clear-token" style="display:none">Eliminar token</button>
-      <button class="btn btn-p" onclick="saveToken()">Guardar i connectar</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
