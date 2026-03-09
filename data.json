@@ -586,9 +586,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 5,
+      "name": "ORIGINAL GLUEBERRY XXL AUTO",
+      "breeder": "THE GREEN BRAND",
+      "type": "feminitzada",
+      "florDays": 65,
+      "stock": 1,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 5,
+  "nextSeedId": 6,
   "pcLots": [],
   "nextPCId": 1
 }
