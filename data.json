@@ -664,9 +664,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 11,
+      "name": "BLUE GELATO",
+      "breeder": "?",
+      "type": "feminitzada",
+      "florDays": 70,
+      "stock": 2,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 11,
+  "nextSeedId": 12,
   "pcLots": [],
   "nextPCId": 1
 }
