@@ -560,9 +560,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 3,
+      "name": "MADARIN COOKIES",
+      "breeder": "EUROGROW",
+      "type": "feminitzada",
+      "florDays": 68,
+      "stock": 3,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 3,
+  "nextSeedId": 4,
   "pcLots": [],
   "nextPCId": 1
 }
