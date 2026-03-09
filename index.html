@@ -1250,8 +1250,8 @@ async function saveToken(){
   if(!t){toast('Cal introduir el token');return;}
   showSync('Verificant token...');
   try{
-    const r=await fetch(\`https://api.github.com/repos/\${GH_USER}/\${GH_REPO}\`,{
-      headers:{'Authorization':\`token \${t}\`,'Accept':'application/vnd.github.v3+json'}
+    const r=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}`,{
+      headers:{'Authorization':`token ${t}`,'Accept':'application/vnd.github.v3+json'}
     });
     if(r.status===401||r.status===403){
       toast('Token invàlid o sense permisos al repo');hideSync();return;
@@ -1290,3 +1290,4 @@ document.addEventListener('DOMContentLoaded',async()=>{
 </script>
 </body>
 </html>
+
