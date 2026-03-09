@@ -1206,7 +1206,65 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-(async()=>{await loadGH();rebuildGC();updateCounts();})();
+
+// ============================================================
+// TOKEN MANAGEMENT
+// ============================================================
+function showTokenModal(){
+  const existing=localStorage.getItem('gc_token')||'';
+  const inp=document.getElementById('token-input');
+  const btnClear=document.getElementById('btn-clear-token');
+  if(inp)inp.value='';
+  if(inp)inp.placeholder=existing?'••••••••••••••• (token guardat)':'ghp_xxxxxxxxxxxx';
+  if(btnClear)btnClear.style.display=existing?'inline-flex':'none';
+  document.getElementById('modal-token').classList.add('open');
+  setTimeout(()=>{if(inp)inp.focus();},80);
+}
+
+async function saveToken(){
+  let t=document.getElementById('token-input').value.trim();
+  // If user left placeholder text, keep existing
+  if(t.startsWith('(token guardat'))t=localStorage.getItem('gc_token')||'';
+  if(!t){toast('Cal introduir el token');return;}
+  showSync('Verificant token...');
+  try{
+    const r=await fetch(\`https://api.github.com/repos/\${GH_USER}/\${GH_REPO}\`,{
+      headers:{'Authorization':\`token \${t}\`,'Accept':'application/vnd.github.v3+json'}
+    });
+    if(r.status===401||r.status===403){
+      toast('Token invàlid o sense permisos al repo');hideSync();return;
+    }
+    if(r.status===404){
+      toast('Repo no trobat. Comprova que existeix GrowControl');hideSync();return;
+    }
+  }catch(e){toast('Error de connexió: '+e.message);hideSync();return;}
+  localStorage.setItem('gc_token',t);
+  GH_TOKEN=t;
+  closeModal('modal-token');
+  hideSync();
+  await loadGH();
+  rebuildGC();
+  updateCounts();
+}
+
+function clearToken(){
+  if(!confirm('Eliminar el token guardat?'))return;
+  localStorage.removeItem('gc_token');
+  GH_TOKEN='';
+  toast('Token eliminat');
+  setTimeout(()=>location.reload(),1000);
+}
+
+(async()=>{
+  if(!localStorage.getItem('gc_token')){
+    showTokenModal();
+  } else {
+    GH_TOKEN=localStorage.getItem('gc_token');
+    await loadGH();
+    rebuildGC();
+    updateCounts();
+  }
+})();
 </script>
 
 <!-- TOKEN MODAL -->
@@ -1224,34 +1282,11 @@ document.addEventListener('keydown',e=>{
         Permís necessari: <strong>Contents</strong> (read & write) del repo GrowControl.
       </p>
     </div>
-    <div class="mf">
+    <div class="mf" style="justify-content:space-between">
+      <button class="btn btn-d" onclick="clearToken()" id="btn-clear-token" style="display:none">Eliminar token</button>
       <button class="btn btn-p" onclick="saveToken()">Guardar i connectar</button>
     </div>
   </div>
 </div>
-<script>function showTokenModal(){
-  document.getElementById('modal-token').classList.add('open');
-  setTimeout(()=>document.getElementById('token-input').focus(),80);
-}
-async function saveToken(){
-  const t=document.getElementById('token-input').value.trim();
-  if(!t){toast('Cal introduir el token');return;}
-  // Quick validation
-  showSync('Verificant token...');
-  try{
-    const r=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}`,{headers:{'Authorization':`token ${t}`,'Accept':'application/vnd.github.v3+json'}});
-    if(r.status===401||r.status===403){toast('Token invàlid o sense permisos');hideSync();return;}
-    if(r.status===404){toast('Repo no trobat. Comprova que existeix GrowControl');hideSync();return;}
-  }catch(e){toast('Error de connexió');hideSync();return;}
-  localStorage.setItem('gc_token',t);
-  GH_TOKEN=t;
-  closeModal('modal-token');
-  loadGH().then(()=>{rebuildGC();updateCounts();});
-}
-function clearToken(){
-  localStorage.removeItem('gc_token');
-  GH_TOKEN='';
-  toast('Token eliminat. Recarrega la pàgina.');
-}</script>
 </body>
 </html>
