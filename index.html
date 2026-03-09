@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowControl</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f8f8f6;
+    --surface2: #f0f0ed;
+    --border: #e8e8e4;
+    --border2: #d8d8d3;
+    --text-primary: #1a1a18;
+    --text-secondary: #6b6b65;
+    --text-muted: #9a9a93;
+    --accent-green: #2d6a4f;
+    --accent-green-light: #52b788;
+    --accent-green-pale: #d8f3dc;
+    --accent-amber: #b5810c;
+    --accent-amber-pale: #fef3c7;
+    --accent-blue: #1d4e89;
+    --accent-blue-pale: #dbeafe;
+    --accent-rose: #9d174d;
+    --accent-rose-pale: #fce7f3;
+    --accent-purple: #5b21b6;
+    --accent-purple-pale: #ede9fe;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- SCREENS ---- */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ---- HEADER ---- */
+  .app-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text-primary);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo svg { color: var(--accent-green); }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+
+  /* ---- BUTTONS ---- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent-green);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #235a42; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--surface); color: var(--text-primary); }
+  .btn-icon {
+    padding: 8px; width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition);
+  }
+  .btn-icon:hover { background: var(--surface); color: var(--text-primary); }
+
+  /* ---- WELCOME SCREEN ---- */
+  #screen-welcome {
+    justify-content: center;
+    align-items: center;
+    padding: 40px 24px;
+    background: #fff;
+  }
+  .welcome-inner { max-width: 560px; width: 100%; text-align: center; }
+  .welcome-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-green-pale);
+    color: var(--accent-green);
+    padding: 5px 12px; border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    margin-bottom: 28px;
+    letter-spacing: 0.2px;
+  }
+  .welcome-title {
+    font-size: clamp(32px, 6vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .welcome-title strong { font-weight: 600; }
+  .welcome-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+  .env-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    text-align: left;
+  }
+  .env-card {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .env-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .env-card.indoor::before { background: linear-gradient(135deg, rgba(45,106,79,0.04), transparent); }
+  .env-card.outdoor::before { background: linear-gradient(135deg, rgba(181,129,12,0.04), transparent); }
+  .env-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .env-card:hover::before { opacity: 1; }
+  .env-card:active { transform: translateY(0); }
+  .env-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .env-card.indoor .env-icon { background: var(--accent-green-pale); color: var(--accent-green); }
+  .env-card.outdoor .env-icon { background: var(--accent-amber-pale); color: var(--accent-amber); }
+  .env-label { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .env-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .env-count {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  /* ---- MAIN DASHBOARD ---- */
+  #screen-dashboard { padding-bottom: 80px; }
+  .dash-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* breadcrumb */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    padding: 20px 0 0;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; cursor: pointer; }
+  .breadcrumb a:hover { color: var(--text-secondary); }
+  .breadcrumb span { color: var(--text-secondary); font-weight: 500; }
+
+  /* environment header */
+  .env-header {
+    padding: 24px 0 32px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .env-header-left h1 {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 300;
+    letter-spacing: -0.8px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .env-header-left h1 strong { font-weight: 600; }
+  .env-meta { display: flex; gap: 16px; flex-wrap: wrap; }
+  .env-meta-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 13px; color: var(--text-muted);
+  }
+
+  /* sections */
+  .section-grid {
+    display: grid;
+    gap: 24px;
+  }
+  .section-grid.indoor { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+  .section-grid.outdoor { grid-template-columns: 1fr; }
+
+  .section-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow var(--transition);
+  }
+  .section-block:hover { box-shadow: var(--shadow-sm); }
+
+  .section-header {
+    padding: 18px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title-row { display: flex; align-items: center; gap: 10px; }
+  .section-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .section-name { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+  .section-count { font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: 4px; }
+
+  /* plant grid inside section */
+  .plant-grid {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+  }
+
+  .plant-card {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .plant-card:hover {
+    border-color: var(--border2);
+    background: var(--surface2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+  .plant-card.selected {
+    border-color: var(--accent-green);
+    background: var(--accent-green-pale);
+  }
+  .plant-card-icon { display: flex; align-items: center; justify-content: center; }
+  .plant-card-id {
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .plant-status-dot {
+    position: absolute; top: 5px; right: 5px;
+    width: 5px; height: 5px; border-radius: 50%;
+  }
+
+  /* add plant button */
+  .add-plant-btn {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    border: 1.5px dashed var(--border2);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all var(--transition);
+  }
+  .add-plant-btn:hover {
+    border-color: var(--accent-green-light);
+    color: var(--accent-green);
+    background: var(--accent-green-pale);
+  }
+
+  /* ---- PLANT DETAIL PANEL (slide in) ---- */
+  .panel-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 200;
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .panel-overlay.open { display: block; opacity: 1; }
+
+  .plant-panel {
+    position: fixed;
+    right: -100%;
+    top: 0; bottom: 0;
+    width: min(480px, 100vw);
+    background: var(--bg);
+    box-shadow: var(--shadow-lg);
+    z-index: 201;
+    overflow-y: auto;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+  }
+  .plant-panel.open { right: 0; }
+
+  .panel-header {
+    position: sticky; top: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 1;
+  }
+  .panel-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .panel-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .panel-body { padding: 20px; flex: 1; }
+
+  /* plant visual hero */
+  .plant-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  /* info grid */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .info-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .info-cell-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .info-cell-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+  }
+  .info-cell-value input, .info-cell-value select {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: text;
+  }
+
+  /* notes */
+  .notes-area {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 20px;
+  }
+  .notes-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .notes-area textarea {
+    width: 100%;
+    min-height: 100px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .notes-area textarea::placeholder { color: var(--text-muted); }
+
+  /* timeline */
+  .timeline { margin-bottom: 20px; }
+  .timeline-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .timeline-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-date {
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    min-width: 70px;
+    font-size: 11px;
+    padding-top: 1px;
+  }
+  .timeline-event { color: var(--text-secondary); line-height: 1.5; }
+
+  /* watering / feeding bars */
+  .metric-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-label { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+  .metric-value { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .metric-badge {
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* action buttons in panel */
+  .panel-actions {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    position: sticky; bottom: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  /* modal */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow-lg);
+    animation: modalIn 0.2s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.96) translateY(8px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .modal-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .modal-body { padding: 16px 20px; }
+  .modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* form fields */
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 5px; }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg);
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent-green-light);
+    box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
+  }
+
+  /* ---- COLOR / STATUS SYSTEM ---- */
+  /* germinacio */
+  .c-germ { color: #065f46; }
+  .bg-germ { background: #d1fae5; }
+  .dot-germ { background: #10b981; }
+  /* clonacio */
+  .c-clon { color: #1d4e89; }
+  .bg-clon { background: #dbeafe; }
+  .dot-clon { background: #3b82f6; }
+  /* vegetatiu */
+  .c-veg { color: #2d6a4f; }
+  .bg-veg { background: #d8f3dc; }
+  .dot-veg { background: #52b788; }
+  /* mares */
+  .c-mare { color: #5b21b6; }
+  .bg-mare { background: #ede9fe; }
+  .dot-mare { background: #8b5cf6; }
+  /* floracio */
+  .c-flor { color: #b5810c; }
+  .bg-flor { background: #fef3c7; }
+  .dot-flor { background: #f59e0b; }
+
+  /* status health */
+  .health-ok { background: #d1fae5; color: #065f46; }
+  .health-warn { background: #fef3c7; color: #92400e; }
+  .health-bad { background: #fee2e2; color: #991b1b; }
+
+  /* ---- STATS BAR (top of dashboard) ---- */
+  .stats-bar {
+    display: flex; gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .stat-item {
+    flex: 1;
+    padding: 14px 16px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 600px) {
+    .env-cards { grid-template-columns: 1fr; }
+    .section-grid.indoor { grid-template-columns: 1fr; }
+    .plant-panel { width: 100vw; }
+    .stats-bar { overflow-x: auto; }
+    .stat-item { min-width: 80px; }
+    .info-grid { grid-template-columns: 1fr 1fr; }
+    .env-header { flex-direction: column; align-items: flex-start; }
+    .app-header { padding: 0 16px; }
+    .dash-container { padding: 0 16px; }
+  }
+
+  /* ---- TOASTS ---- */
+  .toast-container {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 999;
+    display: flex; flex-direction: column; gap: 8px;
+    align-items: center;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--text-primary);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    animation: toastIn 0.25s ease, toastOut 0.25s ease 2.5s forwards;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes toastOut {
+    to { opacity: 0; transform: translateY(-4px); }
+  }
+
+  /* ---- SVG PLANT ICONS ---- */
+  .plant-svg { display: block; }
+
+  /* editable field highlight */
+  [contenteditable]:focus {
+    outline: 2px solid var(--accent-green-light);
+    border-radius: 4px;
+    padding: 0 2px;
+  }
+
+  /* scroll */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* section color strip */
+  .section-strip { width: 3px; border-radius: 2px; height: 16px; }
+
+  /* expand outdoor section full */
+  .outdoor-section .plant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  /* delete zone */
+  .danger-zone {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 4px;
+  }
+  .btn-danger {
+    background: transparent;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  .btn-danger:hover { background: #fee2e2; }
+
+  /* watering log */
+  .log-entry {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .log-text { color: var(--text-secondary); flex: 1; }
+  .log-date { font-family: 'DM Mono', monospace; color: var(--text-muted); font-size: 11px; }
+
+  /* section actions in header */
+  .section-actions { display: flex; gap: 4px; }
+
+  /* section edit name */
+  .section-name-edit {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    border: none; outline: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: -0.2px;
+    width: 120px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== WELCOME SCREEN ===== -->
+<div id="screen-welcome" class="screen active">
+  <div class="welcome-inner">
+    <div class="welcome-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      GrowControl v1.0
+    </div>
+    <h1 class="welcome-title">Controla els teus<br><strong>cultius</strong></h1>
+    <p class="welcome-sub">Gestiona cada planta, fase i cicle des d'un sol lloc.<br>Selecciona l'entorn de cultiu per continuar.</p>
+    <div class="env-cards">
+      <div class="env-card indoor" onclick="enterEnv('indoor')">
+        <div class="env-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="env-label">Indoor</div>
+        <div class="env-desc">Ambient controlat. Germinar, clonar, vegetar, mares i florir.</div>
+        <div class="env-count" id="count-indoor">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          5 fases actives
+        </div>
+      </div>
+      <div class="env-card outdoor" onclick="enterEnv('outdoor')">
+        <div class="env-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </div>
+        <div class="env-label">Outdoor</div>
+        <div class="env-desc">Llum natural. Cicle de floració exterior al ritme de les estacions.</div>
+        <div class="env-count" id="count-outdoor">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          1 fase activa
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD SCREEN ===== -->
+<div id="screen-dashboard" class="screen">
+  <header class="app-header">
+    <div class="logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22c4.97 0 9-1.79 9-4V6c0-2.21-4.03-4-9-4S3 3.79 3 6v12c0 2.21 4.03 4 9 4z"/>
+        <path d="M3 6c0 2.21 4.03 4 9 4s9-1.79 9-4"/>
+        <path d="M3 12c0 2.21 4.03 4 9 4s9-1.79 9-4"/>
+      </svg>
+      GrowControl
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-ghost" onclick="showAddPlantModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nova planta
+      </button>
+      <button class="btn-icon" onclick="showWelcome()" title="Canviar entorn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="dash-container">
+    <div class="breadcrumb">
+      <a onclick="showWelcome()">Inici</a>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span id="dash-env-label">Indoor</span>
+    </div>
+
+    <div class="env-header">
+      <div class="env-header-left">
+        <h1 id="dash-title">Cultiu <strong>Indoor</strong></h1>
+        <div class="env-meta">
+          <span class="env-meta-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="dash-date"></span>
+          </span>
+          <span class="env-meta-item" id="dash-total-plants">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>
+            0 plantes
+          </span>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="showAddPlantModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Afegir planta
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <!-- Sections -->
+    <div class="section-grid" id="section-grid"></div>
+  </div>
+</div>
+
+<!-- ===== PANEL OVERLAY ===== -->
+<div class="panel-overlay" id="panel-overlay" onclick="closePanel()"></div>
+
+<!-- ===== PLANT DETAIL PANEL ===== -->
+<div class="plant-panel" id="plant-panel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-title" id="panel-title">Planta #001</div>
+      <div class="panel-subtitle" id="panel-subtitle">Germinació · Indoor</div>
+    </div>
+    <button class="btn-icon" onclick="closePanel()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+  <div class="panel-actions" id="panel-actions"></div>
+</div>
+
+<!-- ===== ADD PLANT MODAL ===== -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Afegir nova planta</div>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Nom / identificador</label>
+        <input type="text" id="new-name" placeholder="ex: OG Kush #01">
+      </div>
+      <div class="field">
+        <label>Genètica / varietat</label>
+        <input type="text" id="new-strain" placeholder="ex: OG Kush, White Widow...">
+      </div>
+      <div class="field">
+        <label>Fase</label>
+        <select id="new-phase"></select>
+      </div>
+      <div class="field">
+        <label>Data d'inici de fase</label>
+        <input type="date" id="new-date">
+      </div>
+      <div class="field">
+        <label>Notes inicials</label>
+        <textarea id="new-notes" rows="2" placeholder="Observacions..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel·lar</button>
+      <button class="btn btn-primary" onclick="addPlant()">Afegir planta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toasts"></div>
+
+<script>
+// ============================================================
+// DATA MODEL
+// ============================================================
+const PHASES_INDOOR = [
+  { id: 'germ', name: 'Germinació', colorClass: 'c-germ', bgClass: 'bg-germ', dotClass: 'dot-germ', color: '#10b981', lightColor: '#d1fae5' },
+  { id: 'clon', name: 'Clonació',   colorClass: 'c-clon', bgClass: 'bg-clon', dotClass: 'dot-clon', color: '#3b82f6', lightColor: '#dbeafe' },
+  { id: 'veg',  name: 'Vegetatiu',  colorClass: 'c-veg',  bgClass: 'bg-veg',  dotClass: 'dot-veg',  color: '#52b788', lightColor: '#d8f3dc' },
+  { id: 'mare', name: 'Mares',      colorClass: 'c-mare', bgClass: 'bg-mare', dotClass: 'dot-mare', color: '#8b5cf6', lightColor: '#ede9fe' },
+  { id: 'flor', name: 'Floració',   colorClass: 'c-flor', bgClass: 'bg-flor', dotClass: 'dot-flor', color: '#f59e0b', lightColor: '#fef3c7' },
+];
+const PHASES_OUTDOOR = [
+  { id: 'flor', name: 'Floració',   colorClass: 'c-flor', bgClass: 'bg-flor', dotClass: 'dot-flor', color: '#f59e0b', lightColor: '#fef3c7' },
+];
+
+let currentEnv = 'indoor';
+let plants = JSON.parse(localStorage.getItem('gc-plants') || '[]');
+let nextId = parseInt(localStorage.getItem('gc-nextid') || '1');
+let openPlantId = null;
+
+function save() {
+  localStorage.setItem('gc-plants', JSON.stringify(plants));
+  localStorage.setItem('gc-nextid', String(nextId));
+  updateWelcomeCounts();
+}
+
+function phasesForEnv(env) {
+  return env === 'indoor' ? PHASES_INDOOR : PHASES_OUTDOOR;
+}
+
+function getPhase(phaseId) {
+  return [...PHASES_INDOOR, ...PHASES_OUTDOOR].find(p => p.id === phaseId) || PHASES_INDOOR[0];
+}
+
+function plantsInPhase(phase, env) {
+  return plants.filter(p => p.env === env && p.phase === phase);
+}
+
+function pad(n) { return String(n).padStart(3, '0'); }
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function showWelcome() {
+  closePanel();
+  showScreen('welcome');
+  updateWelcomeCounts();
+}
+
+function enterEnv(env) {
+  currentEnv = env;
+  showScreen('dashboard');
+  renderDashboard();
+}
+
+function updateWelcomeCounts() {
+  const indoorCount = plants.filter(p => p.env === 'indoor').length;
+  const outdoorCount = plants.filter(p => p.env === 'outdoor').length;
+  document.getElementById('count-indoor').innerHTML = `
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    ${indoorCount} planta${indoorCount !== 1 ? 'es' : ''}
+  `;
+  document.getElementById('count-outdoor').innerHTML = `
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    ${outdoorCount} planta${outdoorCount !== 1 ? 'es' : ''}
+  `;
+}
+
+// ============================================================
+// DASHBOARD RENDER
+// ============================================================
+function renderDashboard() {
+  const phases = phasesForEnv(currentEnv);
+  const envPlants = plants.filter(p => p.env === currentEnv);
+
+  // title
+  const label = currentEnv === 'indoor' ? 'Indoor' : 'Outdoor';
+  document.getElementById('dash-env-label').textContent = label;
+  document.getElementById('dash-title').innerHTML = `Cultiu <strong>${label}</strong>`;
+
+  // date
+  const now = new Date();
+  document.getElementById('dash-date').textContent = now.toLocaleDateString('ca-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  // total plants
+  document.getElementById('dash-total-plants').innerHTML = `
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>
+    ${envPlants.length} planta${envPlants.length !== 1 ? 'es' : ''}
+  `;
+
+  // stats bar
+  const statsBar = document.getElementById('stats-bar');
+  statsBar.innerHTML = phases.map(ph => {
+    const count = plantsInPhase(ph.id, currentEnv).length;
+    return `
+      <div class="stat-item">
+        <div class="stat-number" style="color:${ph.color}">${count}</div>
+        <div class="stat-label">${ph.name}</div>
+      </div>
+    `;
+  }).join('');
+
+  // sections
+  const grid = document.getElementById('section-grid');
+  grid.className = `section-grid ${currentEnv}`;
+  grid.innerHTML = phases.map(ph => renderSection(ph)).join('');
+}
+
+function renderSection(ph) {
+  const ps = plantsInPhase(ph.id, currentEnv);
+  return `
+    <div class="section-block">
+      <div class="section-header">
+        <div class="section-title-row">
+          <div class="section-strip" style="background:${ph.color}"></div>
+          <span class="section-name">${ph.name}</span>
+          <span class="section-count">${ps.length} planta${ps.length !== 1 ? 'es' : ''}</span>
+        </div>
+        <div class="section-actions">
+          <button class="btn-icon" title="Afegir a ${ph.name}" onclick="showAddPlantModalPhase('${ph.id}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="plant-grid ${currentEnv === 'outdoor' ? 'outdoor-section' : ''}">
+        ${ps.map(p => renderPlantCard(p, ph)).join('')}
+        <button class="add-plant-btn" onclick="showAddPlantModalPhase('${ph.id}')" title="Afegir planta">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderPlantCard(p, ph) {
+  const healthColor = p.health === 'bo' ? '#10b981' : p.health === 'atencio' ? '#f59e0b' : '#ef4444';
+  return `
+    <div class="plant-card" onclick="openPlant(${p.id})" title="${p.name}">
+      <div class="plant-status-dot" style="background:${healthColor}"></div>
+      <div class="plant-card-icon">${plantSVG(ph.id, ph.color, 28)}</div>
+      <div class="plant-card-id">#${pad(p.id)}</div>
+    </div>
+  `;
+}
+
+// ============================================================
+// PLANT SVG ICONS — vectorized plant illustrations by phase
+// ============================================================
+function plantSVG(phase, color, size) {
+  const s = size || 28;
+  const c = color || '#52b788';
+  const icons = {
+    germ: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
+      <ellipse cx="16" cy="24" rx="5" ry="3" fill="${c}22"/>
+      <path d="M16 24 Q16 14 22 10" stroke="${c}" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <ellipse cx="22" cy="10" rx="5" ry="3.5" fill="${c}" opacity="0.8" transform="rotate(-20 22 10)"/>
+      <ellipse cx="10" cy="16" rx="4" ry="2.5" fill="${c}" opacity="0.6" transform="rotate(15 10 16)"/>
+      <circle cx="16" cy="24" r="2" fill="${c}"/>
+    </svg>`,
+    clon: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
+      <rect x="11" y="20" width="10" height="8" rx="2" fill="${c}33"/>
+      <line x1="16" y1="20" x2="16" y2="10" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M16 14 Q10 12 9 7" stroke="${c}" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <ellipse cx="9" cy="7" rx="3.5" ry="2.5" fill="${c}" opacity="0.75" transform="rotate(-10 9 7)"/>
+      <path d="M16 11 Q22 9 23 5" stroke="${c}" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <ellipse cx="23" cy="5" rx="3" ry="2" fill="${c}" opacity="0.75" transform="rotate(10 23 5)"/>
+    </svg>`,
+    veg: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
+      <rect x="13" y="24" width="6" height="5" rx="1.5" fill="${c}44"/>
+      <line x1="16" y1="24" x2="16" y2="8" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M16 19 Q8 17 7 11" stroke="${c}" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <path d="M16 15 Q24 13 25 7" stroke="${c}" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <path d="M16 11 Q10 8 10 4" stroke="${c}" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <ellipse cx="7" cy="11" rx="4.5" ry="3" fill="${c}" opacity="0.7" transform="rotate(-15 7 11)"/>
+      <ellipse cx="25" cy="7" rx="4" ry="2.5" fill="${c}" opacity="0.7" transform="rotate(15 25 7)"/>
+      <ellipse cx="10" cy="4" rx="3" ry="2" fill="${c}" opacity="0.6" transform="rotate(-5 10 4)"/>
+    </svg>`,
+    mare: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
+      <rect x="11" y="25" width="10" height="4" rx="2" fill="${c}44"/>
+      <line x1="16" y1="25" x2="16" y2="6" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M16 22 Q6 20 5 13" stroke="${c}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M16 17 Q26 15 27 8" stroke="${c}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M16 13 Q8 10 8 5" stroke="${c}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M16 10 Q24 7 24 3" stroke="${c}" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      <ellipse cx="5" cy="13" rx="5" ry="3.5" fill="${c}" opacity="0.75" transform="rotate(-18 5 13)"/>
+      <ellipse cx="27" cy="8" rx="5" ry="3" fill="${c}" opacity="0.75" transform="rotate(15 27 8)"/>
+      <ellipse cx="8" cy="5" rx="4" ry="2.5" fill="${c}" opacity="0.65" transform="rotate(-10 8 5)"/>
+      <ellipse cx="24" cy="3" rx="3.5" ry="2" fill="${c}" opacity="0.6" transform="rotate(10 24 3)"/>
+    </svg>`,
+    flor: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
+      <rect x="13" y="25" width="6" height="5" rx="1.5" fill="${c}44"/>
+      <line x1="16" y1="25" x2="16" y2="7" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M16 20 Q9 18 8 13" stroke="${c}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M16 15 Q23 13 24 8" stroke="${c}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="8" cy="13" rx="3.5" ry="2.5" fill="${c}" opacity="0.55" transform="rotate(-15 8 13)"/>
+      <ellipse cx="24" cy="8" rx="3.5" ry="2.5" fill="${c}" opacity="0.55" transform="rotate(15 24 8)"/>
+      <!-- flower buds -->
+      <circle cx="16" cy="7" r="3.5" fill="${c}" opacity="0.9"/>
+      <circle cx="16" cy="7" r="2" fill="${c}"/>
+      <ellipse cx="13" cy="5" rx="2" ry="2.8" fill="${c}" opacity="0.6" transform="rotate(-30 13 5)"/>
+      <ellipse cx="19" cy="5" rx="2" ry="2.8" fill="${c}" opacity="0.6" transform="rotate(30 19 5)"/>
+      <ellipse cx="12" cy="8" rx="2.5" ry="1.5" fill="${c}" opacity="0.5" transform="rotate(-60 12 8)"/>
+      <ellipse cx="20" cy="8" rx="2.5" ry="1.5" fill="${c}" opacity="0.5" transform="rotate(60 20 8)"/>
+    </svg>`,
+  };
+  return icons[phase] || icons['veg'];
+}
+
+// ============================================================
+// PLANT PANEL
+// ============================================================
+function openPlant(id) {
+  const p = plants.find(x => x.id === id);
+  if (!p) return;
+  openPlantId = id;
+  const ph = getPhase(p.phase);
+  const envLabel = p.env === 'indoor' ? 'Indoor' : 'Outdoor';
+
+  document.getElementById('panel-title').textContent = p.name;
+  document.getElementById('panel-subtitle').textContent = `${ph.name} · ${envLabel}`;
+
+  // days in phase
+  const started = p.phaseStart ? new Date(p.phaseStart) : null;
+  const daysInPhase = started ? Math.floor((Date.now() - started.getTime()) / 86400000) : 0;
+
+  const healthBadge = (h) => {
+    if (h === 'bo') return '<span class="metric-badge health-ok">Bo</span>';
+    if (h === 'atencio') return '<span class="metric-badge health-warn">Atenció</span>';
+    return '<span class="metric-badge health-bad">Malament</span>';
+  };
+
+  document.getElementById('panel-body').innerHTML = `
+    <div class="plant-hero">${plantSVG(p.phase, ph.color, 80)}</div>
+
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-cell-label">Nom</div>
+        <div class="info-cell-value">
+          <input type="text" value="${escHtml(p.name)}" onchange="updateField(${id},'name',this.value)" />
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Genètica</div>
+        <div class="info-cell-value">
+          <input type="text" value="${escHtml(p.strain || '')}" placeholder="Varietat..." onchange="updateField(${id},'strain',this.value)" />
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Fase actual</div>
+        <div class="info-cell-value">
+          <select onchange="updateField(${id},'phase',this.value);renderDashboard();openPlant(${id})">
+            ${phasesForEnv(p.env).map(ph2 => `<option value="${ph2.id}" ${ph2.id === p.phase ? 'selected' : ''}>${ph2.name}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Dies en fase</div>
+        <div class="info-cell-value">${daysInPhase} dies</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Inici de fase</div>
+        <div class="info-cell-value">
+          <input type="date" value="${p.phaseStart || ''}" onchange="updateField(${id},'phaseStart',this.value)" />
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Salut</div>
+        <div class="info-cell-value">
+          <select onchange="updateField(${id},'health',this.value);openPlant(${id});renderDashboard()">
+            <option value="bo" ${p.health==='bo'?'selected':''}>Bo</option>
+            <option value="atencio" ${p.health==='atencio'?'selected':''}>Atenció</option>
+            <option value="malament" ${p.health==='malament'?'selected':''}>Malament</option>
+          </select>
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Substrat</div>
+        <div class="info-cell-value">
+          <input type="text" value="${escHtml(p.substrate||'')}" placeholder="Coco, terra..." onchange="updateField(${id},'substrate',this.value)" />
+        </div>
+      </div>
+      <div class="info-cell">
+        <div class="info-cell-label">Tamany de test</div>
+        <div class="info-cell-value">
+          <input type="text" value="${escHtml(p.potSize||'')}" placeholder="ex: 11L" onchange="updateField(${id},'potSize',this.value)" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="notes-area">
+      <div class="notes-label">Paràmetres ambientals</div>
+      <div class="metric-row">
+        <span class="metric-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8l3 3-3 3v4M8 10l-5 2 5 2"/><path d="M16 10l5 2-5 2"/></svg>
+          pH últim reg
+        </span>
+        <span class="metric-value">
+          <input type="number" step="0.1" min="4" max="9" value="${p.ph||''}" placeholder="6.0" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'ph',this.value)">
+        </span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+          EC últim reg
+        </span>
+        <span class="metric-value">
+          <input type="number" step="0.1" min="0" max="5" value="${p.ec||''}" placeholder="1.2" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'ec',this.value)">
+        </span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          Temperatura
+        </span>
+        <span class="metric-value">
+          <input type="number" step="0.5" value="${p.temp||''}" placeholder="24" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'temp',this.value)">
+          <span style="font-size:12px;color:var(--text-muted)">°C</span>
+        </span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8C8 10 5.9 16.17 3.82 19.5c.94.94 2.48 1 3.47.1C8.79 18.1 10.5 17 12 17c4 0 4 2 8 2V8z"/></svg>
+          Humitat
+        </span>
+        <span class="metric-value">
+          <input type="number" step="1" min="0" max="100" value="${p.hum||''}" placeholder="55" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'hum',this.value)">
+          <span style="font-size:12px;color:var(--text-muted)">%</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="notes-area">
+      <div class="notes-label">Notes de cultiu</div>
+      <textarea placeholder="Observacions, problemes detectats, tractaments aplicats..." onchange="updateField(${id},'notes',this.value)">${escHtml(p.notes||'')}</textarea>
+    </div>
+
+    <!-- Log -->
+    ${renderLog(p, id)}
+
+    <!-- Danger zone -->
+    <div class="danger-zone">
+      <button class="btn btn-danger" onclick="deletePlant(${id})">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
+        Eliminar planta
+      </button>
+    </div>
+  `;
+
+  document.getElementById('panel-actions').innerHTML = `
+    <button class="btn btn-primary" onclick="logAction(${id},'reg')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+      Reg
+    </button>
+    <button class="btn btn-ghost" onclick="logAction(${id},'nutrients')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+      Nutrients
+    </button>
+    <button class="btn btn-ghost" onclick="logAction(${id},'defoliacio')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v12M18 9a3 3 0 01-3 3H6M6 3a3 3 0 00-3 3v3a3 3 0 003 3"/></svg>
+      Defoliació
+    </button>
+    <button class="btn btn-ghost" onclick="logAction(${id},'trasplant')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+      Trasplant
+    </button>
+  `;
+
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('plant-panel').classList.add('open');
+}
+
+function renderLog(p, id) {
+  const log = p.log || [];
+  const iconFor = (type) => {
+    const icons = {
+      reg: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,
+      nutrients: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18"/></svg>`,
+      defoliacio: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 3v12M18 9a3 3 0 01-3 3H6"/></svg>`,
+      trasplant: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="16 3 21 3 21 8"/></svg>`,
+    };
+    return icons[type] || icons.reg;
+  };
+  const bgFor = (type) => {
+    return { reg:'#dbeafe', nutrients:'#d1fae5', defoliacio:'#fef3c7', trasplant:'#ede9fe' }[type] || '#f0f0ed';
+  };
+  const labelFor = (type) => {
+    return { reg:'Reg', nutrients:'Nutrients', defoliacio:'Defoliació', trasplant:'Trasplant' }[type] || type;
+  };
+  if (!log.length) return '';
+  return `
+    <div class="notes-area">
+      <div class="notes-label">Registre d'accions</div>
+      ${log.slice().reverse().slice(0,8).map(entry => `
+        <div class="log-entry">
+          <div class="log-icon" style="background:${bgFor(entry.type)}">${iconFor(entry.type)}</div>
+          <span class="log-text">${labelFor(entry.type)}</span>
+          <span class="log-date">${new Date(entry.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short'})}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function closePanel() {
+  document.getElementById('panel-overlay').classList.remove('open');
+  document.getElementById('plant-panel').classList.remove('open');
+  openPlantId = null;
+}
+
+// ============================================================
+// PLANT ACTIONS
+// ============================================================
+function updateField(id, field, value) {
+  const p = plants.find(x => x.id === id);
+  if (!p) return;
+  p[field] = value;
+  save();
+  if (field !== 'notes' && field !== 'ph' && field !== 'ec' && field !== 'temp' && field !== 'hum' && field !== 'substrate' && field !== 'potSize' && field !== 'strain') {
+    renderDashboard();
+  }
+  toast('Guardat');
+}
+
+function logAction(id, type) {
+  const p = plants.find(x => x.id === id);
+  if (!p) return;
+  if (!p.log) p.log = [];
+  p.log.push({ type, date: new Date().toISOString() });
+  save();
+  openPlant(id);
+  toast(({ reg:'Reg registrat', nutrients:'Nutrients registrats', defoliacio:'Defoliació registrada', trasplant:'Trasplant registrat' })[type] || 'Registrat');
+}
+
+function deletePlant(id) {
+  if (!confirm('Segur que vols eliminar aquesta planta?')) return;
+  plants = plants.filter(x => x.id !== id);
+  save();
+  closePanel();
+  renderDashboard();
+  toast('Planta eliminada');
+}
+
+// ============================================================
+// ADD PLANT MODAL
+// ============================================================
+let preselectedPhase = null;
+
+function showAddPlantModal() {
+  preselectedPhase = null;
+  openModalInternal();
+}
+
+function showAddPlantModalPhase(phaseId) {
+  preselectedPhase = phaseId;
+  openModalInternal();
+}
+
+function openModalInternal() {
+  const phases = phasesForEnv(currentEnv);
+  const sel = document.getElementById('new-phase');
+  sel.innerHTML = phases.map(ph => `<option value="${ph.id}" ${ph.id === preselectedPhase ? 'selected' : ''}>${ph.name}</option>`).join('');
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-strain').value = '';
+  document.getElementById('new-notes').value = '';
+  document.getElementById('new-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('modal-add').classList.add('open');
+  setTimeout(() => document.getElementById('new-name').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modal-add').classList.remove('open');
+}
+
+function addPlant() {
+  const name = document.getElementById('new-name').value.trim() || `Planta #${pad(nextId)}`;
+  const strain = document.getElementById('new-strain').value.trim();
+  const phase = document.getElementById('new-phase').value;
+  const phaseStart = document.getElementById('new-date').value;
+  const notes = document.getElementById('new-notes').value.trim();
+
+  plants.push({
+    id: nextId++,
+    env: currentEnv,
+    name, strain, phase, phaseStart, notes,
+    health: 'bo',
+    log: [],
+    substrate: '', potSize: '', ph: '', ec: '', temp: '', hum: ''
+  });
+  save();
+  closeModal();
+  renderDashboard();
+  toast('Planta afegida correctament');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg) {
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Keyboard shortcut - Esc closes panel
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('modal-add').classList.contains('open')) closeModal();
+    else closePanel();
+  }
+  if (e.key === 'Enter' && document.getElementById('modal-add').classList.contains('open')) addPlant();
+});
+
+// Init
+updateWelcomeCounts();
+</script>
+</body>
+</html>
