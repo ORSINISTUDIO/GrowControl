@@ -625,9 +625,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 8,
+      "name": "ARG RANDOM",
+      "breeder": "?",
+      "type": "feminitzada",
+      "florDays": null,
+      "stock": 8,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 8,
+  "nextSeedId": 9,
   "pcLots": [],
   "nextPCId": 1
 }
