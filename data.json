@@ -599,9 +599,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 6,
+      "name": "AMNESIA CBD",
+      "breeder": "THE GREEN BRAND",
+      "type": "feminitzada",
+      "florDays": 75,
+      "stock": 1,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 6,
+  "nextSeedId": 7,
   "pcLots": [],
   "nextPCId": 1
 }
