@@ -690,9 +690,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 13,
+      "name": "AUTO BUDDHA AMNESIA",
+      "breeder": "BUDDHA SEEDS",
+      "type": "feminitzada",
+      "florDays": null,
+      "stock": 1,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 13,
+  "nextSeedId": 14,
   "pcLots": [],
   "nextPCId": 1
 }
