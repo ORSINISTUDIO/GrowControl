@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ca">
 <head>
 <meta charset="UTF-8">
@@ -6,1377 +5,1204 @@
 <title>GrowControl</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #ffffff;
-    --surface: #f8f8f6;
-    --surface2: #f0f0ed;
-    --border: #e8e8e4;
-    --border2: #d8d8d3;
-    --text-primary: #1a1a18;
-    --text-secondary: #6b6b65;
-    --text-muted: #9a9a93;
-    --accent-green: #2d6a4f;
-    --accent-green-light: #52b788;
-    --accent-green-pale: #d8f3dc;
-    --accent-amber: #b5810c;
-    --accent-amber-pale: #fef3c7;
-    --accent-blue: #1d4e89;
-    --accent-blue-pale: #dbeafe;
-    --accent-rose: #9d174d;
-    --accent-rose-pale: #fce7f3;
-    --accent-purple: #5b21b6;
-    --accent-purple-pale: #ede9fe;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    --shadow-lg: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
-    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ---- SCREENS ---- */
-  .screen { display: none; min-height: 100vh; }
-  .screen.active { display: flex; flex-direction: column; }
-
-  /* ---- HEADER ---- */
-  .app-header {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
-    color: var(--text-primary);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .logo svg { color: var(--accent-green); }
-  .header-actions { display: flex; gap: 8px; align-items: center; }
-
-  /* ---- BUTTONS ---- */
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all var(--transition);
-    white-space: nowrap;
-  }
-  .btn-primary {
-    background: var(--accent-green);
-    color: #fff;
-  }
-  .btn-primary:hover { background: #235a42; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-secondary);
-    border: 1px solid var(--border);
-  }
-  .btn-ghost:hover { background: var(--surface); color: var(--text-primary); }
-  .btn-icon {
-    padding: 8px; width: 36px; height: 36px;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all var(--transition);
-  }
-  .btn-icon:hover { background: var(--surface); color: var(--text-primary); }
-
-  /* ---- WELCOME SCREEN ---- */
-  #screen-welcome {
-    justify-content: center;
-    align-items: center;
-    padding: 40px 24px;
-    background: #fff;
-  }
-  .welcome-inner { max-width: 560px; width: 100%; text-align: center; }
-  .welcome-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--accent-green-pale);
-    color: var(--accent-green);
-    padding: 5px 12px; border-radius: 100px;
-    font-size: 12px; font-weight: 500;
-    margin-bottom: 28px;
-    letter-spacing: 0.2px;
-  }
-  .welcome-title {
-    font-size: clamp(32px, 6vw, 52px);
-    font-weight: 300;
-    line-height: 1.1;
-    letter-spacing: -1.5px;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-  }
-  .welcome-title strong { font-weight: 600; }
-  .welcome-sub {
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 48px;
-  }
-  .env-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    text-align: left;
-  }
-  .env-card {
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 16px;
-    padding: 28px 24px;
-    cursor: pointer;
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-  }
-  .env-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-  .env-card.indoor::before { background: linear-gradient(135deg, rgba(45,106,79,0.04), transparent); }
-  .env-card.outdoor::before { background: linear-gradient(135deg, rgba(181,129,12,0.04), transparent); }
-  .env-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
-  .env-card:hover::before { opacity: 1; }
-  .env-card:active { transform: translateY(0); }
-  .env-icon {
-    width: 48px; height: 48px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 16px;
-  }
-  .env-card.indoor .env-icon { background: var(--accent-green-pale); color: var(--accent-green); }
-  .env-card.outdoor .env-icon { background: var(--accent-amber-pale); color: var(--accent-amber); }
-  .env-label { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
-  .env-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-  .env-count {
-    display: inline-flex; align-items: center; gap: 4px;
-    margin-top: 12px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-  }
-
-  /* ---- MAIN DASHBOARD ---- */
-  #screen-dashboard { padding-bottom: 80px; }
-  .dash-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-
-  /* breadcrumb */
-  .breadcrumb {
-    display: flex; align-items: center; gap: 8px;
-    padding: 20px 0 0;
-    font-size: 13px; color: var(--text-muted);
-  }
-  .breadcrumb a { color: var(--text-muted); text-decoration: none; cursor: pointer; }
-  .breadcrumb a:hover { color: var(--text-secondary); }
-  .breadcrumb span { color: var(--text-secondary); font-weight: 500; }
-
-  /* environment header */
-  .env-header {
-    padding: 24px 0 32px;
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
-    flex-wrap: wrap;
-  }
-  .env-header-left h1 {
-    font-size: clamp(24px, 4vw, 36px);
-    font-weight: 300;
-    letter-spacing: -0.8px;
-    line-height: 1.1;
-    margin-bottom: 6px;
-  }
-  .env-header-left h1 strong { font-weight: 600; }
-  .env-meta { display: flex; gap: 16px; flex-wrap: wrap; }
-  .env-meta-item {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 13px; color: var(--text-muted);
-  }
-
-  /* sections */
-  .section-grid {
-    display: grid;
-    gap: 24px;
-  }
-  .section-grid.indoor { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
-  .section-grid.outdoor { grid-template-columns: 1fr; }
-
-  .section-block {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: box-shadow var(--transition);
-  }
-  .section-block:hover { box-shadow: var(--shadow-sm); }
-
-  .section-header {
-    padding: 18px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-title-row { display: flex; align-items: center; gap: 10px; }
-  .section-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-  }
-  .section-name { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
-  .section-count { font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: 4px; }
-
-  /* plant grid inside section */
-  .plant-grid {
-    padding: 16px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 10px;
-  }
-
-  .plant-card {
-    aspect-ratio: 1;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    cursor: pointer;
-    transition: all var(--transition);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    position: relative;
-    overflow: hidden;
-  }
-  .plant-card:hover {
-    border-color: var(--border2);
-    background: var(--surface2);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-  }
-  .plant-card.selected {
-    border-color: var(--accent-green);
-    background: var(--accent-green-pale);
-  }
-  .plant-card-icon { display: flex; align-items: center; justify-content: center; }
-  .plant-card-id {
-    font-size: 9px;
-    font-family: 'DM Mono', monospace;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-  .plant-status-dot {
-    position: absolute; top: 5px; right: 5px;
-    width: 5px; height: 5px; border-radius: 50%;
-  }
-
-  /* add plant button */
-  .add-plant-btn {
-    aspect-ratio: 1;
-    border-radius: 10px;
-    border: 1.5px dashed var(--border2);
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    transition: all var(--transition);
-  }
-  .add-plant-btn:hover {
-    border-color: var(--accent-green-light);
-    color: var(--accent-green);
-    background: var(--accent-green-pale);
-  }
-
-  /* ---- PLANT DETAIL PANEL (slide in) ---- */
-  .panel-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.3);
-    z-index: 200;
-    backdrop-filter: blur(2px);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  .panel-overlay.open { display: block; opacity: 1; }
-
-  .plant-panel {
-    position: fixed;
-    right: -100%;
-    top: 0; bottom: 0;
-    width: min(480px, 100vw);
-    background: var(--bg);
-    box-shadow: var(--shadow-lg);
-    z-index: 201;
-    overflow-y: auto;
-    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column;
-  }
-  .plant-panel.open { right: 0; }
-
-  .panel-header {
-    position: sticky; top: 0;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    z-index: 1;
-  }
-  .panel-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
-  .panel-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-  .panel-body { padding: 20px; flex: 1; }
-
-  /* plant visual hero */
-  .plant-hero {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  /* info grid */
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .info-cell {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
-  .info-cell-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-  }
-  .info-cell-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: -0.2px;
-  }
-  .info-cell-value input, .info-cell-value select {
-    width: 100%;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    background: transparent;
-    border: none;
-    outline: none;
-    cursor: text;
-  }
-
-  /* notes */
-  .notes-area {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 20px;
-  }
-  .notes-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-  }
-  .notes-area textarea {
-    width: 100%;
-    min-height: 100px;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--text-primary);
-    resize: vertical;
-    line-height: 1.6;
-  }
-  .notes-area textarea::placeholder { color: var(--text-muted); }
-
-  /* timeline */
-  .timeline { margin-bottom: 20px; }
-  .timeline-title {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-  }
-  .timeline-item {
-    display: flex; gap: 10px; align-items: flex-start;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-  }
-  .timeline-item:last-child { border-bottom: none; }
-  .timeline-date {
-    font-family: 'DM Mono', monospace;
-    color: var(--text-muted);
-    min-width: 70px;
-    font-size: 11px;
-    padding-top: 1px;
-  }
-  .timeline-event { color: var(--text-secondary); line-height: 1.5; }
-
-  /* watering / feeding bars */
-  .metric-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .metric-row:last-child { border-bottom: none; }
-  .metric-label { font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-  .metric-value { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-  .metric-badge {
-    padding: 2px 8px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-
-  /* action buttons in panel */
-  .panel-actions {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    padding: 16px 20px;
-    border-top: 1px solid var(--border);
-    position: sticky; bottom: 0;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(8px);
-  }
-
-  /* modal */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 300;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    backdrop-filter: blur(4px);
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--bg);
-    border-radius: 16px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: var(--shadow-lg);
-    animation: modalIn 0.2s ease;
-  }
-  @keyframes modalIn {
-    from { transform: scale(0.96) translateY(8px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-  }
-  .modal-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
-  .modal-title { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
-  .modal-body { padding: 16px 20px; }
-  .modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
-
-  /* form fields */
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 5px; }
-  .field input, .field select, .field textarea {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--text-primary);
-    background: var(--bg);
-    outline: none;
-    transition: border-color var(--transition);
-  }
-  .field input:focus, .field select:focus, .field textarea:focus {
-    border-color: var(--accent-green-light);
-    box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
-  }
-
-  /* ---- COLOR / STATUS SYSTEM ---- */
-  /* germinacio */
-  .c-germ { color: #065f46; }
-  .bg-germ { background: #d1fae5; }
-  .dot-germ { background: #10b981; }
-  /* clonacio */
-  .c-clon { color: #1d4e89; }
-  .bg-clon { background: #dbeafe; }
-  .dot-clon { background: #3b82f6; }
-  /* vegetatiu */
-  .c-veg { color: #2d6a4f; }
-  .bg-veg { background: #d8f3dc; }
-  .dot-veg { background: #52b788; }
-  /* mares */
-  .c-mare { color: #5b21b6; }
-  .bg-mare { background: #ede9fe; }
-  .dot-mare { background: #8b5cf6; }
-  /* floracio */
-  .c-flor { color: #b5810c; }
-  .bg-flor { background: #fef3c7; }
-  .dot-flor { background: #f59e0b; }
-
-  /* status health */
-  .health-ok { background: #d1fae5; color: #065f46; }
-  .health-warn { background: #fef3c7; color: #92400e; }
-  .health-bad { background: #fee2e2; color: #991b1b; }
-
-  /* ---- STATS BAR (top of dashboard) ---- */
-  .stats-bar {
-    display: flex; gap: 0;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 28px;
-  }
-  .stat-item {
-    flex: 1;
-    padding: 14px 16px;
-    border-right: 1px solid var(--border);
-    text-align: center;
-  }
-  .stat-item:last-child { border-right: none; }
-  .stat-number { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
-  .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
-
-  /* ---- RESPONSIVE ---- */
-  @media (max-width: 600px) {
-    .env-cards { grid-template-columns: 1fr; }
-    .section-grid.indoor { grid-template-columns: 1fr; }
-    .plant-panel { width: 100vw; }
-    .stats-bar { overflow-x: auto; }
-    .stat-item { min-width: 80px; }
-    .info-grid { grid-template-columns: 1fr 1fr; }
-    .env-header { flex-direction: column; align-items: flex-start; }
-    .app-header { padding: 0 16px; }
-    .dash-container { padding: 0 16px; }
-  }
-
-  /* ---- TOASTS ---- */
-  .toast-container {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    z-index: 999;
-    display: flex; flex-direction: column; gap: 8px;
-    align-items: center;
-    pointer-events: none;
-  }
-  .toast {
-    background: var(--text-primary);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 500;
-    box-shadow: var(--shadow);
-    animation: toastIn 0.25s ease, toastOut 0.25s ease 2.5s forwards;
-  }
-  @keyframes toastIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes toastOut {
-    to { opacity: 0; transform: translateY(-4px); }
-  }
-
-  /* ---- SVG PLANT ICONS ---- */
-  .plant-svg { display: block; }
-
-  /* editable field highlight */
-  [contenteditable]:focus {
-    outline: 2px solid var(--accent-green-light);
-    border-radius: 4px;
-    padding: 0 2px;
-  }
-
-  /* scroll */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
-  /* section color strip */
-  .section-strip { width: 3px; border-radius: 2px; height: 16px; }
-
-  /* expand outdoor section full */
-  .outdoor-section .plant-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  }
-
-  /* delete zone */
-  .danger-zone {
-    border-top: 1px solid var(--border);
-    padding-top: 16px;
-    margin-top: 4px;
-  }
-  .btn-danger {
-    background: transparent;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-    font-size: 12px;
-    padding: 6px 12px;
-  }
-  .btn-danger:hover { background: #fee2e2; }
-
-  /* watering log */
-  .log-entry {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-  }
-  .log-entry:last-child { border-bottom: none; }
-  .log-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .log-text { color: var(--text-secondary); flex: 1; }
-  .log-date { font-family: 'DM Mono', monospace; color: var(--text-muted); font-size: 11px; }
-
-  /* section actions in header */
-  .section-actions { display: flex; gap: 4px; }
-
-  /* section edit name */
-  .section-name-edit {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    border: none; outline: none;
-    background: transparent;
-    font-family: 'DM Sans', sans-serif;
-    letter-spacing: -0.2px;
-    width: 120px;
-  }
+:root{--bg:#fff;--sf:#f8f8f6;--sf2:#f0f0ed;--bd:#e8e8e4;--bd2:#d0d0cb;--tx:#1a1a18;--tx2:#6b6b65;--tx3:#9a9a93;--gn:#2d6a4f;--gnl:#52b788;--gnp:#d8f3dc;--am:#b5810c;--amp:#fef3c7;--bl:#1d4e89;--blp:#dbeafe;--pu:#5b21b6;--pup:#ede9fe;--ro:#9d174d;--rop:#fce7f3;--r:12px;--rs:8px;--s0:0 1px 3px rgba(0,0,0,.06);--s:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.04);--s2:0 12px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);--t:.2s cubic-bezier(.4,0,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.screen{display:none;min-height:100vh}.screen.active{display:flex;flex-direction:column}
+.app-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.93);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:15px;font-weight:600;letter-spacing:-.3px;display:flex;align-items:center;gap:8px;color:var(--tx)}.logo svg{color:var(--gn)}
+.hdr-act{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all var(--t);white-space:nowrap}
+.btn-p{background:var(--gn);color:#fff}.btn-p:hover{background:#235a42;transform:translateY(-1px)}
+.btn-g{background:transparent;color:var(--tx2);border:1px solid var(--bd)}.btn-g:hover{background:var(--sf);color:var(--tx)}
+.btn-i{padding:0;width:36px;height:36px;border-radius:var(--rs);background:transparent;border:1px solid var(--bd);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t)}.btn-i:hover{background:var(--sf);color:var(--tx)}
+.btn-d{background:transparent;color:#dc2626;border:1px solid #fecaca;font-size:12px;padding:6px 12px}.btn-d:hover{background:#fee2e2}
+/* WELCOME */
+#screen-welcome{justify-content:center;align-items:center;padding:40px 24px;background:#fff}
+.wi{max-width:700px;width:100%;text-align:center}
+.wb{display:inline-flex;align-items:center;gap:6px;background:var(--gnp);color:var(--gn);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:500;margin-bottom:28px}
+.wt{font-size:clamp(28px,6vw,50px);font-weight:300;line-height:1.1;letter-spacing:-1.5px;margin-bottom:10px}.wt strong{font-weight:600}
+.ws{font-size:15px;color:var(--tx2);margin-bottom:44px}
+.env-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
+@media(max-width:520px){.env-cards{grid-template-columns:1fr}}
+.ec{background:var(--bg);border:1.5px solid var(--bd);border-radius:16px;padding:22px 18px;cursor:pointer;transition:all var(--t)}
+.ec:hover{border-color:var(--bd2);transform:translateY(-2px);box-shadow:var(--s)}
+.ei{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.ec.indoor .ei{background:var(--gnp);color:var(--gn)}.ec.outdoor .ei{background:var(--amp);color:var(--am)}
+.ec.vault .ei{background:var(--pup);color:var(--pu)}.ec.postcollita .ei{background:var(--rop);color:var(--ro)}
+.el{font-size:16px;font-weight:600;letter-spacing:-.3px;margin-bottom:3px}
+.ed{font-size:12px;color:var(--tx2);line-height:1.5}
+.ecount{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:11px;font-weight:500;color:var(--tx3)}
+/* BREADCRUMB */
+.bc{display:flex;align-items:center;gap:8px;padding:18px 0 0;font-size:13px;color:var(--tx3)}
+.bc a{color:var(--tx3);text-decoration:none;cursor:pointer}.bc a:hover{color:var(--tx2)}.bc span{color:var(--tx2);font-weight:500}
+/* DASHBOARD */
+#screen-dashboard{padding-bottom:80px}
+.dc{max-width:1200px;margin:0 auto;padding:0 24px}
+.eh{padding:18px 0 24px;display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.eh-l h1{font-size:clamp(22px,4vw,34px);font-weight:300;letter-spacing:-.8px;line-height:1.1;margin-bottom:4px}.eh-l h1 strong{font-weight:600}
+.em{display:flex;gap:12px;flex-wrap:wrap}
+.emi{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--tx3)}
+.sb{display:flex;border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:22px;overflow-x:auto}
+.si{flex:1;min-width:75px;padding:11px 12px;border-right:1px solid var(--bd);text-align:center}.si:last-child{border-right:none}
+.sn{font-size:20px;font-weight:600;letter-spacing:-.5px}.sl{font-size:10px;color:var(--tx3);font-weight:500;margin-top:1px}
+.sg{display:grid;gap:18px}.sg.indoor{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}.sg.outdoor{grid-template-columns:1fr}
+.sb2{background:var(--bg);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+.sh2{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd)}
+.str{display:flex;align-items:center;gap:8px}.sstrip{width:3px;border-radius:2px;height:14px}.sname{font-size:14px;font-weight:600;letter-spacing:-.2px}.scnt{font-size:12px;color:var(--tx3);margin-left:2px}
+.pg{padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px}
+.pc2{aspect-ratio:1;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:all var(--t);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;overflow:hidden}
+.pc2:hover{transform:translateY(-2px);box-shadow:var(--s0)}
+.pid{font-size:9px;font-family:'DM Mono',monospace;font-weight:500;opacity:.75}
+.psdot{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%}
+.padot{position:absolute;top:5px;left:5px;width:7px;height:7px;border-radius:50%;background:#ef4444;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.apb{aspect-ratio:1;border-radius:10px;border:1.5px dashed var(--bd2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:all var(--t)}
+.apb:hover{border-color:var(--gnl);color:var(--gn);background:var(--gnp)}
+/* GENETICS LEGEND */
+.gl{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px}
+.gp{display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:500;border:1px solid transparent}
+/* PANEL */
+.po{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200;backdrop-filter:blur(2px)}.po.open{display:block}
+.pp{position:fixed;right:-100%;top:0;bottom:0;width:min(500px,100vw);background:var(--bg);box-shadow:var(--s2);z-index:201;overflow-y:auto;transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}.pp.open{right:0}
+.ph{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;z-index:1}
+.pt{font-size:15px;font-weight:600;letter-spacing:-.2px}.ps{font-size:11px;color:var(--tx3);margin-top:1px}
+.pb{padding:16px;flex:1}.pa{display:flex;gap:7px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--bd);position:sticky;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px)}
+.phero{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:28px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.ic{background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:10px 12px}
+.icl{font-size:10px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.icv{font-size:13px;font-weight:600;color:var(--tx)}
+.icv input,.icv select{width:100%;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx);background:transparent;border:none;outline:none}
+.na{background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:12px;margin-bottom:16px}
+.nl{font-size:10px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.na textarea{width:100%;min-height:75px;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);resize:vertical;line-height:1.6}
+.na textarea::placeholder{color:var(--tx3)}
+.mr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)}.mr:last-child{border-bottom:none}
+.ml{font-size:13px;color:var(--tx2);display:flex;align-items:center;gap:5px}
+.mv{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px}
+.le{display:flex;align-items:center;gap:7px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}.le:last-child{border-bottom:none}
+.li{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lt{color:var(--tx2);flex:1}.ld{font-family:'DM Mono',monospace;color:var(--tx3);font-size:10px}
+.dz{border-top:1px solid var(--bd);padding-top:14px;margin-top:4px}
+/* FLOR COUNTDOWN */
+.fc{background:linear-gradient(135deg,#fef3c7,#fff7ed);border:1px solid #fde68a;border-radius:10px;padding:14px;margin-bottom:16px}
+.fct{font-size:10px;color:#92400e;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.fcm{font-size:22px;font-weight:600;color:#78350f;letter-spacing:-.5px}
+.fcs{font-size:12px;color:#92400e;margin-top:2px}
+.fpb{height:5px;background:#fde68a;border-radius:3px;margin-top:8px;overflow:hidden}
+.fpf{height:100%;background:#f59e0b;border-radius:3px;transition:width .5s ease}
+.ab{border-radius:9px;padding:11px 13px;margin-bottom:13px;font-size:13px;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.ab.warn{background:#fef3c7;border:1px solid #fde68a;color:#78350f}
+.ab.info{background:#dbeafe;border:1px solid #bfdbfe;color:#1e3a8a}
+/* WEATHER */
+.wc{background:linear-gradient(135deg,#e0f2fe,#f0fdf4);border:1px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:20px}
+.wt2{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.wl{font-size:10px;color:#0369a1;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.wte{font-size:34px;font-weight:300;color:#0c4a6e;letter-spacing:-1px;line-height:1}
+.wd{font-size:12px;color:#0369a1;margin-top:2px}.wic{font-size:38px;line-height:1}
+.wg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
+.wce{background:rgba(255,255,255,.6);border-radius:7px;padding:7px 5px;text-align:center}
+.wcv{font-size:13px;font-weight:600;color:#0c4a6e}.wcl{font-size:10px;color:#0369a1;margin-top:1px}
+.wf{display:flex;gap:5px;overflow-x:auto}
+.fd{background:rgba(255,255,255,.5);border-radius:7px;padding:7px 8px;text-align:center;flex-shrink:0;min-width:52px}
+.fdn{font-size:10px;color:#0369a1;font-weight:500;margin-bottom:3px}.fdi{font-size:16px;margin-bottom:2px}.fdt{font-size:11px;color:#0c4a6e;font-weight:600}
+.wr{background:rgba(255,255,255,.7);border-radius:9px;padding:10px 12px}
+.wrt{font-size:10px;color:#0369a1;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.wri{font-size:12px;color:#0c4a6e;padding:2px 0;display:flex;align-items:flex-start;gap:5px;line-height:1.5}
+/* VAULT */
+#screen-vault{padding-bottom:80px}.vc{max-width:1000px;margin:0 auto;padding:0 24px}
+.seed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-top:0}
+.skc{background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:16px;cursor:pointer;transition:all var(--t)}.skc:hover{box-shadow:var(--s);transform:translateY(-1px)}
+.skn{font-size:15px;font-weight:600;letter-spacing:-.3px}.skb{font-size:12px;color:var(--tx2);margin-top:1px}
+.skbdg{padding:3px 8px;border-radius:100px;font-size:10px;font-weight:600}
+.skmeta{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.sktag{background:var(--sf);border:1px solid var(--bd);padding:3px 8px;border-radius:100px;font-size:11px;color:var(--tx2)}
+.add-area{border:2px dashed var(--bd);border-radius:14px;padding:26px;text-align:center;cursor:pointer;color:var(--tx3);transition:all var(--t)}.add-area:hover{border-color:var(--gnl);color:var(--gn);background:var(--gnp)}
+/* POST-COLLITA */
+#screen-postcollita{padding-bottom:80px}.pcc{max-width:1000px;margin:0 auto;padding:0 24px}
+.pcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.pcb{background:var(--bg);border:1px solid var(--bd);border-radius:14px;overflow:hidden}
+.pcbh{padding:13px 15px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.pcbt{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:600}
+.pci{padding:11px 15px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background var(--t);display:flex;align-items:center;justify-content:space-between}.pci:last-child{border-bottom:none}.pci:hover{background:var(--sf)}
+.pcin{font-size:13px;font-weight:500}.pcim{font-size:11px;color:var(--tx3);margin-top:1px}
+/* PHOTOS */
+.pwt{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.wktab{padding:3px 9px;border-radius:100px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all var(--t)}.wktab:hover{border-color:var(--gnl);color:var(--gn)}.wktab.active{background:var(--gn);color:#fff;border-color:var(--gn)}
+.phg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pht{aspect-ratio:1;border-radius:7px;overflow:hidden;border:1px solid var(--bd);position:relative;cursor:pointer;background:var(--sf)}
+.pht img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}.pht:hover img{transform:scale(1.04)}
+.phtd{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center}.pht:hover .phtd{display:flex}
+.pub{aspect-ratio:1;border-radius:7px;border:1.5px dashed var(--bd2);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--tx3);font-size:10px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all var(--t)}.pub:hover{border-color:var(--gnl);color:var(--gn);background:var(--gnp)}
+.up{background:var(--sf);border:1px solid var(--bd);border-radius:7px;padding:8px 11px;font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ubw{flex:1;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}.ub{height:100%;background:var(--gn);width:0%;transition:width .3s ease;border-radius:2px}
+/* LIGHTBOX */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:400;align-items:center;justify-content:center;flex-direction:column;gap:10px}.lb.open{display:flex}
+.lb img{max-width:92vw;max-height:80vh;border-radius:8px;object-fit:contain}
+.lbi{color:rgba(255,255,255,.5);font-size:11px}
+.lbc{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center}.lbc:hover{background:rgba(255,255,255,.25)}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)}.mo.open{display:flex}
+.md{background:var(--bg);border-radius:16px;width:100%;max-width:420px;box-shadow:var(--s2);animation:mIn .2s ease;max-height:90vh;overflow-y:auto}
+@keyframes mIn{from{transform:scale(.96) translateY(8px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.mh{padding:16px 16px 13px;border-bottom:1px solid var(--bd)}.mt{font-size:15px;font-weight:600;letter-spacing:-.2px}
+.mb{padding:13px 16px}.mf{padding:10px 16px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+.fld{margin-bottom:12px}.fld label{display:block;font-size:11px;font-weight:500;color:var(--tx2);margin-bottom:4px}
+.fld input,.fld select,.fld textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);background:var(--bg);outline:none;transition:border-color var(--t)}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--gnl);box-shadow:0 0 0 3px rgba(82,183,136,.1)}
+/* TOAST */
+.tc{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none}
+.tos{background:var(--tx);color:#fff;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;box-shadow:var(--s);animation:tIn .25s ease,tOut .25s ease 2.5s forwards}
+@keyframes tIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes tOut{to{opacity:0;transform:translateY(-4px)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+@media(max-width:600px){.sg.indoor{grid-template-columns:1fr}.pp{width:100vw}.eh{flex-direction:column;align-items:flex-start}.dc,.vc,.pcc{padding-left:16px;padding-right:16px}.wg{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- ===== WELCOME SCREEN ===== -->
+<!-- WELCOME -->
 <div id="screen-welcome" class="screen active">
-  <div class="welcome-inner">
-    <div class="welcome-badge">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      GrowControl v1.0
-    </div>
-    <h1 class="welcome-title">Controla els teus<br><strong>cultius</strong></h1>
-    <p class="welcome-sub">Gestiona cada planta, fase i cicle des d'un sol lloc.<br>Selecciona l'entorn de cultiu per continuar.</p>
+  <div class="wi">
+    <div class="wb"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>GrowControl</div>
+    <h1 class="wt">Gestió de<br><strong>cultius</strong></h1>
+    <p class="ws">Selecciona una secció per continuar.</p>
     <div class="env-cards">
-      <div class="env-card indoor" onclick="enterEnv('indoor')">
-        <div class="env-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </div>
-        <div class="env-label">Indoor</div>
-        <div class="env-desc">Ambient controlat. Germinar, clonar, vegetar, mares i florir.</div>
-        <div class="env-count" id="count-indoor">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          5 fases actives
-        </div>
+      <div class="ec indoor" onclick="enterEnv('indoor')">
+        <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="el">Indoor</div><div class="ed">Germinació, clonació, vegetatiu, mares i floració.</div>
+        <div class="ecount" id="count-indoor"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>0 plantes</div>
       </div>
-      <div class="env-card outdoor" onclick="enterEnv('outdoor')">
-        <div class="env-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-          </svg>
-        </div>
-        <div class="env-label">Outdoor</div>
-        <div class="env-desc">Llum natural. Cicle de floració exterior al ritme de les estacions.</div>
-        <div class="env-count" id="count-outdoor">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          1 fase activa
-        </div>
+      <div class="ec outdoor" onclick="enterEnv('outdoor')">
+        <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+        <div class="el">Outdoor</div><div class="ed">Floració exterior amb predicció meteorològica real del Masnou.</div>
+        <div class="ecount" id="count-outdoor"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>0 plantes</div>
+      </div>
+      <div class="ec vault" onclick="showVault()">
+        <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1.5"/></svg></div>
+        <div class="el">My Vault</div><div class="ed">Inventari de llavors i genètiques disponibles.</div>
+        <div class="ecount" id="count-vault"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg>0 genètiques</div>
+      </div>
+      <div class="ec postcollita" onclick="showPostCollita()">
+        <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="el">Post-Collita</div><div class="ed">Secat, curació, hash, extraccions i processament.</div>
+        <div class="ecount" id="count-pc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>0 lots</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== DASHBOARD SCREEN ===== -->
+<!-- DASHBOARD -->
 <div id="screen-dashboard" class="screen">
   <header class="app-header">
-    <div class="logo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 22c4.97 0 9-1.79 9-4V6c0-2.21-4.03-4-9-4S3 3.79 3 6v12c0 2.21 4.03 4 9 4z"/>
-        <path d="M3 6c0 2.21 4.03 4 9 4s9-1.79 9-4"/>
-        <path d="M3 12c0 2.21 4.03 4 9 4s9-1.79 9-4"/>
-      </svg>
-      GrowControl
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-ghost" onclick="showAddPlantModal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Nova planta
-      </button>
-      <button class="btn-icon" onclick="showWelcome()" title="Canviar entorn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-      </button>
+    <div class="logo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5 0 9-1.8 9-4V6c0-2.2-4-4-9-4S3 3.8 3 6v12c0 2.2 4 4 9 4z"/><path d="M3 6c0 2.2 4 4 9 4s9-1.8 9-4"/><path d="M3 12c0 2.2 4 4 9 4s9-1.8 9-4"/></svg>GrowControl</div>
+    <div class="hdr-act">
+      <button class="btn btn-p" onclick="showAddPlantModal()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nova planta</button>
+      <button class="btn-i" onclick="showWelcome()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
     </div>
   </header>
-
-  <div class="dash-container">
-    <div class="breadcrumb">
-      <a onclick="showWelcome()">Inici</a>
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-      <span id="dash-env-label">Indoor</span>
-    </div>
-
-    <div class="env-header">
-      <div class="env-header-left">
-        <h1 id="dash-title">Cultiu <strong>Indoor</strong></h1>
-        <div class="env-meta">
-          <span class="env-meta-item">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span id="dash-date"></span>
-          </span>
-          <span class="env-meta-item" id="dash-total-plants">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>
-            0 plantes
-          </span>
-        </div>
-      </div>
-      <div>
-        <button class="btn btn-primary" onclick="showAddPlantModal()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Afegir planta
-        </button>
-      </div>
-    </div>
-
-    <!-- Stats bar -->
-    <div class="stats-bar" id="stats-bar"></div>
-
-    <!-- Sections -->
-    <div class="section-grid" id="section-grid"></div>
+  <div class="dc">
+    <div class="bc"><a onclick="showWelcome()">Inici</a><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span id="dash-env-label">Indoor</span></div>
+    <div class="eh"><div class="eh-l"><h1 id="dash-title">Cultiu <strong>Indoor</strong></h1><div class="em"><span class="emi" id="dash-date-el"></span><span class="emi" id="dash-total-plants"></span></div></div></div>
+    <div class="sb" id="stats-bar"></div>
+    <div id="genetics-legend" style="display:none;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:16px;padding:10px 12px;background:var(--sf);border:1px solid var(--bd);border-radius:10px"></div>
+    <div id="weather-zone"></div>
+    <div class="sg" id="section-grid"></div>
   </div>
 </div>
 
-<!-- ===== PANEL OVERLAY ===== -->
-<div class="panel-overlay" id="panel-overlay" onclick="closePanel()"></div>
-
-<!-- ===== PLANT DETAIL PANEL ===== -->
-<div class="plant-panel" id="plant-panel">
-  <div class="panel-header">
-    <div>
-      <div class="panel-title" id="panel-title">Planta #001</div>
-      <div class="panel-subtitle" id="panel-subtitle">Germinació · Indoor</div>
+<!-- VAULT -->
+<div id="screen-vault" class="screen">
+  <header class="app-header">
+    <div class="logo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>My Vault</div>
+    <div class="hdr-act">
+      <button class="btn btn-p" onclick="showAddSeedModal()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nova genètica</button>
+      <button class="btn-i" onclick="showWelcome()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
     </div>
-    <button class="btn-icon" onclick="closePanel()">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <div class="panel-body" id="panel-body"></div>
-  <div class="panel-actions" id="panel-actions"></div>
-</div>
-
-<!-- ===== ADD PLANT MODAL ===== -->
-<div class="modal-overlay" id="modal-add">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Afegir nova planta</div>
-    </div>
-    <div class="modal-body">
-      <div class="field">
-        <label>Nom / identificador</label>
-        <input type="text" id="new-name" placeholder="ex: OG Kush #01">
-      </div>
-      <div class="field">
-        <label>Genètica / varietat</label>
-        <input type="text" id="new-strain" placeholder="ex: OG Kush, White Widow...">
-      </div>
-      <div class="field">
-        <label>Fase</label>
-        <select id="new-phase"></select>
-      </div>
-      <div class="field">
-        <label>Data d'inici de fase</label>
-        <input type="date" id="new-date">
-      </div>
-      <div class="field">
-        <label>Notes inicials</label>
-        <textarea id="new-notes" rows="2" placeholder="Observacions..."></textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel·lar</button>
-      <button class="btn btn-primary" onclick="addPlant()">Afegir planta</button>
-    </div>
+  </header>
+  <div class="vc">
+    <div class="bc"><a onclick="showWelcome()">Inici</a><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>My Vault</span></div>
+    <div class="eh"><div class="eh-l"><h1>My <strong>Vault</strong></h1></div></div>
+    <div class="seed-grid" id="seed-grid"></div>
   </div>
 </div>
 
-<!-- ===== TOAST CONTAINER ===== -->
-<div class="toast-container" id="toasts"></div>
+<!-- POST-COLLITA -->
+<div id="screen-postcollita" class="screen">
+  <header class="app-header">
+    <div class="logo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Post-Collita</div>
+    <div class="hdr-act">
+      <button class="btn btn-p" onclick="showAddPCModal()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nou lot</button>
+      <button class="btn-i" onclick="showWelcome()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
+    </div>
+  </header>
+  <div class="pcc">
+    <div class="bc"><a onclick="showWelcome()">Inici</a><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>Post-Collita</span></div>
+    <div class="eh"><div class="eh-l"><h1>Post-<strong>Collita</strong></h1></div></div>
+    <div class="pcs" id="pc-sections"></div>
+  </div>
+</div>
 
+<!-- PANEL -->
+<div class="po" id="panel-overlay" onclick="closePanel()"></div>
+<div class="pp" id="plant-panel">
+  <div class="ph"><div><div class="pt" id="panel-title"></div><div class="ps" id="panel-subtitle"></div></div>
+  <button class="btn-i" onclick="closePanel()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="pb" id="panel-body"></div>
+  <div class="pa" id="panel-actions"></div>
+</div>
+
+<!-- MODALS -->
+<div class="mo" id="modal-add">
+  <div class="md">
+    <div class="mh"><div class="mt">Afegir nova planta</div></div>
+    <div class="mb">
+      <div class="fld"><label>Nom</label><input type="text" id="new-name" placeholder="ex: OG Kush #01"></div>
+      <div class="fld"><label>Genètica</label><input type="text" id="new-strain" placeholder="ex: OG Kush" list="strain-dl"><datalist id="strain-dl"></datalist></div>
+      <div class="fld"><label>Fase</label><select id="new-phase"></select></div>
+      <div class="fld"><label>Data inici de fase</label><input type="date" id="new-date"></div>
+      <div class="fld" id="flor-days-fld" style="display:none"><label>Dies estimats de floració</label><input type="number" id="new-flor-days" placeholder="63" min="30" max="120"></div>
+      <div class="fld"><label>Notes</label><textarea id="new-notes" rows="2" placeholder="Observacions..."></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-g" onclick="closeModal('modal-add')">Cancel·lar</button><button class="btn btn-p" onclick="addPlant()">Afegir</button></div>
+  </div>
+</div>
+
+<div class="mo" id="modal-seed">
+  <div class="md">
+    <div class="mh"><div class="mt">Nova genètica al Vault</div></div>
+    <div class="mb">
+      <div class="fld"><label>Nom de la genètica</label><input type="text" id="seed-name" placeholder="ex: White Widow"></div>
+      <div class="fld"><label>Breeder</label><input type="text" id="seed-breeder" placeholder="ex: Green House Seeds"></div>
+      <div class="fld"><label>Tipus</label><select id="seed-type"><option value="feminitzada">Feminitzada</option><option value="autoflorent">Autoflorent</option><option value="regular">Regular</option><option value="CBD">CBD</option></select></div>
+      <div class="fld"><label>Dies floració estimats</label><input type="number" id="seed-flor" placeholder="63"></div>
+      <div class="fld"><label>Estoc (unitats)</label><input type="number" id="seed-stock" placeholder="5" min="0"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="fld"><label>THC mínim %</label><input type="number" id="seed-thcmin" step="0.5" placeholder="18"></div>
+        <div class="fld"><label>THC màxim %</label><input type="number" id="seed-thcmax" step="0.5" placeholder="25"></div>
+      </div>
+      <div class="fld"><label>Notes</label><textarea id="seed-notes" rows="2" placeholder="Rendiment, efectes, aromes..."></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-g" onclick="closeModal('modal-seed')">Cancel·lar</button><button class="btn btn-p" onclick="addSeed()">Guardar</button></div>
+  </div>
+</div>
+
+<div class="mo" id="modal-pc">
+  <div class="md">
+    <div class="mh"><div class="mt">Nou lot Post-Collita</div></div>
+    <div class="mb">
+      <div class="fld"><label>Nom del lot</label><input type="text" id="pc-name" placeholder="ex: OG Kush - Abril 2025"></div>
+      <div class="fld"><label>Genètica</label><input type="text" id="pc-strain" placeholder="ex: OG Kush"></div>
+      <div class="fld"><label>Tipus</label><select id="pc-type"><option value="secat">Secat</option><option value="curacio">Curació</option><option value="hash">Hash / Rosin</option><option value="extraccio">Extracció BHO/PHO</option><option value="tinctura">Tintura / RSO</option><option value="altri">Altres</option></select></div>
+      <div class="fld"><label>Pes inicial (g)</label><input type="number" id="pc-weight" placeholder="100"></div>
+      <div class="fld"><label>Data inici</label><input type="date" id="pc-start"></div>
+      <div class="fld"><label>Dies estimats</label><input type="number" id="pc-days" placeholder="14"></div>
+    </div>
+    <div class="mf"><button class="btn btn-g" onclick="closeModal('modal-pc')">Cancel·lar</button><button class="btn btn-p" onclick="addPCLot()">Crear</button></div>
+  </div>
+</div>
+
+<div class="lb" id="lightbox" onclick="closeLightbox()">
+  <button class="lbc" onclick="closeLightbox()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <img id="lb-img" src="" alt=""><div class="lbi" id="lb-info"></div>
+</div>
+<input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+<div class="tc" id="toasts"></div>
 <script>
-// ============================================================
-// DATA MODEL
-// ============================================================
-const PHASES_INDOOR = [
-  { id: 'germ', name: 'Germinació', colorClass: 'c-germ', bgClass: 'bg-germ', dotClass: 'dot-germ', color: '#10b981', lightColor: '#d1fae5' },
-  { id: 'clon', name: 'Clonació',   colorClass: 'c-clon', bgClass: 'bg-clon', dotClass: 'dot-clon', color: '#3b82f6', lightColor: '#dbeafe' },
-  { id: 'veg',  name: 'Vegetatiu',  colorClass: 'c-veg',  bgClass: 'bg-veg',  dotClass: 'dot-veg',  color: '#52b788', lightColor: '#d8f3dc' },
-  { id: 'mare', name: 'Mares',      colorClass: 'c-mare', bgClass: 'bg-mare', dotClass: 'dot-mare', color: '#8b5cf6', lightColor: '#ede9fe' },
-  { id: 'flor', name: 'Floració',   colorClass: 'c-flor', bgClass: 'bg-flor', dotClass: 'dot-flor', color: '#f59e0b', lightColor: '#fef3c7' },
-];
-const PHASES_OUTDOOR = [
-  { id: 'flor', name: 'Floració',   colorClass: 'c-flor', bgClass: 'bg-flor', dotClass: 'dot-flor', color: '#f59e0b', lightColor: '#fef3c7' },
-];
+// CONFIG
+const GH_TOKEN='POSA_EL_TEU_TOKEN_AQUI';
+const GH_USER='ORSINISTUDIO';
+const GH_REPO='GrowControl';
+const GH_API=`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/data.json`;
+const LAT=41.5088,LON=2.3174; // El Masnou
 
-let currentEnv = 'indoor';
-let plants = JSON.parse(localStorage.getItem('gc-plants') || '[]');
-let nextId = parseInt(localStorage.getItem('gc-nextid') || '1');
-let openPlantId = null;
+// PHASES
+const PI=[{id:'germ',name:'Germinació',color:'#10b981',light:'#d1fae5'},{id:'clon',name:'Clonació',color:'#3b82f6',light:'#dbeafe'},{id:'veg',name:'Vegetatiu',color:'#22c55e',light:'#dcfce7'},{id:'mare',name:'Mares',color:'#8b5cf6',light:'#ede9fe'},{id:'flor',name:'Floració',color:'#f59e0b',light:'#fef3c7'}];
+const PO=[{id:'flor',name:'Floració',color:'#f59e0b',light:'#fef3c7'}];
 
-function save() {
-  localStorage.setItem('gc-plants', JSON.stringify(plants));
-  localStorage.setItem('gc-nextid', String(nextId));
-  updateWelcomeCounts();
+// GENETICS PALETTE
+const GP=[{bg:'#fecdd3',bd:'#fb7185',tx:'#9f1239'},{bg:'#fed7aa',bd:'#fb923c',tx:'#9a3412'},{bg:'#fef08a',bd:'#facc15',tx:'#713f12'},{bg:'#bbf7d0',bd:'#4ade80',tx:'#14532d'},{bg:'#bae6fd',bd:'#38bdf8',tx:'#0c4a6e'},{bg:'#e9d5ff',bd:'#a855f7',tx:'#581c87'},{bg:'#fecaca',bd:'#f87171',tx:'#991b1b'},{bg:'#d9f99d',bd:'#86efac',tx:'#166534'},{bg:'#c7d2fe',bd:'#818cf8',tx:'#3730a3'},{bg:'#fbcfe8',bd:'#f472b6',tx:'#9d174d'},{bg:'#a5f3fc',bd:'#22d3ee',tx:'#164e63'},{bg:'#fde68a',bd:'#fbbf24',tx:'#78350f'}];
+
+// STATE
+let S={plants:[],nextId:1,seeds:[],nextSeedId:1,pcLots:[],nextPCId:1};
+let ghSha=null,saving=false,curEnv='indoor',openPId=null,activeWeek=null,photoCtx={plantId:null,week:null},gcMap={};
+
+// GITHUB
+async function loadGH(){
+  showSync('Carregant...');
+  try{
+    const r=await fetch(GH_API,{headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});
+    if(r.status===404){hideSync();return;}
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();ghSha=j.sha;
+    const d=JSON.parse(atob(j.content.replace(/\n/g,'')));
+    S={...S,...d};hideSync();
+  }catch(e){showSync('Error: '+e.message,'err');}
 }
 
-function phasesForEnv(env) {
-  return env === 'indoor' ? PHASES_INDOOR : PHASES_OUTDOOR;
+async function save(){
+  rebuildGC();updateCounts();
+  if(saving)return;saving=true;showSync('Guardant...');
+  try{
+    const c=btoa(unescape(encodeURIComponent(JSON.stringify(S,null,2))));
+    const b={message:`Update ${new Date().toISOString()}`,content:c,...(ghSha?{sha:ghSha}:{})};
+    const r=await fetch(GH_API,{method:'PUT',headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(b)});
+    if(!r.ok){const e=await r.json();throw new Error(e.message);}
+    const res=await r.json();ghSha=res.content.sha;
+    showSync('Guardat','ok');setTimeout(hideSync,2000);
+  }catch(e){showSync('Error: '+e.message,'err');}finally{saving=false;}
 }
 
-function getPhase(phaseId) {
-  return [...PHASES_INDOOR, ...PHASES_OUTDOOR].find(p => p.id === phaseId) || PHASES_INDOOR[0];
+function showSync(msg,type='load'){
+  let el=document.getElementById('sync-st');
+  if(!el){el=document.createElement('div');el.id='sync-st';el.style.cssText='position:fixed;bottom:16px;right:16px;z-index:998;padding:7px 13px;border-radius:100px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,.12)';document.body.appendChild(el);}
+  const ic={load:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.2-8.6"/></svg>`,ok:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,err:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`};
+  const st={load:'background:#1a1a18;color:#fff',ok:'background:#d1fae5;color:#065f46',err:'background:#fee2e2;color:#991b1b'};
+  Object.assign(el.style,Object.fromEntries(st[type].split(';').map(s=>s.split(':').map(x=>x.trim()))));
+  el.innerHTML=ic[type]+msg;el.style.display='flex';
+}
+function hideSync(){const el=document.getElementById('sync-st');if(el)el.style.display='none';}
+
+// GENETICS COLORS
+function rebuildGC(){
+  const strains=[...new Set(S.plants.map(p=>p.strain).filter(Boolean))];
+  strains.forEach((s,i)=>{if(gcMap[s]===undefined)gcMap[s]=i%GP.length;});
+}
+function colFor(strain){if(!strain)return{bg:'#f0f0ed',bd:'#d0d0cb',tx:'#6b6b65'};return GP[gcMap[strain]??0];}
+
+// NAV
+function showWelcome(){closePanel();showScr('welcome');updateCounts();}
+function enterEnv(env){curEnv=env;showScr('dashboard');renderDash();if(env==='outdoor')fetchWeather();}
+function showVault(){showScr('vault');renderVault();}
+function showPostCollita(){showScr('postcollita');renderPC();}
+function showScr(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
+
+function updateCounts(){
+  const ni=S.plants.filter(p=>p.env==='indoor').length;
+  const no=S.plants.filter(p=>p.env==='outdoor').length;
+  const ns=S.seeds.length;
+  const np=S.pcLots.filter(l=>l.status!=='completat').length;
+  document.getElementById('count-indoor').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${ni} planta${ni!==1?'es':''}`;
+  document.getElementById('count-outdoor').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${no} planta${no!==1?'es':''}`;
+  document.getElementById('count-vault').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg>${ns} genètica${ns!==1?'es':''}`;
+  document.getElementById('count-pc').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>${np} lot${np!==1?'s':''}`;
 }
 
-function plantsInPhase(phase, env) {
-  return plants.filter(p => p.env === env && p.phase === phase);
+// DASHBOARD
+function renderDash(){
+  rebuildGC();
+  const phases=curEnv==='indoor'?PI:PO;
+  const lbl=curEnv==='indoor'?'Indoor':'Outdoor';
+  const ep=S.plants.filter(p=>p.env===curEnv);
+  document.getElementById('dash-env-label').textContent=lbl;
+  document.getElementById('dash-title').innerHTML=`Cultiu <strong>${lbl}</strong>`;
+  document.getElementById('dash-date-el').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${new Date().toLocaleDateString('ca-ES',{weekday:'short',day:'numeric',month:'long'})}`;
+  document.getElementById('dash-total-plants').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${ep.length} planta${ep.length!==1?'es':''}`;
+  document.getElementById('stats-bar').innerHTML=phases.map(ph=>{const c=S.plants.filter(p=>p.env===curEnv&&p.phase===ph.id).length;return`<div class="si"><div class="sn" style="color:${ph.color}">${c}</div><div class="sl">${ph.name}</div></div>`;}).join('');
+
+  // ---- E: Llegenda global de genètiques ----
+  const allStrains=[...new Set(ep.map(p=>p.strain).filter(Boolean))];
+  const legendEl=document.getElementById('genetics-legend');
+  if(legendEl){
+    if(allStrains.length>0){
+      legendEl.style.display='flex';
+      legendEl.innerHTML=`
+        <span style="font-size:11px;font-weight:500;color:var(--tx3);flex-shrink:0">Genètiques:</span>
+        ${allStrains.map(s=>{
+          const c=colFor(s);
+          const count=ep.filter(p=>p.strain===s).length;
+          const floringPlants=ep.filter(p=>p.strain===s&&p.phase==='flor'&&p.florDays);
+          const urgentCount=floringPlants.filter(p=>{
+            const dip=p.phaseStart?Math.floor((Date.now()-new Date(p.phaseStart).getTime())/86400000):0;
+            return p.florDays-dip<=14;
+          }).length;
+          return`<div style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;background:${c.bg};border:1.5px solid ${c.bd};cursor:default" title="${count} planta${count!==1?'es':''} · ${esc(s)}">
+            <div style="width:8px;height:8px;border-radius:50%;background:${c.bd};flex-shrink:0"></div>
+            <span style="font-size:12px;font-weight:500;color:${c.tx}">${esc(s)}</span>
+            <span style="font-size:10px;color:${c.tx};opacity:.7">${count}</span>
+            ${urgentCount?`<span style="width:6px;height:6px;border-radius:50%;background:#ef4444;animation:pulse 1.5s ease-in-out infinite;flex-shrink:0" title="Collita pròxima"></span>`:''}
+          </div>`;
+        }).join('')}
+      `;
+    } else {
+      legendEl.style.display='none';
+    }
+  }
+
+  const grid=document.getElementById('section-grid');
+  grid.className='sg '+(curEnv==='indoor'?'indoor':'outdoor');
+  grid.innerHTML=phases.map(ph=>renderSection(ph)).join('');
 }
 
-function pad(n) { return String(n).padStart(3, '0'); }
-
-// ============================================================
-// NAVIGATION
-// ============================================================
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+function renderSection(ph){
+  const ps=S.plants.filter(p=>p.env===curEnv&&p.phase===ph.id);
+  const strains=[...new Set(ps.map(p=>p.strain).filter(Boolean))];
+  // Show legend only if multiple strains in this section
+  const leg=strains.length>0?`<div class="gl">${strains.map(s=>{
+    const c=colFor(s);
+    const cnt=ps.filter(p=>p.strain===s).length;
+    return`<div class="gp" style="background:${c.bg};color:${c.tx};border-color:${c.bd}">
+      <div style="width:6px;height:6px;border-radius:50%;background:${c.bd};flex-shrink:0"></div>
+      ${esc(s)}<span style="opacity:.6;font-size:9px">${cnt}</span>
+    </div>`;
+  }).join('')}</div>`:'';
+  return`<div class="sb2">
+    <div class="sh2">
+      <div class="str"><div class="sstrip" style="background:${ph.color}"></div><span class="sname">${ph.name}</span><span class="scnt">${ps.length}</span></div>
+      <button class="btn-i" style="width:26px;height:26px" onclick="showAddPlantModalPhase('${ph.id}')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </div>
+    ${leg}
+    <div class="pg">
+      ${ps.map(p=>renderCard(p)).join('')}
+      <button class="apb" onclick="showAddPlantModalPhase('${ph.id}')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </div>
+  </div>`;
 }
 
-function showWelcome() {
-  closePanel();
-  showScreen('welcome');
-  updateWelcomeCounts();
+function renderCard(p){
+  const c=colFor(p.strain);
+  const hc=p.health==='bo'?'#10b981':p.health==='atencio'?'#f59e0b':'#ef4444';
+  // Alert dot: collita en <=14 dies
+  const dip2=p.phaseStart?Math.floor((Date.now()-new Date(p.phaseStart).getTime())/86400000):0;
+  const alert=p.phase==='flor'&&p.florDays&&(p.florDays-dip2)<=14&&(p.florDays-dip2)>=0;
+  // Tooltip complet
+  const tip=`${esc(p.name)}${p.strain?' · '+p.strain:''}${p.florDays&&p.phase==='flor'?' · '+(p.florDays-dip2)+'d collita':''}`;
+  return`<div class="pc2" onclick="openPlant(${p.id})" title="${tip}" style="background:${c.bg};border-color:${c.bd}">
+    ${alert?'<div class="padot"></div>':''}
+    <div class="psdot" style="background:${hc}"></div>
+    ${pSVG(p.phase,c.tx,26)}
+    <div class="pid" style="color:${c.tx}">#${pad(p.id)}</div>
+  </div>`;
 }
 
-function enterEnv(env) {
-  currentEnv = env;
-  showScreen('dashboard');
-  renderDashboard();
+// PLANT SVG
+function pSVG(phase,color,size){
+  const s=size||28,c=color||'#52b788';
+  return({
+    germ:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="24" rx="5" ry="3" fill="${c}22"/><path d="M16 24 Q16 14 22 10" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="22" cy="10" rx="5" ry="3.5" fill="${c}" opacity=".8" transform="rotate(-20 22 10)"/><ellipse cx="10" cy="16" rx="4" ry="2.5" fill="${c}" opacity=".6" transform="rotate(15 10 16)"/><circle cx="16" cy="24" r="2" fill="${c}"/></svg>`,
+    clon:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="11" y="20" width="10" height="8" rx="2" fill="${c}33"/><line x1="16" y1="20" x2="16" y2="10" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><path d="M16 14 Q10 12 9 7" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="9" cy="7" rx="3.5" ry="2.5" fill="${c}" opacity=".75" transform="rotate(-10 9 7)"/><path d="M16 11 Q22 9 23 5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="23" cy="5" rx="3" ry="2" fill="${c}" opacity=".75" transform="rotate(10 23 5)"/></svg>`,
+    veg:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="13" y="24" width="6" height="5" rx="1.5" fill="${c}44"/><line x1="16" y1="24" x2="16" y2="8" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/><path d="M16 19 Q8 17 7 11" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/><path d="M16 15 Q24 13 25 7" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="7" cy="11" rx="4.5" ry="3" fill="${c}" opacity=".7" transform="rotate(-15 7 11)"/><ellipse cx="25" cy="7" rx="4" ry="2.5" fill="${c}" opacity=".7" transform="rotate(15 25 7)"/></svg>`,
+    mare:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="11" y="25" width="10" height="4" rx="2" fill="${c}44"/><line x1="16" y1="25" x2="16" y2="6" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M16 22 Q6 20 5 13" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/><path d="M16 17 Q26 15 27 8" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/><path d="M16 13 Q8 10 8 5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="5" cy="13" rx="5" ry="3.5" fill="${c}" opacity=".75" transform="rotate(-18 5 13)"/><ellipse cx="27" cy="8" rx="5" ry="3" fill="${c}" opacity=".75" transform="rotate(15 27 8)"/></svg>`,
+    flor:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="13" y="25" width="6" height="5" rx="1.5" fill="${c}44"/><line x1="16" y1="25" x2="16" y2="7" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/><path d="M16 20 Q9 18 8 13" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><path d="M16 15 Q23 13 24 8" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="8" cy="13" rx="3.5" ry="2.5" fill="${c}" opacity=".55" transform="rotate(-15 8 13)"/><ellipse cx="24" cy="8" rx="3.5" ry="2.5" fill="${c}" opacity=".55" transform="rotate(15 24 8)"/><circle cx="16" cy="7" r="3.5" fill="${c}" opacity=".9"/><circle cx="16" cy="7" r="2" fill="${c}"/><ellipse cx="13" cy="5" rx="2" ry="2.8" fill="${c}" opacity=".6" transform="rotate(-30 13 5)"/><ellipse cx="19" cy="5" rx="2" ry="2.8" fill="${c}" opacity=".6" transform="rotate(30 19 5)"/></svg>`,
+  })[phase]||'';
 }
 
-function updateWelcomeCounts() {
-  const indoorCount = plants.filter(p => p.env === 'indoor').length;
-  const outdoorCount = plants.filter(p => p.env === 'outdoor').length;
-  document.getElementById('count-indoor').innerHTML = `
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    ${indoorCount} planta${indoorCount !== 1 ? 'es' : ''}
-  `;
-  document.getElementById('count-outdoor').innerHTML = `
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    ${outdoorCount} planta${outdoorCount !== 1 ? 'es' : ''}
-  `;
+// PLANT PANEL
+function openPlant(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(openPId!==id)activeWeek=null;openPId=id;
+  const ph=(p.env==='indoor'?PI:PO).find(x=>x.id===p.phase)||PI[0];
+  const c=colFor(p.strain);
+  document.getElementById('panel-title').textContent=p.name;
+  document.getElementById('panel-subtitle').textContent=`${ph.name} · ${p.env==='indoor'?'Indoor':'Outdoor'}${p.strain?' · '+p.strain:''}`;
+  const started=p.phaseStart?new Date(p.phaseStart):null;
+  const dip=started?Math.floor((Date.now()-started.getTime())/86400000):0;
+
+  // ---- D: Comptador floració millorat ----
+  let fch='';
+  if(p.phase==='flor'&&p.florDays){
+    const rem=p.florDays-dip;
+    const pct=Math.min(100,Math.round((dip/p.florDays)*100));
+    const overdue=rem<0;
+    const barColor=rem<=7?'#ef4444':rem<=14?'#f59e0b':ph.color;
+    let mainMsg='',mainSub='';
+    if(overdue){mainMsg=`Retard de ${Math.abs(rem)} dies`;mainSub='Revisa tricomes: àmbar>50% = collita urgent';}
+    else if(rem===0){mainMsg='Dia de collita!';mainSub='Revisa tricomes i decideix si collir avui.';}
+    else if(rem<=3){mainMsg=`${rem} dies per a la collita`;mainSub="Atura el reg. Flushing final si no s'ha fet.";}
+    else if(rem<=7){mainMsg=`${rem} dies per a la collita`;mainSub='Atura els nutrients. Últim reg amb aigua sola.';}
+    else if(rem<=14){mainMsg=`${rem} dies per a la collita`;mainSub='Inicia flushing: rega amb aigua sola 7–14 dies.';}
+    else if(rem<=21){mainMsg=`${rem} dies per a la collita`;mainSub='Fase final. Redueix nitrogen, puja potassi/fòsfor.';}
+    else{mainMsg=`${rem} dies per a la collita`;mainSub=`Dia ${dip} de ${p.florDays} · ${pct}% de la floració completat.`;}
+    const weekRecs=[];
+    if(dip<=14)weekRecs.push({t:'Setmana 1–2',r:'Transició nutrients: baixa N, puja P/K. Defoliació suau.'});
+    else if(dip<=35)weekRecs.push({t:'Setmana 3–5',r:'Formació brots. Màxim P/K. Humitat <55% per evitar botiritis.'});
+    else if(dip<=49)weekRecs.push({t:'Setmana 5–7',r:'Engruiximent. Controla aroma. Revisa botiritis als brots.'});
+    else if(rem>14)weekRecs.push({t:'Recta final',r:'Comença a mirar tricomes. Prepara material de collita.'});
+    fch=`<div class="fc" style="border-color:${barColor}33;background:linear-gradient(135deg,${barColor}10,${barColor}05)">
+      <div class="fct" style="color:${barColor}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Floració · ${dip} / ${p.florDays} dies</div>
+      <div class="fcm" style="color:${overdue?'#dc2626':rem<=3?'#d97706':'var(--tx)'}">${mainMsg}</div>
+      <div class="fcs" style="color:${barColor}">${mainSub}</div>
+      <div class="fpb" style="background:${barColor}22;margin-top:10px"><div class="fpf" style="width:${pct}%;background:${barColor}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:${barColor};opacity:.7;margin-top:3px"><span>Dia 1</span><span>Dia ${p.florDays}</span></div>
+    </div>
+    ${overdue||rem<=0?`<div class="ab warn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span><strong>Collita imminent.</strong> Examina tricomes: blanc lletós = potència màxima, àmbar = efecte sedant. Atura reg 2–3 dies.</span></div>`:''}
+    ${rem>0&&rem<=7?`<div class="ab warn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Queden ${rem} dies. Atura nutrients. Flushing amb pH 6.0–6.2.</span></div>`:''}
+    ${rem>7&&rem<=14?`<div class="ab info"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Queden ${rem} dies. Inicia flushing: rega amb aigua sola els propers 7–14 dies.</span></div>`:''}
+    ${rem>14&&rem<=21?`<div class="ab info"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Queden ${rem} dies. Redueix nitrogen, maximitza P/K per engruixir brots.</span></div>`:''}
+    ${weekRecs.map(r=>`<div class="ab info" style="background:#f0fdf4;border-color:#bbf7d0;color:#14532d"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span><strong>${r.t}:</strong> ${r.r}</span></div>`).join('')}`;
+  } else if(p.phase==='flor'&&!p.florDays){
+    fch=`<div class="ab info"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Afegeix els dies estimats de floració per activar el comptador i rebre recomanacions.</span></div>`;
+  }
+  const inp=()=>`style="width:60px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right"`;
+  document.getElementById('panel-body').innerHTML=`
+    <div class="phero" style="background:${c.bg};border-color:${c.bd}">${pSVG(p.phase,c.tx,80)}</div>
+    ${fch}
+    <div class="ig">
+      <div class="ic"><div class="icl">Nom</div><div class="icv"><input type="text" value="${esc(p.name)}" onchange="upF(${id},'name',this.value)"></div></div>
+      <div class="ic"><div class="icl">Genètica</div><div class="icv"><input type="text" value="${esc(p.strain||'')}" placeholder="Varietat..." onchange="upF(${id},'strain',this.value)" list="strain-dl"></div></div>
+      <div class="ic"><div class="icl">Fase</div><div class="icv"><select onchange="upF(${id},'phase',this.value);renderDash();openPlant(${id})">${(p.env==='indoor'?PI:PO).map(ph2=>`<option value="${ph2.id}"${ph2.id===p.phase?' selected':''}>${ph2.name}</option>`).join('')}</select></div></div>
+      <div class="ic"><div class="icl">Dies en fase</div><div class="icv">${dip} dies</div></div>
+      <div class="ic"><div class="icl">Inici fase</div><div class="icv"><input type="date" value="${p.phaseStart||''}" onchange="upF(${id},'phaseStart',this.value)"></div></div>
+      <div class="ic"><div class="icl">Salut</div><div class="icv"><select onchange="upF(${id},'health',this.value);openPlant(${id});renderDash()"><option value="bo"${p.health==='bo'?' selected':''}>Bo</option><option value="atencio"${p.health==='atencio'?' selected':''}>Atenció</option><option value="malament"${p.health==='malament'?' selected':''}>Malament</option></select></div></div>
+      <div class="ic"><div class="icl">Substrat</div><div class="icv"><input type="text" value="${esc(p.substrate||'')}" placeholder="Coco, terra..." onchange="upF(${id},'substrate',this.value)"></div></div>
+      <div class="ic"><div class="icl">Test (L)</div><div class="icv"><input type="text" value="${esc(p.potSize||'')}" placeholder="11L" onchange="upF(${id},'potSize',this.value)"></div></div>
+      ${p.phase==='flor'?`<div class="ic"><div class="icl">Dies flor. estimats</div><div class="icv"><input type="number" value="${p.florDays||''}" placeholder="63" min="30" max="120" onchange="upF(${id},'florDays',parseInt(this.value)||null);openPlant(${id})"></div></div>`:''}
+    </div>
+    <div class="na"><div class="nl">Paràmetres</div>
+      <div class="mr"><span class="ml"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8l3 3-3 3v4"/></svg>pH reg</span><span class="mv"><input type="number" step=".1" min="4" max="9" value="${p.ph||''}" placeholder="6.0" ${inp()} onchange="upF(${id},'ph',this.value)"></span></div>
+      <div class="mr"><span class="ml"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>EC reg</span><span class="mv"><input type="number" step=".1" min="0" max="5" value="${p.ec||''}" placeholder="1.2" ${inp()} onchange="upF(${id},'ec',this.value)"></span></div>
+      <div class="mr"><span class="ml"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>Temperatura</span><span class="mv"><input type="number" step=".5" value="${p.temp||''}" placeholder="24" ${inp()} onchange="upF(${id},'temp',this.value)"><span style="font-size:11px;color:var(--tx3)">°C</span></span></div>
+      <div class="mr"><span class="ml"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8C8 10 5.9 16.17 3.82 19.5c.94.94 2.48 1 3.47.1C8.79 18.1 10.5 17 12 17c4 0 4 2 8 2V8z"/></svg>Humitat</span><span class="mv"><input type="number" step="1" min="0" max="100" value="${p.hum||''}" placeholder="55" ${inp()} onchange="upF(${id},'hum',this.value)"><span style="font-size:11px;color:var(--tx3)">%</span></span></div>
+    </div>
+    <div class="na"><div class="nl">Notes</div><textarea placeholder="Observacions, problemes, tractaments..." onchange="upF(${id},'notes',this.value)">${esc(p.notes||'')}</textarea></div>
+    ${renderLog(p)}
+    ${renderPhotos(p)}
+    <div class="dz"><button class="btn btn-d" onclick="delPlant(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar planta</button></div>`;
+
+  document.getElementById('panel-actions').innerHTML=`
+    <button class="btn btn-p" onclick="logAct(${id},'reg')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>Reg</button>
+    <button class="btn btn-g" onclick="logAct(${id},'nutrients')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18"/></svg>Nutrients</button>
+    <button class="btn btn-g" onclick="logAct(${id},'defoliacio')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v12M18 9a3 3 0 01-3 3H6"/></svg>Defoliació</button>
+    <button class="btn btn-g" onclick="logAct(${id},'trasplant')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>Trasplant</button>`;
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('plant-panel').classList.add('open');
 }
 
-// ============================================================
-// DASHBOARD RENDER
-// ============================================================
-function renderDashboard() {
-  const phases = phasesForEnv(currentEnv);
-  const envPlants = plants.filter(p => p.env === currentEnv);
+function renderLog(p){
+  const log=p.log||[];if(!log.length)return'';
+  const ic={reg:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,nutrients:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4"/></svg>`,defoliacio:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 3v12"/></svg>`,trasplant:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="16 3 21 3 21 8"/></svg>`};
+  const bg={reg:'#dbeafe',nutrients:'#d1fae5',defoliacio:'#fef3c7',trasplant:'#ede9fe'};
+  const lb={reg:'Reg',nutrients:'Nutrients',defoliacio:'Defoliació',trasplant:'Trasplant'};
+  return`<div class="na"><div class="nl">Registre</div>${log.slice().reverse().slice(0,8).map(e=>`<div class="le"><div class="li" style="background:${bg[e.type]||'#f0f0ed'}">${ic[e.type]||''}</div><span class="lt">${lb[e.type]||e.type}</span><span class="ld">${new Date(e.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short'})}</span></div>`).join('')}</div>`;
+}
 
-  // title
-  const label = currentEnv === 'indoor' ? 'Indoor' : 'Outdoor';
-  document.getElementById('dash-env-label').textContent = label;
-  document.getElementById('dash-title').innerHTML = `Cultiu <strong>${label}</strong>`;
+function renderPhotos(p){
+  const photos=p.photos||[];
+  const weeks=[...new Set(photos.map(ph=>ph.week))].sort((a,b)=>a-b);
+  const started=p.phaseStart?new Date(p.phaseStart):null;
+  const cw=started?Math.max(1,Math.floor((Date.now()-started.getTime())/(86400000*7))+1):1;
+  if(activeWeek===null||![...weeks,cw].includes(activeWeek))activeWeek=weeks.length?weeks[weeks.length-1]:cw;
+  const wp=photos.filter(ph=>ph.week===activeWeek);
+  const allW=[...new Set([...weeks,cw])].sort((a,b)=>a-b);
+  return`<div class="na" style="margin-bottom:16px">
+    <div class="nl">Fotos per setmana <span><button class="btn btn-g" style="font-size:10px;padding:2px 8px" onclick="trigPhoto(${p.id},${activeWeek})">+ Foto</button></span></div>
+    <div class="pwt">${allW.map(w=>`<button class="wktab${w===activeWeek?' active':''}" onclick="swWeek(${p.id},${w})">S${w}${w===cw?' ·':''}</button>`).join('')}<button class="wktab" style="border-style:dashed" onclick="newWeekTab(${p.id})">+</button></div>
+    <div id="ph-prog-${p.id}" style="display:none" class="up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 11-6.2-8.6"/></svg>Pujant...<div class="ubw"><div class="ub" id="ph-bar-${p.id}"></div></div></div>
+    <div class="phg">${wp.map(ph=>`<div class="pht" onclick="openLB('${ph.url}','S${activeWeek}')"><img src="${ph.url}" loading="lazy"><button class="phtd" onclick="event.stopPropagation();delPhoto(${p.id},'${ph.id}')"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`).join('')}<button class="pub" onclick="trigPhoto(${p.id},${activeWeek})"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Foto</button></div>
+    ${!wp.length?`<div style="text-align:center;padding:10px;font-size:11px;color:var(--tx3)">Sense fotos · S${activeWeek}</div>`:''}
+  </div>`;
+}
 
-  // date
-  const now = new Date();
-  document.getElementById('dash-date').textContent = now.toLocaleDateString('ca-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+function swWeek(pid,w){activeWeek=w;openPlant(pid);}
+function newWeekTab(pid){const p=S.plants.find(x=>x.id===pid);if(!p)return;const ws=(p.photos||[]).map(ph=>ph.week);const m=ws.length?Math.max(...ws):0;activeWeek=m+1;openPlant(pid);trigPhoto(pid,m+1);}
+function trigPhoto(pid,w){photoCtx={plantId:pid,week:w};const i=document.getElementById('photo-input');i.value='';i.click();}
 
-  // total plants
-  document.getElementById('dash-total-plants').innerHTML = `
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>
-    ${envPlants.length} planta${envPlants.length !== 1 ? 'es' : ''}
-  `;
+async function handlePhotoUpload(input){
+  const file=input.files[0];if(!file)return;
+  const{plantId:pid,week:w}=photoCtx;const p=S.plants.find(x=>x.id===pid);if(!p)return;
+  const prg=document.getElementById(`ph-prog-${pid}`);const bar=document.getElementById(`ph-bar-${pid}`);
+  if(prg)prg.style.display='flex';
+  try{
+    const b64f=await rdB64(file);if(bar)bar.style.width='30%';
+    const rsz=await rszImg(b64f,1200);if(bar)bar.style.width='60%';
+    const ext=file.name.split('.').pop()||'jpg';const ts=Date.now();
+    const ghp=`photos/plant-${pid}/week-${w}/${ts}.${ext}`;
+    const r=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${ghp}`,{method:'PUT',headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:`Photo p${pid} w${w}`,content:rsz.split(',')[1]})});
+    if(!r.ok){const e=await r.json();throw new Error(e.message);}
+    if(bar)bar.style.width='90%';
+    const ru=`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/${ghp}`;
+    if(!p.photos)p.photos=[];
+    p.photos.push({id:`${pid}-${w}-${ts}`,week:w,url:ru,ghPath:ghp,date:new Date().toISOString()});
+    activeWeek=w;await save();if(bar)bar.style.width='100%';
+    setTimeout(()=>{if(prg)prg.style.display='none';openPlant(pid);},400);toast('Foto pujada');
+  }catch(e){if(prg)prg.style.display='none';toast('Error: '+e.message);}
+}
 
-  // stats bar
-  const statsBar = document.getElementById('stats-bar');
-  statsBar.innerHTML = phases.map(ph => {
-    const count = plantsInPhase(ph.id, currentEnv).length;
-    return `
-      <div class="stat-item">
-        <div class="stat-number" style="color:${ph.color}">${count}</div>
-        <div class="stat-label">${ph.name}</div>
-      </div>
-    `;
+async function delPhoto(pid,phid){
+  if(!confirm('Eliminar foto?'))return;
+  const p=S.plants.find(x=>x.id===pid);if(!p||!p.photos)return;
+  const ph=p.photos.find(x=>x.id===phid);if(!ph)return;
+  try{const gr=await fetch(`https://api.github.com/repos/${ORSINISTUDIO}/${GrowControl}/contents/${ph.ghPath}`,{headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json'}});if(gr.ok){const fi=await gr.json();await fetch(`https://api.github.com/repos/${ORSINISTUDIO}/${GrowControl}/contents/${ph.ghPath}`,{method:'DELETE',headers:{'Authorization':`token ${GH_TOKEN}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:'Delete photo',sha:fi.sha})});}}catch(e){}
+  p.photos=p.photos.filter(x=>x.id!==phid);await save();openPlant(pid);toast('Foto eliminada');
+}
+function rdB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f);});}
+function rszImg(d,mw){return new Promise(res=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');let w=i.width,h=i.height;if(w>mw){h=Math.round(h*mw/w);w=mw;}c.width=w;c.height=h;c.getContext('2d').drawImage(i,0,0,w,h);res(c.toDataURL('image/jpeg',.82));};i.src=d;});}
+function openLB(url,info){document.getElementById('lb-img').src=url;document.getElementById('lb-info').textContent=info;document.getElementById('lightbox').classList.add('open');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+
+// ACTIONS
+function upF(id,f,v){const p=S.plants.find(x=>x.id===id);if(!p)return;p[f]=v;save();toast('Guardat');}
+function logAct(id,t){const p=S.plants.find(x=>x.id===id);if(!p)return;if(!p.log)p.log=[];p.log.push({type:t,date:new Date().toISOString()});save();openPlant(id);toast({reg:'Reg',nutrients:'Nutrients',defoliacio:'Defoliació',trasplant:'Trasplant'}[t]+' registrat');}
+function delPlant(id){if(!confirm('Eliminar planta?'))return;S.plants=S.plants.filter(x=>x.id!==id);save();closePanel();renderDash();toast('Planta eliminada');}
+function closePanel(){document.getElementById('panel-overlay').classList.remove('open');document.getElementById('plant-panel').classList.remove('open');openPId=null;}
+
+// ADD PLANT
+let prePh=null;
+function showAddPlantModal(){prePh=null;openAddM();}
+function showAddPlantModalPhase(ph){prePh=ph;openAddM();}
+function openAddM(){
+  const phases=curEnv==='indoor'?PI:PO;
+  document.getElementById('new-phase').innerHTML=phases.map(ph=>`<option value="${ph.id}"${ph.id===prePh?' selected':''}>${ph.name}</option>`).join('');
+  const dl=document.getElementById('strain-dl');
+  dl.innerHTML=[...new Set([...S.plants.map(p=>p.strain),...S.seeds.map(s=>s.name)].filter(Boolean))].map(s=>`<option value="${esc(s)}">`).join('');
+  ['new-name','new-strain','new-notes'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('new-flor-days').value='';
+  document.getElementById('new-date').value=new Date().toISOString().split('T')[0];
+  const ph=document.getElementById('new-phase').value;
+  document.getElementById('flor-days-fld').style.display=ph==='flor'?'block':'none';
+  document.getElementById('new-phase').onchange=function(){document.getElementById('flor-days-fld').style.display=this.value==='flor'?'block':'none';};
+  document.getElementById('modal-add').classList.add('open');
+  setTimeout(()=>document.getElementById('new-name').focus(),80);
+}
+function addPlant(){
+  const name=document.getElementById('new-name').value.trim()||`Planta #${pad(S.nextId)}`;
+  const strain=document.getElementById('new-strain').value.trim();
+  const phase=document.getElementById('new-phase').value;
+  const florDays=parseInt(document.getElementById('new-flor-days').value)||null;
+  S.plants.push({id:S.nextId++,env:curEnv,name,strain,phase,phaseStart:document.getElementById('new-date').value,notes:document.getElementById('new-notes').value.trim(),florDays,health:'bo',log:[],photos:[],substrate:'',potSize:'',ph:'',ec:'',temp:'',hum:''});
+  save();closeModal('modal-add');renderDash();toast('Planta afegida');
+}
+
+// WEATHER — Open-Meteo, El Masnou 41.5088, 2.3174
+const WD={0:'Cel clar',1:'Predominantment clar',2:'Parcialment ennuvolat',3:'Ennuvolat',45:'Boira',48:'Boira amb glaçada',51:'Plugim feble',53:'Plugim moderat',55:'Plugim dens',61:'Pluja feble',63:'Pluja moderada',65:'Pluja forta',71:'Neu feble',80:'Ruixats febles',81:'Ruixats moderats',82:'Ruixats forts',95:'Tempesta'};
+
+function weatherSVG(code){
+  // returns inline SVG by weather code category
+  const sunny=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8"><circle cx="12" cy="12" r="4" fill="#fcd34d"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg>`;
+  const partcloud=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8"><circle cx="10" cy="10" r="3" fill="#fcd34d" stroke="#f59e0b"/><path d="M16 16H7a4 4 0 010-8 4.5 4.5 0 018.8 1.5A3 3 0 0116 16z" fill="#e2e8f0" stroke="#94a3b8"/></svg>`;
+  const cloud=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><path d="M18 16H6a5 5 0 010-10 5.5 5.5 0 0110.8 1.5A3.5 3.5 0 0118 16z" fill="#e2e8f0"/></svg>`;
+  const rain=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8"><path d="M16 13H6a5 5 0 010-10 5.5 5.5 0 0110.8 1.5A3.5 3.5 0 0116 13z" fill="#bfdbfe"/><line x1="8" y1="16" x2="7" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="16" x2="11" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="16" x2="15" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  const storm=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8"><path d="M16 10H6a5 5 0 010-10 5.5 5.5 0 0110.8 1.5A3.5 3.5 0 0116 10z" fill="#ddd6fe"/><polyline points="13 10 11 14 14 14 10 20" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/></svg>`;
+  const fog=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="15" x2="16" y2="15"/></svg>`;
+  const snow=`<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#bae6fd" stroke-width="1.8"><line x1="12" y1="2" x2="12" y2="22"/><line x1="4.93" y1="7" x2="19.07" y2="17"/><line x1="19.07" y1="7" x2="4.93" y2="17"/><circle cx="12" cy="12" r="2" fill="#e0f2fe"/></svg>`;
+  if(code===0||code===1)return sunny;
+  if(code===2)return partcloud;
+  if(code===3||code===45||code===48)return code>=45?fog:cloud;
+  if(code>=51&&code<=67)return rain;
+  if(code>=71&&code<=77)return snow;
+  if(code>=80&&code<=82)return rain;
+  if(code>=95)return storm;
+  return cloud;
+}
+
+function weatherSVGSmall(code){
+  // small forecast icon
+  const c=code;
+  if(c===0||c===1)return`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="4" fill="#fcd34d"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>`;
+  if(c===2)return`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" fill="#fcd34d" stroke="#f59e0b" stroke-width="1.5"/><path d="M16 16H7a4 4 0 010-8 4.5 4.5 0 018.8 1.5A3 3 0 0116 16z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/></svg>`;
+  if(c>=60&&c<=82)return`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M16 12H6a4 4 0 010-8 4.5 4.5 0 018.8 1.5A3 3 0 0116 12z" fill="#bfdbfe" stroke="#60a5fa" stroke-width="1.5"/><line x1="8" y1="14" x2="7" y2="18" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="14" x2="11" y2="18" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+  if(c>=95)return`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 10H6a4 4 0 010-8 4.5 4.5 0 018.8 1.5A3 3 0 0115 10z" fill="#ddd6fe" stroke="#7c3aed" stroke-width="1.5"/><polyline points="12 10 10 13 13 13 9 19" stroke="#f59e0b" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+  return`<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 15H7a5 5 0 010-10 5.5 5.5 0 0110.8 1.5A3.5 3.5 0 0117 15z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/></svg>`;
+}
+
+async function fetchWeather(){
+  document.getElementById('weather-zone').innerHTML=`<div style="padding:14px;color:var(--tx3);font-size:12px;display:flex;align-items:center;gap:7px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;flex-shrink:0"><path d="M21 12a9 9 0 11-6.2-8.6"/></svg>Carregant meteorologia El Masnou...</div>`;
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,wind_speed_10m_max,relative_humidity_2m_max&timezone=Europe%2FMadrid&forecast_days=7`;
+    const r=await fetch(url);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    renderWeather(await r.json());
+  }catch(e){
+    document.getElementById('weather-zone').innerHTML=`<div style="padding:12px 0;color:#dc2626;font-size:13px;display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>No s'ha pogut carregar la meteorologia: ${e.message}</div>`;
+  }
+}
+
+function renderWeather(d){
+  const c=d.current,dl=d.daily;
+  const temp=Math.round(c.temperature_2m);
+  const feels=Math.round(c.apparent_temperature);
+  const hum=c.relative_humidity_2m;
+  const wind=Math.round(c.wind_speed_10m);
+  const prec=c.precipitation;
+  const code=c.weather_code;
+  const uv=dl.uv_index_max?dl.uv_index_max[0]:0;
+
+  // Agro recommendations with SVG icons
+  const recs=[];
+  const rec=(svg,text,level='info')=>recs.push({svg,text,level});
+
+  if(prec>5) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,`Pluja significant (${prec}mm). Comprova el drenatge i aplica tractament preventiu de botiritis.`,'warn');
+  else if(prec>1) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,`Pluja lleugera (${prec}mm). Ajusta el reg d'avui.`,'info');
+
+  if(hum>80) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8C8 10 5.9 16.17 3.82 19.5c.94.94 2.48 1 3.47.1C8.79 18.1 10.5 17 12 17c4 0 4 2 8 2V8z"/></svg>`,`Humitat molt alta (${hum}%). Risc elevat de botiritis i míldiu. Millora la circulació d'aire.`,'warn');
+  else if(hum>70) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8C8 10 5.9 16.17 3.82 19.5c.94.94 2.48 1 3.47.1C8.79 18.1 10.5 17 12 17c4 0 4 2 8 2V8z"/></svg>`,`Humitat alta (${hum}%). Vigila els signes de fongs, especialment als brots.`,'warn');
+  else if(hum<35) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,`Ambient molt sec (${hum}%). Augmenta la freqüència de reg i vigila el risc d'aranya roja.`,'warn');
+
+  if(temp>34) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>`,`Calor extrem (${temp}°C). Ombreja les plantes, rega a primera hora i evita el maneig en hores centrals.`,'warn');
+  else if(temp>30) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>`,`Temperatura alta (${temp}°C). Rega abundantment al matí. Vigilant per estrès tèrmic.`,'info');
+  else if(temp<6) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20M6.34 6.34l11.32 11.32M17.66 6.34L6.34 17.66"/></svg>`,`Temperatura molt baixa (${temp}°C). Protegeix les plantes del fred nocturn. Risc de gelada.`,'warn');
+  else if(temp<12) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>`,`Temperatura fresca (${temp}°C). El metabolisme de les plantes és més lent. Redueix nutrients.`,'info');
+
+  if(wind>40) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.7 7.7a2.5 2.5 0 111.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1111 8H2"/><path d="M12.6 19.4A2 2 0 1014 16H2"/></svg>`,`Vent molt fort (${wind} km/h). Reforça tutors i protegeix les branques principals. No tractis avui.`,'warn');
+  else if(wind>25) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.7 7.7a2.5 2.5 0 111.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1111 8H2"/></svg>`,`Vent moderat (${wind} km/h). Bon moment per ventilar i reduir humitat naturalment.`,'info');
+
+  if(uv>=9) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/></svg>`,`UV extrem (${uv}). Rega sempre a primera hora del matí. Risc de cremades foliars si tractament.`,'warn');
+  else if(uv>=7) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>`,`UV alt (${uv}). Aplica tractaments foliars a primera hora o al capvespre per evitar cremades.`,'info');
+
+  // Check forecast for upcoming rain/heat
+  const tomorrowCode=dl.weather_code?.[1];
+  const tomorrowPrec=dl.precipitation_sum?.[1];
+  if(tomorrowPrec>5) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,`Pluja prevista demà (${tomorrowPrec}mm). Considera tractar avui i ajustar el reg.`,'info');
+
+  if(!recs.length) rec(`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`,`Condicions excel·lents. Bon dia per al cultiu outdoor al Masnou.`,'ok');
+
+  // 5-day forecast
+  const days=['Dg','Dl','Dt','Dc','Dj','Dv','Ds'];
+  const fcHtml=dl.time.slice(1,6).map((t,i)=>{
+    const dt=new Date(t+'T12:00:00');
+    const maxT=Math.round(dl.temperature_2m_max[i+1]);
+    const minT=Math.round(dl.temperature_2m_min[i+1]);
+    const pr=dl.precipitation_sum[i+1];
+    return`<div class="fd">
+      <div class="fdn">${days[dt.getDay()]}</div>
+      <div style="display:flex;justify-content:center;margin:2px 0">${weatherSVGSmall(dl.weather_code[i+1])}</div>
+      <div class="fdt">${maxT}°<span style="opacity:.6;font-weight:400">/${minT}°</span></div>
+      ${pr>0.5?`<div style="font-size:9px;color:#0369a1;margin-top:1px">${pr.toFixed(1)}mm</div>`:''}
+    </div>`;
   }).join('');
 
-  // sections
-  const grid = document.getElementById('section-grid');
-  grid.className = `section-grid ${currentEnv}`;
-  grid.innerHTML = phases.map(ph => renderSection(ph)).join('');
-}
+  const recColors={warn:'background:#fef3c7;border-color:#fde68a;color:#78350f',info:'background:#e0f2fe;border-color:#bae6fd;color:#0c4a6e',ok:'background:#d1fae5;border-color:#a7f3d0;color:#065f46'};
 
-function renderSection(ph) {
-  const ps = plantsInPhase(ph.id, currentEnv);
-  return `
-    <div class="section-block">
-      <div class="section-header">
-        <div class="section-title-row">
-          <div class="section-strip" style="background:${ph.color}"></div>
-          <span class="section-name">${ph.name}</span>
-          <span class="section-count">${ps.length} planta${ps.length !== 1 ? 'es' : ''}</span>
+  document.getElementById('weather-zone').innerHTML=`
+    <div class="wc">
+      <div class="wt2">
+        <div>
+          <div class="wl">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10A15 15 0 0112 2z"/></svg>
+            El Masnou, Catalunya
+          </div>
+          <div class="wte">${temp}<span style="font-size:15px;color:#0369a1;font-weight:400">°C</span></div>
+          <div class="wd">${WD[code]||'Variable'} · Sensació ${feels}°C</div>
         </div>
-        <div class="section-actions">
-          <button class="btn-icon" title="Afegir a ${ph.name}" onclick="showAddPlantModalPhase('${ph.id}')">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </button>
+        <div style="flex-shrink:0">${weatherSVG(code)}</div>
+      </div>
+
+      <div class="wg">
+        <div class="wce">
+          <div class="wcv">${hum}%</div>
+          <div class="wcl">Humitat</div>
+        </div>
+        <div class="wce">
+          <div class="wcv">${wind}</div>
+          <div class="wcl">km/h vent</div>
+        </div>
+        <div class="wce">
+          <div class="wcv">${prec}</div>
+          <div class="wcl">mm prec.</div>
+        </div>
+        <div class="wce">
+          <div class="wcv">${uv||'-'}</div>
+          <div class="wcl">UV màx.</div>
         </div>
       </div>
-      <div class="plant-grid ${currentEnv === 'outdoor' ? 'outdoor-section' : ''}">
-        ${ps.map(p => renderPlantCard(p, ph)).join('')}
-        <button class="add-plant-btn" onclick="showAddPlantModalPhase('${ph.id}')" title="Afegir planta">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+
+      <div class="wf">${fcHtml}</div>
+
+      <div class="wr" style="margin-top:10px">
+        <div class="wrt">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Recomanacions de cultiu
+        </div>
+        ${recs.map(r=>`<div class="wri" style="${recColors[r.level]||recColors.info};border:1px solid;border-radius:7px;padding:8px 10px;margin-top:5px">${r.svg}<span>${r.text}</span></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// VAULT — My Vault amb panel lateral editable
+// ============================================================
+const SEED_TYPES={
+  feminitzada:{bg:'#d8f3dc',c:'#1a7a4a',label:'Feminitzada'},
+  autoflorent:{bg:'#fef3c7',c:'#92400e',label:'Autoflorent'},
+  regular:    {bg:'#f0f0ed',c:'#4b5563',label:'Regular'},
+  CBD:        {bg:'#dbeafe',c:'#1d4e89',label:'CBD'}
+};
+
+function renderVault(){
+  updateCounts();
+  const g=document.getElementById('seed-grid');
+  if(!S.seeds.length){
+    g.innerHTML=`<div class="add-area" onclick="showAddSeedModal()">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 8px;display:block"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Afegir primera genètica al Vault
+    </div>`;
+    return;
+  }
+  g.innerHTML=S.seeds.map(s=>{
+    const t=SEED_TYPES[s.type]||SEED_TYPES.regular;
+    const inUse=S.plants.filter(p=>p.strain===s.name).length;
+    return`<div class="skc" onclick="openSeedPanel(${s.id})">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px">
+        <div>
+          <div class="skn">${esc(s.name)}</div>
+          <div class="skb">${esc(s.breeder||'Breeder desconegut')}</div>
+        </div>
+        <span class="skbdg" style="background:${t.bg};color:${t.c};flex-shrink:0">${t.label}</span>
+      </div>
+      <div class="skmeta">
+        ${s.florDays?`<span class="sktag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${s.florDays}d flor.</span>`:''}
+        <span class="sktag" style="background:${s.stock>0?'#d8f3dc':'#fee2e2'};border-color:${s.stock>0?'#a7f3d0':'#fecaca'};color:${s.stock>0?'#1a7a4a':'#991b1b'}">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>
+          ${s.stock||0} ut.
+        </span>
+        ${inUse?`<span class="sktag" style="background:#ede9fe;border-color:#ddd6fe;color:#5b21b6">${inUse} en cultiu</span>`:''}
+        ${s.thcMin||s.thcMax?`<span class="sktag">THC ${s.thcMin||'?'}–${s.thcMax||'?'}%</span>`:''}
+      </div>
+      ${s.notes?`<div style="font-size:12px;color:var(--tx3);margin-top:9px;line-height:1.5;border-top:1px solid var(--bd);padding-top:8px">${esc(s.notes)}</div>`:''}
+    </div>`;
+  }).join('')+`<div class="add-area" onclick="showAddSeedModal()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin:0 auto 4px;display:block"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Afegir genètica
+  </div>`;
+}
+
+function showAddSeedModal(){
+  ['seed-name','seed-breeder','seed-flor','seed-stock','seed-notes','seed-thcmin','seed-thcmax'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  document.getElementById('seed-type').value='feminitzada';
+  document.getElementById('modal-seed').classList.add('open');
+  setTimeout(()=>document.getElementById('seed-name').focus(),80);
+}
+
+function addSeed(){
+  const n=document.getElementById('seed-name').value.trim();
+  if(!n){toast('Cal un nom de genètica');return;}
+  S.seeds.push({
+    id:S.nextSeedId++,name:n,
+    breeder:document.getElementById('seed-breeder').value.trim(),
+    type:document.getElementById('seed-type').value,
+    florDays:parseInt(document.getElementById('seed-flor').value)||null,
+    stock:parseInt(document.getElementById('seed-stock').value)||0,
+    notes:document.getElementById('seed-notes').value.trim(),
+    thcMin:document.getElementById('seed-thcmin')?.value.trim()||'',
+    thcMax:document.getElementById('seed-thcmax')?.value.trim()||'',
+    grow:'',effect:''
+  });
+  save();closeModal('modal-seed');renderVault();toast('Genètica afegida al Vault');
+}
+
+function openSeedPanel(id){
+  const s=S.seeds.find(x=>x.id===id);if(!s)return;
+  const t=SEED_TYPES[s.type]||SEED_TYPES.regular;
+  const inUse=S.plants.filter(p=>p.strain===s.name);
+  document.getElementById('panel-title').textContent=s.name;
+  document.getElementById('panel-subtitle').textContent=`${s.breeder||'Breeder desconegut'} · ${t.label}`;
+  document.getElementById('panel-body').innerHTML=`
+    <div class="phero" style="background:${t.bg}">
+      <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+        <ellipse cx="24" cy="36" rx="8" ry="5" fill="${t.c}22"/>
+        <path d="M24 36 Q24 20 34 14" stroke="${t.c}" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="34" cy="14" rx="8" ry="5.5" fill="${t.c}" opacity=".8" transform="rotate(-20 34 14)"/>
+        <ellipse cx="14" cy="24" rx="6" ry="4" fill="${t.c}" opacity=".6" transform="rotate(15 14 24)"/>
+        <circle cx="24" cy="36" r="3" fill="${t.c}"/>
+        <path d="M24 28 Q18 24 16 18" stroke="${t.c}" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="16" cy="18" rx="5" ry="3.5" fill="${t.c}" opacity=".7" transform="rotate(10 16 18)"/>
+      </svg>
+    </div>
+
+    <div class="ig">
+      <div class="ic"><div class="icl">Nom</div><div class="icv"><input value="${esc(s.name)}" onchange="updateSeed(${id},'name',this.value)"/></div></div>
+      <div class="ic"><div class="icl">Breeder</div><div class="icv"><input value="${esc(s.breeder||'')}" placeholder="Breeder..." onchange="updateSeed(${id},'breeder',this.value)"/></div></div>
+      <div class="ic"><div class="icl">Tipus</div><div class="icv">
+        <select onchange="updateSeed(${id},'type',this.value);openSeedPanel(${id})">
+          ${Object.entries(SEED_TYPES).map(([k,v])=>`<option value="${k}" ${s.type===k?'selected':''}>${v.label}</option>`).join('')}
+        </select>
+      </div></div>
+      <div class="ic"><div class="icl">Dies floració</div><div class="icv"><input type="number" value="${s.florDays||''}" placeholder="63" onchange="updateSeed(${id},'florDays',parseInt(this.value)||null)"/></div></div>
+      <div class="ic"><div class="icl">THC min %</div><div class="icv"><input type="number" step="0.5" value="${s.thcMin||''}" placeholder="18" onchange="updateSeed(${id},'thcMin',this.value)"/></div></div>
+      <div class="ic"><div class="icl">THC max %</div><div class="icv"><input type="number" step="0.5" value="${s.thcMax||''}" placeholder="25" onchange="updateSeed(${id},'thcMax',this.value)"/></div></div>
+    </div>
+
+    <div class="na">
+      <div class="nl">Estoc de llavors</div>
+      <div style="display:flex;align-items:center;gap:10px;padding:4px 0">
+        <button class="btn btn-g" style="padding:6px 14px;font-size:16px;font-weight:300" onclick="updateSeed(${id},'stock',Math.max(0,(parseInt(S.seeds.find(x=>x.id===${id})?.stock)||0)-1));openSeedPanel(${id})">−</button>
+        <span style="font-size:22px;font-weight:600;min-width:32px;text-align:center">${s.stock||0}</span>
+        <button class="btn btn-g" style="padding:6px 14px;font-size:16px;font-weight:300" onclick="updateSeed(${id},'stock',(parseInt(S.seeds.find(x=>x.id===${id})?.stock)||0)+1);openSeedPanel(${id})">+</button>
+        <span style="font-size:12px;color:var(--tx3)">unitats</span>
+      </div>
+    </div>
+
+    <div class="na">
+      <div class="nl">Perfil de cultiu</div>
+      <textarea placeholder="Temps de vegetació recomanat, productivitat esperada, dificultat..." onchange="updateSeed(${id},'grow',this.value)">${esc(s.grow||'')}</textarea>
+    </div>
+
+    <div class="na">
+      <div class="nl">Efectes i aroma</div>
+      <textarea placeholder="Efectes, sabors, aromes, usos..." onchange="updateSeed(${id},'effect',this.value)">${esc(s.effect||'')}</textarea>
+    </div>
+
+    <div class="na">
+      <div class="nl">Notes generals</div>
+      <textarea placeholder="Historial, observacions, resultats anteriors..." onchange="updateSeed(${id},'notes',this.value)">${esc(s.notes||'')}</textarea>
+    </div>
+
+    ${inUse.length?`<div class="na">
+      <div class="nl">Plantes en cultiu ara (${inUse.length})</div>
+      ${inUse.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:13px">
+        <div style="width:28px;height:28px;border-radius:6px;background:${t.bg};display:flex;align-items:center;justify-content:center">${pSVG(p.phase,t.c,18)}</div>
+        <span style="flex:1">${esc(p.name)}</span>
+        <span style="font-size:11px;color:var(--tx3)">${(S.plants.find(x=>x.id===p.id)&&['germ','clon','veg','mare','flor'].find(ph=>ph===p.phase))?((curEnv==='indoor'?PI:PO).find(x=>x.id===p.phase)||{name:p.phase}).name:p.phase}</span>
+      </div>`).join('')}
+    </div>`:''}
+
+    <div class="dz">
+      <button class="btn btn-d" onclick="deleteSeed(${id})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        Eliminar genètica
+      </button>
+    </div>
+  `;
+  document.getElementById('panel-actions').innerHTML=`
+    <button class="btn btn-p" onclick="useSeedInPlant(${id})">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Plantar ara
+    </button>
+    <button class="btn btn-g" onclick="updateSeed(${id},'stock',(parseInt(S.seeds.find(x=>x.id===${id})?.stock)||0)-1);toast('Llavor usada');openSeedPanel(${id})">Usar 1 llavor</button>
+  `;
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('plant-panel').classList.add('open');
+}
+
+function updateSeed(id,field,value){
+  const s=S.seeds.find(x=>x.id===id);if(!s)return;
+  s[field]=value;save();renderVault();toast('Guardat');
+}
+function deleteSeed(id){
+  if(!confirm('Eliminar aquesta genètica?'))return;
+  S.seeds=S.seeds.filter(x=>x.id!==id);
+  save();closePanel();renderVault();toast('Genètica eliminada');
+}
+function useSeedInPlant(seedId){
+  const s=S.seeds.find(x=>x.id===seedId);if(!s)return;
+  closePanel();
+  showScr('dashboard');
+  curEnv='indoor';
+  renderDash();
+  showAddPlantModalPhase('germ');
+  setTimeout(()=>{
+    document.getElementById('new-strain').value=s.name;
+    if(s.florDays)document.getElementById('new-flor-days').value=s.florDays;
+  },150);
+}
+
+// ============================================================
+// POST-COLLITA — lots amb panel editable complet
+// ============================================================
+const PCT={
+  secat:    {l:'Secat',     c:'#52b788', d:10, svg:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>`},
+  curacio:  {l:'Curació',   c:'#f59e0b', d:21, svg:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`},
+  hash:     {l:'Hash / Rosin', c:'#8b5cf6', d:3, svg:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>`},
+  extraccio:{l:'Extracció BHO/PHO', c:'#3b82f6', d:2, svg:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>`},
+  tinctura: {l:'Tintura / RSO', c:'#e11d48', d:14, svg:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2h4l1 7H9z"/><path d="M9 9c-2 2-3 5-3 7a6 6 0 0012 0c0-2-1-5-3-7"/></svg>`},
+  altri:    {l:'Altres',    c:'#64748b', d:7,  svg:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 00-4 0v2"/></svg>`},
+};
+
+function renderPC(){
+  updateCounts();
+  const bt={};Object.keys(PCT).forEach(t=>bt[t]=[]);
+  S.pcLots.forEach(l=>{(bt[l.type]||bt.altri).push(l);});
+  document.getElementById('pc-sections').innerHTML=Object.entries(PCT).map(([t,m])=>{
+    const lots=bt[t]||[];
+    return`<div class="pcb">
+      <div class="pcbh">
+        <div class="pcbt" style="color:${m.c}">${m.svg}<span style="color:var(--tx)">${m.l}</span></div>
+        <button class="btn-i" style="width:26px;height:26px" onclick="showAddPCModalType('${t}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
       </div>
-    </div>
-  `;
+      ${lots.length?lots.map(l=>{
+        const start=l.startDate?new Date(l.startDate):null;
+        const elapsed=start?Math.floor((Date.now()-start.getTime())/86400000):0;
+        const pct=l.days?Math.min(100,Math.round((elapsed/l.days)*100)):0;
+        const rem=l.days?Math.max(0,l.days-elapsed):0;
+        const done=l.status==='completat';
+        return`<div class="pci" onclick="openPCPanel(${l.id})">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="pcin">${esc(l.name)}</div>
+              ${done?`<span style="background:#d1fae5;color:#065f46;font-size:10px;font-weight:600;padding:1px 6px;border-radius:100px">Completat</span>`:''}
+            </div>
+            <div class="pcim">${l.strain?esc(l.strain)+' · ':''}${l.weight?l.weight+'g inici · ':''}Dia ${elapsed}${l.days?'/'+l.days:''}</div>
+            ${!done?`<div style="height:3px;background:var(--bd);border-radius:2px;margin-top:5px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:${m.c};border-radius:2px;transition:width .5s"></div>
+            </div>`:''}
+          </div>
+          <div style="font-size:12px;font-weight:600;color:${done?'#065f46':rem<=3?'#dc2626':m.c};margin-left:8px;flex-shrink:0">
+            ${done?`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`:rem+'d'}
+          </div>
+        </div>`;
+      }).join(''):`<div style="padding:16px;font-size:12px;color:var(--tx3);text-align:center">Cap lot actiu</div>`}
+    </div>`;
+  }).join('');
 }
 
-function renderPlantCard(p, ph) {
-  const healthColor = p.health === 'bo' ? '#10b981' : p.health === 'atencio' ? '#f59e0b' : '#ef4444';
-  return `
-    <div class="plant-card" onclick="openPlant(${p.id})" title="${p.name}">
-      <div class="plant-status-dot" style="background:${healthColor}"></div>
-      <div class="plant-card-icon">${plantSVG(ph.id, ph.color, 28)}</div>
-      <div class="plant-card-id">#${pad(p.id)}</div>
-    </div>
-  `;
-}
+function openPCPanel(id){
+  const l=S.pcLots.find(x=>x.id===id);if(!l)return;
+  const m=PCT[l.type]||PCT.altri;
+  const start=l.startDate?new Date(l.startDate):null;
+  const elapsed=start?Math.floor((Date.now()-start.getTime())/86400000):0;
+  const pct=l.days?Math.min(100,Math.round((elapsed/l.days)*100)):0;
+  const rem=l.days?Math.max(0,l.days-elapsed):0;
+  const done=l.status==='completat';
 
-// ============================================================
-// PLANT SVG ICONS — vectorized plant illustrations by phase
-// ============================================================
-function plantSVG(phase, color, size) {
-  const s = size || 28;
-  const c = color || '#52b788';
-  const icons = {
-    germ: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
-      <ellipse cx="16" cy="24" rx="5" ry="3" fill="${c}22"/>
-      <path d="M16 24 Q16 14 22 10" stroke="${c}" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-      <ellipse cx="22" cy="10" rx="5" ry="3.5" fill="${c}" opacity="0.8" transform="rotate(-20 22 10)"/>
-      <ellipse cx="10" cy="16" rx="4" ry="2.5" fill="${c}" opacity="0.6" transform="rotate(15 10 16)"/>
-      <circle cx="16" cy="24" r="2" fill="${c}"/>
-    </svg>`,
-    clon: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
-      <rect x="11" y="20" width="10" height="8" rx="2" fill="${c}33"/>
-      <line x1="16" y1="20" x2="16" y2="10" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M16 14 Q10 12 9 7" stroke="${c}" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-      <ellipse cx="9" cy="7" rx="3.5" ry="2.5" fill="${c}" opacity="0.75" transform="rotate(-10 9 7)"/>
-      <path d="M16 11 Q22 9 23 5" stroke="${c}" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-      <ellipse cx="23" cy="5" rx="3" ry="2" fill="${c}" opacity="0.75" transform="rotate(10 23 5)"/>
-    </svg>`,
-    veg: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
-      <rect x="13" y="24" width="6" height="5" rx="1.5" fill="${c}44"/>
-      <line x1="16" y1="24" x2="16" y2="8" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M16 19 Q8 17 7 11" stroke="${c}" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M16 15 Q24 13 25 7" stroke="${c}" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-      <path d="M16 11 Q10 8 10 4" stroke="${c}" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-      <ellipse cx="7" cy="11" rx="4.5" ry="3" fill="${c}" opacity="0.7" transform="rotate(-15 7 11)"/>
-      <ellipse cx="25" cy="7" rx="4" ry="2.5" fill="${c}" opacity="0.7" transform="rotate(15 25 7)"/>
-      <ellipse cx="10" cy="4" rx="3" ry="2" fill="${c}" opacity="0.6" transform="rotate(-5 10 4)"/>
-    </svg>`,
-    mare: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
-      <rect x="11" y="25" width="10" height="4" rx="2" fill="${c}44"/>
-      <line x1="16" y1="25" x2="16" y2="6" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
-      <path d="M16 22 Q6 20 5 13" stroke="${c}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <path d="M16 17 Q26 15 27 8" stroke="${c}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <path d="M16 13 Q8 10 8 5" stroke="${c}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <path d="M16 10 Q24 7 24 3" stroke="${c}" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-      <ellipse cx="5" cy="13" rx="5" ry="3.5" fill="${c}" opacity="0.75" transform="rotate(-18 5 13)"/>
-      <ellipse cx="27" cy="8" rx="5" ry="3" fill="${c}" opacity="0.75" transform="rotate(15 27 8)"/>
-      <ellipse cx="8" cy="5" rx="4" ry="2.5" fill="${c}" opacity="0.65" transform="rotate(-10 8 5)"/>
-      <ellipse cx="24" cy="3" rx="3.5" ry="2" fill="${c}" opacity="0.6" transform="rotate(10 24 3)"/>
-    </svg>`,
-    flor: `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" class="plant-svg">
-      <rect x="13" y="25" width="6" height="5" rx="1.5" fill="${c}44"/>
-      <line x1="16" y1="25" x2="16" y2="7" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M16 20 Q9 18 8 13" stroke="${c}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <path d="M16 15 Q23 13 24 8" stroke="${c}" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <ellipse cx="8" cy="13" rx="3.5" ry="2.5" fill="${c}" opacity="0.55" transform="rotate(-15 8 13)"/>
-      <ellipse cx="24" cy="8" rx="3.5" ry="2.5" fill="${c}" opacity="0.55" transform="rotate(15 24 8)"/>
-      <!-- flower buds -->
-      <circle cx="16" cy="7" r="3.5" fill="${c}" opacity="0.9"/>
-      <circle cx="16" cy="7" r="2" fill="${c}"/>
-      <ellipse cx="13" cy="5" rx="2" ry="2.8" fill="${c}" opacity="0.6" transform="rotate(-30 13 5)"/>
-      <ellipse cx="19" cy="5" rx="2" ry="2.8" fill="${c}" opacity="0.6" transform="rotate(30 19 5)"/>
-      <ellipse cx="12" cy="8" rx="2.5" ry="1.5" fill="${c}" opacity="0.5" transform="rotate(-60 12 8)"/>
-      <ellipse cx="20" cy="8" rx="2.5" ry="1.5" fill="${c}" opacity="0.5" transform="rotate(60 20 8)"/>
-    </svg>`,
-  };
-  return icons[phase] || icons['veg'];
-}
+  document.getElementById('panel-title').textContent=l.name;
+  document.getElementById('panel-subtitle').textContent=`${m.l} · ${l.strain||'Genètica no especificada'}`;
 
-// ============================================================
-// PLANT PANEL
-// ============================================================
-function openPlant(id) {
-  const p = plants.find(x => x.id === id);
-  if (!p) return;
-  openPlantId = id;
-  const ph = getPhase(p.phase);
-  const envLabel = p.env === 'indoor' ? 'Indoor' : 'Outdoor';
-
-  document.getElementById('panel-title').textContent = p.name;
-  document.getElementById('panel-subtitle').textContent = `${ph.name} · ${envLabel}`;
-
-  // days in phase
-  const started = p.phaseStart ? new Date(p.phaseStart) : null;
-  const daysInPhase = started ? Math.floor((Date.now() - started.getTime()) / 86400000) : 0;
-
-  const healthBadge = (h) => {
-    if (h === 'bo') return '<span class="metric-badge health-ok">Bo</span>';
-    if (h === 'atencio') return '<span class="metric-badge health-warn">Atenció</span>';
-    return '<span class="metric-badge health-bad">Malament</span>';
-  };
-
-  document.getElementById('panel-body').innerHTML = `
-    <div class="plant-hero">${plantSVG(p.phase, ph.color, 80)}</div>
-
-    <div class="info-grid">
-      <div class="info-cell">
-        <div class="info-cell-label">Nom</div>
-        <div class="info-cell-value">
-          <input type="text" value="${escHtml(p.name)}" onchange="updateField(${id},'name',this.value)" />
+  document.getElementById('panel-body').innerHTML=`
+    <!-- Hero progress -->
+    <div style="background:linear-gradient(135deg,${m.c}18,${m.c}08);border:1px solid ${m.c}33;border-radius:13px;padding:18px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:10px;background:${m.c}22;display:flex;align-items:center;justify-content:center;color:${m.c}">${m.svg}</div>
+        <div>
+          <div style="font-size:11px;color:${m.c};font-weight:600;text-transform:uppercase;letter-spacing:.4px">${m.l}</div>
+          <div style="font-size:22px;font-weight:600;color:var(--tx);letter-spacing:-.5px">${done?'Completat':`Dia ${elapsed} / ${l.days||'?'}`}</div>
         </div>
+        ${!done?`<div style="margin-left:auto;font-size:13px;font-weight:600;color:${rem<=3&&rem>0?'#dc2626':m.c}">${rem>0?rem+'d restants':'Temps esgotat'}</div>`:''}
       </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Genètica</div>
-        <div class="info-cell-value">
-          <input type="text" value="${escHtml(p.strain || '')}" placeholder="Varietat..." onchange="updateField(${id},'strain',this.value)" />
-        </div>
+      ${!done&&l.days?`<div style="height:6px;background:${m.c}22;border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${m.c};border-radius:3px;transition:width .5s"></div>
       </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Fase actual</div>
-        <div class="info-cell-value">
-          <select onchange="updateField(${id},'phase',this.value);renderDashboard();openPlant(${id})">
-            ${phasesForEnv(p.env).map(ph2 => `<option value="${ph2.id}" ${ph2.id === p.phase ? 'selected' : ''}>${ph2.name}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Dies en fase</div>
-        <div class="info-cell-value">${daysInPhase} dies</div>
-      </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Inici de fase</div>
-        <div class="info-cell-value">
-          <input type="date" value="${p.phaseStart || ''}" onchange="updateField(${id},'phaseStart',this.value)" />
-        </div>
-      </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Salut</div>
-        <div class="info-cell-value">
-          <select onchange="updateField(${id},'health',this.value);openPlant(${id});renderDashboard()">
-            <option value="bo" ${p.health==='bo'?'selected':''}>Bo</option>
-            <option value="atencio" ${p.health==='atencio'?'selected':''}>Atenció</option>
-            <option value="malament" ${p.health==='malament'?'selected':''}>Malament</option>
-          </select>
-        </div>
-      </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Substrat</div>
-        <div class="info-cell-value">
-          <input type="text" value="${escHtml(p.substrate||'')}" placeholder="Coco, terra..." onchange="updateField(${id},'substrate',this.value)" />
-        </div>
-      </div>
-      <div class="info-cell">
-        <div class="info-cell-label">Tamany de test</div>
-        <div class="info-cell-value">
-          <input type="text" value="${escHtml(p.potSize||'')}" placeholder="ex: 11L" onchange="updateField(${id},'potSize',this.value)" />
-        </div>
-      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:${m.c}""><span>${pct}% completat</span><span>${l.days} dies total</span></div>`:''}
     </div>
 
-    <!-- Metrics -->
-    <div class="notes-area">
-      <div class="notes-label">Paràmetres ambientals</div>
-      <div class="metric-row">
-        <span class="metric-label">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8l3 3-3 3v4M8 10l-5 2 5 2"/><path d="M16 10l5 2-5 2"/></svg>
-          pH últim reg
-        </span>
-        <span class="metric-value">
-          <input type="number" step="0.1" min="4" max="9" value="${p.ph||''}" placeholder="6.0" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'ph',this.value)">
-        </span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
-          EC últim reg
-        </span>
-        <span class="metric-value">
-          <input type="number" step="0.1" min="0" max="5" value="${p.ec||''}" placeholder="1.2" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'ec',this.value)">
-        </span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-          Temperatura
-        </span>
-        <span class="metric-value">
-          <input type="number" step="0.5" value="${p.temp||''}" placeholder="24" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'temp',this.value)">
-          <span style="font-size:12px;color:var(--text-muted)">°C</span>
-        </span>
-      </div>
-      <div class="metric-row">
-        <span class="metric-label">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8C8 10 5.9 16.17 3.82 19.5c.94.94 2.48 1 3.47.1C8.79 18.1 10.5 17 12 17c4 0 4 2 8 2V8z"/></svg>
-          Humitat
-        </span>
-        <span class="metric-value">
-          <input type="number" step="1" min="0" max="100" value="${p.hum||''}" placeholder="55" style="width:64px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right;" onchange="updateField(${id},'hum',this.value)">
-          <span style="font-size:12px;color:var(--text-muted)">%</span>
-        </span>
-      </div>
+    <div class="ig">
+      <div class="ic"><div class="icl">Nom del lot</div><div class="icv"><input value="${esc(l.name)}" onchange="updatePC(${id},'name',this.value)"/></div></div>
+      <div class="ic"><div class="icl">Genètica</div><div class="icv"><input value="${esc(l.strain||'')}" placeholder="Varietat..." onchange="updatePC(${id},'strain',this.value)"/></div></div>
+      <div class="ic"><div class="icl">Tipus</div><div class="icv">
+        <select onchange="updatePC(${id},'type',this.value);openPCPanel(${id})">
+          ${Object.entries(PCT).map(([k,v])=>`<option value="${k}" ${l.type===k?'selected':''}>${v.l}</option>`).join('')}
+        </select>
+      </div></div>
+      <div class="ic"><div class="icl">Data inici</div><div class="icv"><input type="date" value="${l.startDate||''}" onchange="updatePC(${id},'startDate',this.value)"/></div></div>
+      <div class="ic"><div class="icl">Dies estimats</div><div class="icv"><input type="number" value="${l.days||''}" placeholder="${m.d}" onchange="updatePC(${id},'days',parseInt(this.value)||m.d)"/></div></div>
+      <div class="ic"><div class="icl">Estat</div><div class="icv">
+        <select onchange="updatePC(${id},'status',this.value);openPCPanel(${id})">
+          <option value="actiu" ${l.status==='actiu'?'selected':''}>Actiu</option>
+          <option value="completat" ${l.status==='completat'?'selected':''}>Completat</option>
+          <option value="pausat" ${l.status==='pausat'?'selected':''}>Pausat</option>
+        </select>
+      </div></div>
     </div>
 
-    <!-- Notes -->
-    <div class="notes-area">
-      <div class="notes-label">Notes de cultiu</div>
-      <textarea placeholder="Observacions, problemes detectats, tractaments aplicats..." onchange="updateField(${id},'notes',this.value)">${escHtml(p.notes||'')}</textarea>
+    <!-- Pesos -->
+    <div class="na">
+      <div class="nl">Control de pes</div>
+      <div class="mr">
+        <span class="ml"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.3 6.9.6-5 5 1.2 6.9L12 17l-6.1 3.8 1.2-6.9-5-5 6.9-.6z"/></svg>Pes inicial (g)</span>
+        <input type="number" step="0.1" value="${l.weight||''}" placeholder="100" style="width:72px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'weight',parseFloat(this.value)||0)">
+      </div>
+      <div class="mr">
+        <span class="ml"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Pes final (g)</span>
+        <input type="number" step="0.1" value="${l.weightFinal||''}" placeholder="0" style="width:72px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'weightFinal',parseFloat(this.value)||0)">
+      </div>
+      ${l.weight&&l.weightFinal?`<div class="mr">
+        <span class="ml">Rendiment</span>
+        <span style="font-size:13px;font-weight:600;color:${m.c}">${((l.weightFinal/l.weight)*100).toFixed(1)}%</span>
+      </div>`:''}
     </div>
 
-    <!-- Log -->
-    ${renderLog(p, id)}
+    <!-- Paràmetres específics per tipus -->
+    ${l.type==='secat'||l.type==='curacio'?`<div class="na">
+      <div class="nl">Paràmetres de ${m.l.toLowerCase()}</div>
+      <div class="mr">
+        <span class="ml">Temperatura (°C)</span>
+        <input type="number" step="0.5" value="${l.tempParam||''}" placeholder="${l.type==='secat'?18:20}" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'tempParam',parseFloat(this.value)||null)">
+      </div>
+      <div class="mr">
+        <span class="ml">Humitat (%)</span>
+        <input type="number" step="1" value="${l.humParam||''}" placeholder="${l.type==='secat'?50:62}" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'humParam',parseFloat(this.value)||null)">
+      </div>
+    </div>`:''}
 
-    <!-- Danger zone -->
-    <div class="danger-zone">
-      <button class="btn btn-danger" onclick="deletePlant(${id})">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
-        Eliminar planta
+    ${l.type==='hash'||l.type==='extraccio'?`<div class="na">
+      <div class="nl">Paràmetres d'extracció</div>
+      <div class="mr">
+        <span class="ml">Temperatura pressió (°C)</span>
+        <input type="number" step="1" value="${l.pressTemp||''}" placeholder="75" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'pressTemp',parseFloat(this.value)||null)">
+      </div>
+      <div class="mr">
+        <span class="ml">Malla / microns</span>
+        <input type="text" value="${l.microns||''}" placeholder="73µ, 90µ..." style="width:80px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif" onchange="updatePC(${id},'microns',this.value)">
+      </div>
+    </div>`:''}
+
+    <div class="na">
+      <div class="nl">Notes del procés</div>
+      <textarea placeholder="Observacions del procés, problemes, ajustos fets..." onchange="updatePC(${id},'notes',this.value)">${esc(l.notes||'')}</textarea>
+    </div>
+
+    <div class="dz">
+      <button class="btn btn-d" onclick="deletePCLot(${id})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        Eliminar lot
       </button>
     </div>
   `;
 
-  document.getElementById('panel-actions').innerHTML = `
-    <button class="btn btn-primary" onclick="logAction(${id},'reg')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
-      Reg
-    </button>
-    <button class="btn btn-ghost" onclick="logAction(${id},'nutrients')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
-      Nutrients
-    </button>
-    <button class="btn btn-ghost" onclick="logAction(${id},'defoliacio')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v12M18 9a3 3 0 01-3 3H6M6 3a3 3 0 00-3 3v3a3 3 0 003 3"/></svg>
-      Defoliació
-    </button>
-    <button class="btn btn-ghost" onclick="logAction(${id},'trasplant')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-      Trasplant
-    </button>
+  document.getElementById('panel-actions').innerHTML=`
+    ${!done?`<button class="btn btn-p" onclick="updatePC(${id},'status','completat');openPCPanel(${id});renderPC()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Marcar completat
+    </button>`:`<button class="btn btn-g" onclick="updatePC(${id},'status','actiu');openPCPanel(${id});renderPC()">Reactivar lot</button>`}
+    <button class="btn btn-g" onclick="closePanel()">Tancar</button>
   `;
 
   document.getElementById('panel-overlay').classList.add('open');
   document.getElementById('plant-panel').classList.add('open');
 }
 
-function renderLog(p, id) {
-  const log = p.log || [];
-  const iconFor = (type) => {
-    const icons = {
-      reg: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,
-      nutrients: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18"/></svg>`,
-      defoliacio: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 3v12M18 9a3 3 0 01-3 3H6"/></svg>`,
-      trasplant: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="16 3 21 3 21 8"/></svg>`,
-    };
-    return icons[type] || icons.reg;
-  };
-  const bgFor = (type) => {
-    return { reg:'#dbeafe', nutrients:'#d1fae5', defoliacio:'#fef3c7', trasplant:'#ede9fe' }[type] || '#f0f0ed';
-  };
-  const labelFor = (type) => {
-    return { reg:'Reg', nutrients:'Nutrients', defoliacio:'Defoliació', trasplant:'Trasplant' }[type] || type;
-  };
-  if (!log.length) return '';
-  return `
-    <div class="notes-area">
-      <div class="notes-label">Registre d'accions</div>
-      ${log.slice().reverse().slice(0,8).map(entry => `
-        <div class="log-entry">
-          <div class="log-icon" style="background:${bgFor(entry.type)}">${iconFor(entry.type)}</div>
-          <span class="log-text">${labelFor(entry.type)}</span>
-          <span class="log-date">${new Date(entry.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short'})}</span>
-        </div>
-      `).join('')}
-    </div>
-  `;
+function updatePC(id,field,value){
+  const l=S.pcLots.find(x=>x.id===id);if(!l)return;
+  l[field]=value;save();renderPC();toast('Guardat');
 }
-
-function closePanel() {
-  document.getElementById('panel-overlay').classList.remove('open');
-  document.getElementById('plant-panel').classList.remove('open');
-  openPlantId = null;
+function showAddPCModal(){showAddPCModalType(null);}
+function showAddPCModalType(t){
+  if(t)document.getElementById('pc-type').value=t;
+  ['pc-name','pc-strain','pc-weight'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('pc-start').value=new Date().toISOString().split('T')[0];
+  const ty=t||'secat';
+  document.getElementById('pc-days').value=PCT[ty]?.d||14;
+  document.getElementById('pc-type').onchange=function(){document.getElementById('pc-days').value=PCT[this.value]?.d||14;};
+  document.getElementById('modal-pc').classList.add('open');
+  setTimeout(()=>document.getElementById('pc-name').focus(),80);
 }
-
-// ============================================================
-// PLANT ACTIONS
-// ============================================================
-function updateField(id, field, value) {
-  const p = plants.find(x => x.id === id);
-  if (!p) return;
-  p[field] = value;
-  save();
-  if (field !== 'notes' && field !== 'ph' && field !== 'ec' && field !== 'temp' && field !== 'hum' && field !== 'substrate' && field !== 'potSize' && field !== 'strain') {
-    renderDashboard();
-  }
-  toast('Guardat');
-}
-
-function logAction(id, type) {
-  const p = plants.find(x => x.id === id);
-  if (!p) return;
-  if (!p.log) p.log = [];
-  p.log.push({ type, date: new Date().toISOString() });
-  save();
-  openPlant(id);
-  toast(({ reg:'Reg registrat', nutrients:'Nutrients registrats', defoliacio:'Defoliació registrada', trasplant:'Trasplant registrat' })[type] || 'Registrat');
-}
-
-function deletePlant(id) {
-  if (!confirm('Segur que vols eliminar aquesta planta?')) return;
-  plants = plants.filter(x => x.id !== id);
-  save();
-  closePanel();
-  renderDashboard();
-  toast('Planta eliminada');
-}
-
-// ============================================================
-// ADD PLANT MODAL
-// ============================================================
-let preselectedPhase = null;
-
-function showAddPlantModal() {
-  preselectedPhase = null;
-  openModalInternal();
-}
-
-function showAddPlantModalPhase(phaseId) {
-  preselectedPhase = phaseId;
-  openModalInternal();
-}
-
-function openModalInternal() {
-  const phases = phasesForEnv(currentEnv);
-  const sel = document.getElementById('new-phase');
-  sel.innerHTML = phases.map(ph => `<option value="${ph.id}" ${ph.id === preselectedPhase ? 'selected' : ''}>${ph.name}</option>`).join('');
-  document.getElementById('new-name').value = '';
-  document.getElementById('new-strain').value = '';
-  document.getElementById('new-notes').value = '';
-  document.getElementById('new-date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('modal-add').classList.add('open');
-  setTimeout(() => document.getElementById('new-name').focus(), 100);
-}
-
-function closeModal() {
-  document.getElementById('modal-add').classList.remove('open');
-}
-
-function addPlant() {
-  const name = document.getElementById('new-name').value.trim() || `Planta #${pad(nextId)}`;
-  const strain = document.getElementById('new-strain').value.trim();
-  const phase = document.getElementById('new-phase').value;
-  const phaseStart = document.getElementById('new-date').value;
-  const notes = document.getElementById('new-notes').value.trim();
-
-  plants.push({
-    id: nextId++,
-    env: currentEnv,
-    name, strain, phase, phaseStart, notes,
-    health: 'bo',
-    log: [],
-    substrate: '', potSize: '', ph: '', ec: '', temp: '', hum: ''
+function addPCLot(){
+  const n=document.getElementById('pc-name').value.trim()||`Lot #${S.nextPCId}`;
+  S.pcLots.push({
+    id:S.nextPCId++,name:n,
+    strain:document.getElementById('pc-strain').value.trim(),
+    type:document.getElementById('pc-type').value,
+    weight:parseFloat(document.getElementById('pc-weight').value)||0,
+    startDate:document.getElementById('pc-start').value,
+    days:parseInt(document.getElementById('pc-days').value)||14,
+    status:'actiu',weightFinal:0,notes:'',tempParam:null,humParam:null,pressTemp:null,microns:''
   });
-  save();
-  closeModal();
-  renderDashboard();
-  toast('Planta afegida correctament');
+  save();closeModal('modal-pc');renderPC();toast('Lot creat');
+}
+function deletePCLot(id){
+  if(!confirm('Eliminar aquest lot?'))return;
+  S.pcLots=S.pcLots.filter(x=>x.id!==id);
+  save();closePanel();renderPC();toast('Lot eliminat');
 }
 
-// ============================================================
-// TOAST
-// ============================================================
-function toast(msg) {
-  const c = document.getElementById('toasts');
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  c.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
-
-// ============================================================
 // UTILS
-// ============================================================
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function pad(n){return String(n).padStart(3,'0');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(m){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='tos';t.textContent=m;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
 
-// Keyboard shortcut - Esc closes panel
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    if (document.getElementById('modal-add').classList.contains('open')) closeModal();
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const om=document.querySelector('.mo.open');if(om)om.classList.remove('open');
+    else if(document.getElementById('lightbox').classList.contains('open'))closeLightbox();
     else closePanel();
   }
-  if (e.key === 'Enter' && document.getElementById('modal-add').classList.contains('open')) addPlant();
 });
 
-// Init
-updateWelcomeCounts();
+(async()=>{await loadGH();rebuildGC();updateCounts();})();
 </script>
 </body>
 </html>
