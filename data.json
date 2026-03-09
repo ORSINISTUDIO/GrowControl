@@ -703,9 +703,22 @@
       "thcMax": "",
       "grow": "",
       "effect": ""
+    },
+    {
+      "id": 14,
+      "name": "BLACK CRITICAL",
+      "breeder": "SPANNISH SEEDS",
+      "type": "feminitzada",
+      "florDays": null,
+      "stock": 2,
+      "notes": "",
+      "thcMin": "",
+      "thcMax": "",
+      "grow": "",
+      "effect": ""
     }
   ],
-  "nextSeedId": 14,
+  "nextSeedId": 15,
   "pcLots": [],
   "nextPCId": 1
 }
