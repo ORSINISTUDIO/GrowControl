@@ -187,7 +187,13 @@
       "notes": "",
       "florDays": null,
       "health": "bo",
-      "log": [],
+      "log": [
+        {
+          "type": "clon",
+          "date": "2026-03-10T21:53:25.166Z",
+          "detail": "2 clons extrets"
+        }
+      ],
       "photos": [],
       "substrate": "",
       "potSize": "",
@@ -579,9 +585,51 @@
         }
       ],
       "notes": "Clon de HC11. Arrelament: ~12 dies."
+    },
+    {
+      "id": 33,
+      "name": "TANNER Clon #01",
+      "strain": "TANNER",
+      "phase": "clon",
+      "env": "indoor",
+      "phaseStart": "2026-03-10",
+      "health": "bo",
+      "motherId": 10,
+      "motherName": "T01",
+      "clonDay": 0,
+      "clonTarget": 12,
+      "log": [
+        {
+          "type": "clon",
+          "date": "2026-03-10T21:53:25.166Z",
+          "detail": "Clon de mare: T01 (ID#010)"
+        }
+      ],
+      "notes": "Clon de T01. Arrelament: ~12 dies."
+    },
+    {
+      "id": 34,
+      "name": "TANNER Clon #02",
+      "strain": "TANNER",
+      "phase": "clon",
+      "env": "indoor",
+      "phaseStart": "2026-03-10",
+      "health": "bo",
+      "motherId": 10,
+      "motherName": "T01",
+      "clonDay": 0,
+      "clonTarget": 12,
+      "log": [
+        {
+          "type": "clon",
+          "date": "2026-03-10T21:53:25.166Z",
+          "detail": "Clon de mare: T01 (ID#010)"
+        }
+      ],
+      "notes": "Clon de T01. Arrelament: ~12 dies."
     }
   ],
-  "nextId": 33,
+  "nextId": 35,
   "seeds": [
     {
       "id": 1,
