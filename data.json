@@ -273,7 +273,7 @@
       "phase": "flor",
       "phaseStart": "2026-01-09",
       "notes": "",
-      "florDays": null,
+      "florDays": 63,
       "health": "bo",
       "log": [],
       "photos": [],
