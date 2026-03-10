@@ -166,21 +166,37 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 <div id="screen-welcome" class="screen active">
   <div class="wi">
     <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:28px">
-      <div class="wb" style="margin-bottom:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>GrowControl</div>
+      <div class="wb" style="margin-bottom:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22c5 0 9-1.8 9-4V6c0-2.2-4-4-9-4S3 3.8 3 6v12c0 2.2 4 4 9 4z"/></svg>GrowControl</div>
       <button class="btn btn-g" style="font-size:11px;padding:5px 10px;display:flex;align-items:center;gap:5px" onclick="showTokenModal()" title="Configurar token GitHub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>GitHub</button>
     </div>
     <h1 class="wt">Gestió de<br><strong>cultius</strong></h1>
     <p class="ws" style="margin-bottom:44px">Selecciona una secció per continuar.</p>
     <div class="env-cards">
-      <div class="ec indoor" onclick="enterEnv('indoor')">
-        <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-        <div class="el">Indoor</div><div class="ed">Germinació, clonació, vegetatiu, mares i floració.</div>
-        <div class="ecount" id="count-indoor"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>0 plantes</div>
+      <div class="ec indoor" onclick="enterEnv('indoor')" style="position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:.04;background:linear-gradient(135deg,#10b981,#22c55e);pointer-events:none;border-radius:16px;"></div>
+        <div class="ei" style="margin-bottom:8px;width:48px;height:48px;border-radius:12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="el">Indoor</div>
+        <div class="ed">5 fases de cultiu</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#d1fae5;border:1px solid #6ee7b7;border-radius:20px;font-size:10px;font-weight:600;color:#065f46;">🌱 Germinació</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#dbeafe;border:1px solid #93c5fd;border-radius:20px;font-size:10px;font-weight:600;color:#1e3a8a;">🧪 Clonació</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#dcfce7;border:1px solid #86efac;border-radius:20px;font-size:10px;font-weight:600;color:#14532d;">🌿 Vegetatiu</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#ede9fe;border:1px solid #c4b5fd;border-radius:20px;font-size:10px;font-weight:600;color:#4c1d95;">👑 Mares</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#fef3c7;border:1px solid #fcd34d;border-radius:20px;font-size:10px;font-weight:600;color:#78350f;">🌸 Floració</span>
+        </div>
+        <div class="ecount" id="count-indoor" style="margin-top:10px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>0 plantes</div>
       </div>
-      <div class="ec outdoor" onclick="enterEnv('outdoor')">
-        <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
-        <div class="el">Outdoor</div><div class="ed">Floració exterior amb predicció meteorològica real del Masnou.</div>
-        <div class="ecount" id="count-outdoor"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>0 plantes</div>
+      <div class="ec outdoor" onclick="enterEnv('outdoor')" style="position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:.04;background:linear-gradient(135deg,#f59e0b,#fbbf24);pointer-events:none;border-radius:16px;"></div>
+        <div class="ei" style="margin-bottom:8px;width:48px;height:48px;border-radius:12px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+        <div class="el">Outdoor</div><div class="ed">Floració exterior · El Masnou</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#fef3c7;border:1px solid #fcd34d;border-radius:20px;font-size:10px;font-weight:600;color:#78350f;">🌸 Floració</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:2px 7px;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:20px;font-size:10px;font-weight:600;color:#0c4a6e;">🌤️ Meteorologia</span>
+        </div>
+        <div class="ecount" id="count-outdoor" style="margin-top:10px;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>0 plantes</div>
       </div>
       <div class="ec vault" onclick="showVault()">
         <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1.5"/></svg></div>
@@ -502,16 +518,90 @@ function renderCard(p){
   </div>`;
 }
 
-// PLANT SVG
+// PLANT SVG — improved icons per phase
 function pSVG(phase,color,size){
   const s=size||28,c=color||'#52b788';
-  return({
-    germ:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="24" rx="5" ry="3" fill="${c}22"/><path d="M16 24 Q16 14 22 10" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="22" cy="10" rx="5" ry="3.5" fill="${c}" opacity=".8" transform="rotate(-20 22 10)"/><ellipse cx="10" cy="16" rx="4" ry="2.5" fill="${c}" opacity=".6" transform="rotate(15 10 16)"/><circle cx="16" cy="24" r="2" fill="${c}"/></svg>`,
-    clon:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="11" y="20" width="10" height="8" rx="2" fill="${c}33"/><line x1="16" y1="20" x2="16" y2="10" stroke="${c}" stroke-width="1.5" stroke-linecap="round"/><path d="M16 14 Q10 12 9 7" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="9" cy="7" rx="3.5" ry="2.5" fill="${c}" opacity=".75" transform="rotate(-10 9 7)"/><path d="M16 11 Q22 9 23 5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="23" cy="5" rx="3" ry="2" fill="${c}" opacity=".75" transform="rotate(10 23 5)"/></svg>`,
-    veg:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="13" y="24" width="6" height="5" rx="1.5" fill="${c}44"/><line x1="16" y1="24" x2="16" y2="8" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/><path d="M16 19 Q8 17 7 11" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/><path d="M16 15 Q24 13 25 7" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="7" cy="11" rx="4.5" ry="3" fill="${c}" opacity=".7" transform="rotate(-15 7 11)"/><ellipse cx="25" cy="7" rx="4" ry="2.5" fill="${c}" opacity=".7" transform="rotate(15 25 7)"/></svg>`,
-    mare:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="11" y="25" width="10" height="4" rx="2" fill="${c}44"/><line x1="16" y1="25" x2="16" y2="6" stroke="${c}" stroke-width="2" stroke-linecap="round"/><path d="M16 22 Q6 20 5 13" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/><path d="M16 17 Q26 15 27 8" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/><path d="M16 13 Q8 10 8 5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="5" cy="13" rx="5" ry="3.5" fill="${c}" opacity=".75" transform="rotate(-18 5 13)"/><ellipse cx="27" cy="8" rx="5" ry="3" fill="${c}" opacity=".75" transform="rotate(15 27 8)"/></svg>`,
-    flor:`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none"><rect x="13" y="25" width="6" height="5" rx="1.5" fill="${c}44"/><line x1="16" y1="25" x2="16" y2="7" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/><path d="M16 20 Q9 18 8 13" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><path d="M16 15 Q23 13 24 8" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="8" cy="13" rx="3.5" ry="2.5" fill="${c}" opacity=".55" transform="rotate(-15 8 13)"/><ellipse cx="24" cy="8" rx="3.5" ry="2.5" fill="${c}" opacity=".55" transform="rotate(15 24 8)"/><circle cx="16" cy="7" r="3.5" fill="${c}" opacity=".9"/><circle cx="16" cy="7" r="2" fill="${c}"/><ellipse cx="13" cy="5" rx="2" ry="2.8" fill="${c}" opacity=".6" transform="rotate(-30 13 5)"/><ellipse cx="19" cy="5" rx="2" ry="2.8" fill="${c}" opacity=".6" transform="rotate(30 19 5)"/></svg>`,
-  })[phase]||'';
+  // germ: llavor trencant-se amb arrel i cotilèdons
+  const germ=`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none">
+    <ellipse cx="16" cy="26" rx="4" ry="2.5" fill="${c}18"/>
+    <line x1="16" y1="26" x2="16" y2="19" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M16 22 Q13 20 12 17" stroke="${c}" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M16 22 Q19 20 20 17" stroke="${c}" stroke-width="1.1" stroke-linecap="round"/>
+    <ellipse cx="12" cy="16.5" rx="3" ry="2" fill="${c}" opacity=".7" transform="rotate(-20 12 16.5)"/>
+    <ellipse cx="20" cy="16.5" rx="3" ry="2" fill="${c}" opacity=".7" transform="rotate(20 20 16.5)"/>
+    <ellipse cx="16" cy="20" rx="3.5" ry="2.8" fill="${c}22" stroke="${c}66" stroke-width=".8"/>
+    <path d="M13.5 21.5 Q16 18.5 18.5 21.5" stroke="${c}" stroke-width=".8" stroke-linecap="round" fill="none"/>
+    <line x1="16" y1="19" x2="16" y2="14.5" stroke="${c}88" stroke-width="1" stroke-linecap="round" stroke-dasharray="1.2 1.2"/>
+    <circle cx="16" cy="14" r="1.3" fill="${c}66"/>
+  </svg>`;
+  // clon: tija en got d'aigua amb arrels visibles
+  const clon=`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none">
+    <rect x="10" y="19" width="12" height="9" rx="2" fill="${c}18" stroke="${c}44" stroke-width=".8"/>
+    <path d="M12 24 Q13 22 12 20" stroke="${c}55" stroke-width="1" stroke-linecap="round"/>
+    <path d="M14 25 Q15 22 14.5 20" stroke="${c}55" stroke-width="1" stroke-linecap="round"/>
+    <path d="M18 24 Q17 21 17.5 20" stroke="${c}55" stroke-width="1" stroke-linecap="round"/>
+    <path d="M20 25 Q19 22 19 20" stroke="${c}44" stroke-width="1" stroke-linecap="round"/>
+    <line x1="16" y1="19" x2="16" y2="8" stroke="${c}" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M16 14 Q10 12 9 7.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M16 11 Q22 9 22.5 5.5" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="9" cy="7" rx="3.5" ry="2.2" fill="${c}" opacity=".75" transform="rotate(-15 9 7)"/>
+    <ellipse cx="22.5" cy="5" rx="3.2" ry="2" fill="${c}" opacity=".75" transform="rotate(15 22.5 5)"/>
+    <circle cx="16" cy="19" r="1.5" fill="${c}44"/>
+  </svg>`;
+  // veg: planta amb 3 parells de fulles alternades, tija prominent
+  const veg=`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none">
+    <rect x="14" y="25" width="4" height="5" rx="1.5" fill="${c}33"/>
+    <line x1="16" y1="25" x2="16" y2="6" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M16 22 Q9 21 7 15.5" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/>
+    <ellipse cx="7" cy="15" rx="4.5" ry="3" fill="${c}" opacity=".65" transform="rotate(-18 7 15)"/>
+    <path d="M16 22 Q23 21 25 15.5" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/>
+    <ellipse cx="25" cy="15" rx="4.5" ry="3" fill="${c}" opacity=".65" transform="rotate(18 25 15)"/>
+    <path d="M16 17 Q9 15 8 10" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="8" cy="9.5" rx="4" ry="2.5" fill="${c}" opacity=".75" transform="rotate(-15 8 9.5)"/>
+    <path d="M16 17 Q23 15 24 10" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="24" cy="9.5" rx="4" ry="2.5" fill="${c}" opacity=".75" transform="rotate(15 24 9.5)"/>
+    <path d="M16 11 Q13 9 13 6.5" stroke="${c}" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="13" cy="6" rx="2.5" ry="1.8" fill="${c}" opacity=".8" transform="rotate(-10 13 6)"/>
+  </svg>`;
+  // mare: planta gran i densa, múltiples ramificacions i corona
+  const mare=`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none">
+    <rect x="12" y="26" width="8" height="4" rx="2" fill="${c}33"/>
+    <line x1="16" y1="26" x2="16" y2="5" stroke="${c}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M16 23 Q5 22 4 14" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/>
+    <ellipse cx="4" cy="13.5" rx="5" ry="3.5" fill="${c}" opacity=".7" transform="rotate(-20 4 13.5)"/>
+    <path d="M16 23 Q27 22 28 14" stroke="${c}" stroke-width="1.4" stroke-linecap="round"/>
+    <ellipse cx="28" cy="13.5" rx="5" ry="3.5" fill="${c}" opacity=".7" transform="rotate(20 28 13.5)"/>
+    <path d="M16 18 Q8 16 7 10" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/>
+    <ellipse cx="7" cy="9.5" rx="4.5" ry="3" fill="${c}" opacity=".75" transform="rotate(-15 7 9.5)"/>
+    <path d="M16 18 Q24 16 25 10" stroke="${c}" stroke-width="1.3" stroke-linecap="round"/>
+    <ellipse cx="25" cy="9.5" rx="4.5" ry="3" fill="${c}" opacity=".75" transform="rotate(15 25 9.5)"/>
+    <path d="M16 13 Q11 10 11 5.5" stroke="${c}" stroke-width="1.1" stroke-linecap="round"/>
+    <ellipse cx="11" cy="5" rx="3" ry="2.2" fill="${c}" opacity=".85" transform="rotate(-8 11 5)"/>
+    <path d="M16 13 Q21 10 21 5.5" stroke="${c}" stroke-width="1.1" stroke-linecap="round"/>
+    <ellipse cx="21" cy="5" rx="3" ry="2.2" fill="${c}" opacity=".85" transform="rotate(8 21 5)"/>
+    <circle cx="16" cy="5" r="2" fill="${c}" opacity=".9"/>
+  </svg>`;
+  // flor: planta amb brot terminal dens i tricomes
+  const flor=`<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none">
+    <rect x="14" y="25" width="4" height="5" rx="1.5" fill="${c}33"/>
+    <line x1="16" y1="25" x2="16" y2="14" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M16 22 Q10 20 9 15" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="9" cy="14.5" rx="3.5" ry="2.2" fill="${c}" opacity=".55" transform="rotate(-15 9 14.5)"/>
+    <path d="M16 22 Q22 20 23 15" stroke="${c}" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="23" cy="14.5" rx="3.5" ry="2.2" fill="${c}" opacity=".55" transform="rotate(15 23 14.5)"/>
+    <ellipse cx="16" cy="10" rx="4.5" ry="6" fill="${c}" opacity=".85"/>
+    <ellipse cx="16" cy="9" rx="3" ry="4.5" fill="${c}"/>
+    <circle cx="12.5" cy="8" r="1.8" fill="${c}" opacity=".7"/>
+    <circle cx="19.5" cy="8" r="1.8" fill="${c}" opacity=".7"/>
+    <circle cx="14.5" cy="5.5" r="1.5" fill="${c}" opacity=".8"/>
+    <circle cx="17.5" cy="5.5" r="1.5" fill="${c}" opacity=".8"/>
+    <circle cx="16" cy="4" r="1.3" fill="${c}"/>
+    <circle cx="12" cy="10" r=".7" fill="white" opacity=".5"/>
+    <circle cx="20" cy="9" r=".6" fill="white" opacity=".5"/>
+    <circle cx="15" cy="7" r=".6" fill="white" opacity=".4"/>
+    <circle cx="18" cy="12" r=".5" fill="white" opacity=".4"/>
+  </svg>`;
+  return ({germ,clon,veg,mare,flor})[phase]||'';
 }
 
 // PLANT PANEL
@@ -590,17 +680,53 @@ function openPlant(id){
     <button class="btn btn-p" onclick="logAct(${id},'reg')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>Reg</button>
     <button class="btn btn-g" onclick="logAct(${id},'nutrients')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18"/></svg>Nutrients</button>
     <button class="btn btn-g" onclick="logAct(${id},'defoliacio')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v12M18 9a3 3 0 01-3 3H6"/></svg>Defoliació</button>
-    <button class="btn btn-g" onclick="logAct(${id},'trasplant')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>Trasplant</button>`;
+    <button class="btn btn-g" onclick="logAct(${id},'trasplant')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/></svg>Trasplant</button>
+    ${(p.phase==='veg'||p.phase==='mare')?`<button class="btn" style="background:#fef3c7;color:#92400e;border:1px solid #fde68a;" onclick="passarAFloracio(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0110 10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 22v-4M2 12h4M22 12h-4"/></svg>Passar a Floració</button>`:''}
+    ${p.phase==='clon'?`<button class="btn" style="background:#dcfce7;color:#14532d;border:1px solid #86efac;" onclick="passarAVeg(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Passar a Vegetatiu</button>`:''}
+    ${p.phase==='mare'?`<button class="btn" style="background:#ede9fe;color:#4c1d95;border:1px solid #c4b5fd;" onclick="clonarDeMare(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Clonar d'aquesta mare</button>`:''}
+    ${p.phase==='clon'?`<button class="btn" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;" onclick="mortClon(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Mort del clon</button>`:''}
+    ${p.phase==='germ'?`<button class="btn" style="background:#f8f0ff;color:#6b21a8;border:1px solid #e9d5ff;" onclick="noGermina(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>No Germina (NG)</button>`:''}
+  `;
   document.getElementById('panel-overlay').classList.add('open');
   document.getElementById('plant-panel').classList.add('open');
 }
 
 function renderLog(p){
   const log=p.log||[];if(!log.length)return'';
-  const ic={reg:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,nutrients:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4"/></svg>`,defoliacio:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 3v12"/></svg>`,trasplant:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="16 3 21 3 21 8"/></svg>`};
-  const bg={reg:'#dbeafe',nutrients:'#d1fae5',defoliacio:'#fef3c7',trasplant:'#ede9fe'};
-  const lb={reg:'Reg',nutrients:'Nutrients',defoliacio:'Defoliació',trasplant:'Trasplant'};
-  return`<div class="na"><div class="nl">Registre</div>${log.slice().reverse().slice(0,8).map(e=>`<div class="le"><div class="li" style="background:${bg[e.type]||'#f0f0ed'}">${ic[e.type]||''}</div><span class="lt">${lb[e.type]||e.type}</span><span class="ld">${new Date(e.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short'})}</span></div>`).join('')}</div>`;
+  const ic={
+    reg:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>`,
+    nutrients:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4"/></svg>`,
+    defoliacio:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 3v12"/></svg>`,
+    trasplant:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="16 3 21 3 21 8"/></svg>`,
+    fase:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M12 2a10 10 0 0110 10"/><circle cx="12" cy="12" r="3"/></svg>`,
+    clon:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>`,
+    mort:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+    ng:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+  };
+  const bg={reg:'#dbeafe',nutrients:'#d1fae5',defoliacio:'#fef3c7',trasplant:'#ede9fe',fase:'#fef3c7',clon:'#ede9fe',mort:'#fee2e2',ng:'#f3e8ff'};
+  const lb={reg:'Reg',nutrients:'Nutrients',defoliacio:'Defoliació',trasplant:'Trasplant',fase:'Canvi de fase',clon:'Clonació',mort:'Mort',ng:'No germina'};
+  // Clone arrelament countdown
+  let clonBlock='';
+  if(p.phase==='clon'&&p.phaseStart){
+    const dip=Math.floor((Date.now()-new Date(p.phaseStart).getTime())/86400000);
+    const target=p.clonTarget||12;
+    const rem=Math.max(0,target-dip);
+    const pct=Math.min(100,Math.round((dip/target)*100));
+    const bc=rem<=3?'#10b981':rem<=6?'#22c55e':'#3b82f6';
+    clonBlock=`<div style="background:linear-gradient(135deg,${bc}10,${bc}05);border:1px solid ${bc}33;border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:${bc};text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;align-items:center;gap:4px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Arrelament · Dia ${dip} de ${target}
+      </div>
+      <div style="font-size:20px;font-weight:600;color:${dip>=target?'#10b981':'var(--tx)'}">
+        ${dip>=target?'✓ Arrelament complet':'Falten '+rem+' dies'}
+      </div>
+      <div style="font-size:11px;color:${bc};margin-top:2px">${dip>=target?'Llesta per passar a Vegetatiu':'Protocol: nebulitzar cada 12h, T 24–26°C, HR >75%'}</div>
+      <div style="height:4px;background:${bc}22;border-radius:2px;margin-top:8px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${bc};border-radius:2px;transition:width .5s ease"></div></div>
+      ${p.motherName?`<div style="font-size:11px;color:var(--tx3);margin-top:6px;">Mare: <strong>${esc(p.motherName)}</strong></div>`:''}
+      ${dip>=target?`<button class="btn" style="margin-top:10px;background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;font-size:12px;" onclick="passarAFloracio(${p.id});closePanel()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>Passar a Vegetatiu</button>`:''}
+    </div>`;
+  }
+  return`${clonBlock}<div class="na"><div class="nl">Registre d'activitats</div>${log.slice().reverse().slice(0,12).map(e=>`<div class="le"><div class="li" style="background:${bg[e.type]||'#f0f0ed'}">${ic[e.type]||''}</div><span class="lt">${e.detail||lb[e.type]||e.type}</span><span class="ld">${new Date(e.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short'})}</span></div>`).join('')}</div>`;
 }
 
 function renderPhotos(p){
@@ -1215,7 +1341,168 @@ function deletePCLot(id){
 }
 
 // UTILS
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+// ── c) PASSAR A FLORACIÓ ──────────────────────────────────────────
+function passarAFloracio(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Passar "${p.name}" a Floració?\nEs registrarà la data d'inici de fase.`))return;
+  const prev=p.phase;
+  p.phase='flor';
+  p.phaseStart=new Date().toISOString().split('T')[0];
+  if(!p.log)p.log=[];
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:`Canvi de fase: ${prev}→flor`});
+  save();renderDash();openPlant(id);
+  toast('Planta passada a Floració ✓');
+}
+
+function passarAVeg(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Passar "${p.name}" a Vegetatiu?\nEl clon ha completat l'arrelament.`))return;
+  const prev=p.phase;
+  p.phase='veg';
+  p.phaseStart=new Date().toISOString().split('T')[0];
+  if(!p.log)p.log=[];
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:`Arrelament complet → Vegetatiu`});
+  save();renderDash();openPlant(id);
+  toast('Clon passat a Vegetatiu ✓');
+}
+
+// ── d) CLONAR D'UNA MARE ──────────────────────────────────────────
+function clonarDeMare(motherId){
+  const mare=S.plants.find(x=>x.id===motherId);if(!mare)return;
+  const num=parseInt(prompt(`Clonar "${mare.name}"\nQuants clons han sortit?`,'4'));
+  if(!num||isNaN(num)||num<1)return;
+  const today=new Date().toISOString().split('T')[0];
+  const clons=[];
+  for(let i=0;i<num;i++){
+    const cid=S.nextId++;
+    const clon={id:cid,name:`${mare.strain||mare.name} Clon #${String(i+1).padStart(2,'0')}`,
+      strain:mare.strain||'',phase:'clon',env:'indoor',
+      phaseStart:today,health:'bo',
+      motherId:motherId,motherName:mare.name,
+      clonDay:0,clonTarget:12,
+      log:[{type:'clon',date:new Date().toISOString(),detail:`Clon de mare: ${mare.name} (ID#${pad(motherId)})`}],
+      notes:`Clon de ${mare.name}. Arrelament: ~12 dies.`
+    };
+    S.plants.push(clon);
+    clons.push(cid);
+  }
+  if(!mare.log)mare.log=[];
+  mare.log.push({type:'clon',date:new Date().toISOString(),detail:`${num} clon${num>1?'s':''} extret${num>1?'s':''}`});
+  save();closePanel();renderDash();
+  toast(`${num} clon${num>1?'s':''} creat${num>1?'s':''} a Clonació ✓`);
+}
+
+// ── e) MORT DEL CLON ─────────────────────────────────────────────
+function mortClon(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  // Show inline modal
+  const mo=document.createElement('div');
+  mo.className='mo open';mo.id='modal-mort-clon';
+  mo.innerHTML=`<div class="md" style="max-width:400px;">
+    <div class="mh"><div class="mt">💀 Mort del clon</div></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>${esc(p.name)}</strong></p>
+      <div class="fld"><label>Causa de la mort</label>
+        <select id="mc-causa">
+          <option value="NG0">NG0 — Factor desconegut</option>
+          <option value="NG1">NG1 — Problema d'arrelament</option>
+          <option value="NG2">NG2 — Malaltia / fong (Botrytis, etc.)</option>
+          <option value="NG3">NG3 — Error de maneig (sec, tallat, etc.)</option>
+          <option value="NG-contam">NG — Contaminació creuada</option>
+          <option value="NG-stress">NG — Estrès hídric / lumínic</option>
+          <option value="altra">Altra causa...</option>
+        </select>
+      </div>
+      <div class="fld"><label>Notes addicionals</label><textarea id="mc-notes" rows="2" placeholder="Observacions, símptomes..."></textarea></div>
+      <div style="font-size:12px;color:var(--tx3);padding:8px;background:var(--sf);border-radius:8px;margin-top:4px;">
+        📷 La foto es pot afegir des de la secció de fotos de la planta abans de confirmar.
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="closeModal('modal-mort-clon');document.getElementById('modal-mort-clon').remove()">Cancel·lar</button>
+      <button class="btn" style="background:#dc2626;color:white;" onclick="confirmarMortClon(${id})">Confirmar mort</button>
+    </div>
+  </div>`;
+  document.body.appendChild(mo);
+}
+
+function confirmarMortClon(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  const causa=document.getElementById('mc-causa').value;
+  const notes=document.getElementById('mc-notes').value;
+  const mo=document.getElementById('modal-mort-clon');if(mo)mo.remove();
+  // Move to dead log, don't delete - mark as mort
+  if(!p.log)p.log=[];
+  p.log.push({type:'mort',date:new Date().toISOString(),detail:`Mort: ${causa}${notes?' — '+notes:''}`});
+  p.health='malament';
+  p.dead=true;
+  p.deadCause=causa;
+  p.deadNotes=notes;
+  p.deadDate=new Date().toISOString();
+  // Remove from active plants after save
+  save();
+  // Add to dead archive on all plants but mark hidden
+  S.plants=S.plants.map(x=>x.id===id?{...x,dead:true}:x);
+  // Actually remove from display
+  S.plants=S.plants.filter(x=>x.id!==id);
+  // Store in dead archive
+  if(!S.deadClons)S.deadClons=[];
+  S.deadClons.push({...p,dead:true,deadCause:causa,deadNotes:notes,deadDate:new Date().toISOString()});
+  save();closePanel();renderDash();
+  toast(`Clon eliminat · Causa: ${causa}`);
+}
+
+// ── f) NO GERMINA (NG) ────────────────────────────────────────────
+function noGermina(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  const mo=document.createElement('div');
+  mo.className='mo open';mo.id='modal-ng';
+  mo.innerHTML=`<div class="md" style="max-width:400px;">
+    <div class="mh"><div class="mt">🚫 No Germina (NG)</div></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Llavor: <strong>${esc(p.name)}</strong></p>
+      <div class="fld"><label>Factor NG</label>
+        <select id="ng-factor">
+          <option value="NG0">NG0 — Factor desconegut / aleatori</option>
+          <option value="NG1">NG1 — Llavor envellida / baixa viabilitat</option>
+          <option value="NG2">NG2 — Error de substrat / humitat excessiva</option>
+          <option value="NG3">NG3 — Error de temperatura o llum</option>
+        </select>
+      </div>
+      <div style="margin:8px 0 12px;padding:10px;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;">
+        <div style="font-size:11px;font-weight:600;color:#92400e;margin-bottom:4px;">Definició de factors NG propis:</div>
+        <div style="font-size:11px;color:#78350f;line-height:1.6;">
+          <b>NG0</b> Causa no identificable (atzar genètic)<br>
+          <b>NG1</b> Llavor vella, mal emmagatzemada o viabilitat baixa<br>
+          <b>NG2</b> Substrat massa sec/humit, excés o falta de calor<br>
+          <b>NG3</b> Error de protocol: profunditat, llum, pH
+        </div>
+      </div>
+      <div class="fld"><label>Notes</label><textarea id="ng-notes" rows="2" placeholder="Observacions addicionals..."></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="document.getElementById('modal-ng').remove()">Cancel·lar</button>
+      <button class="btn" style="background:#7c3aed;color:white;" onclick="confirmarNG(${id})">Registrar NG</button>
+    </div>
+  </div>`;
+  document.body.appendChild(mo);
+}
+
+function confirmarNG(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  const factor=document.getElementById('ng-factor').value;
+  const notes=document.getElementById('ng-notes').value;
+  document.getElementById('modal-ng')?.remove();
+  if(!p.log)p.log=[];
+  p.log.push({type:'ng',date:new Date().toISOString(),detail:`${factor}${notes?' — '+notes:''}`});
+  if(!S.ngArchive)S.ngArchive=[];
+  S.ngArchive.push({...p,ngFactor:factor,ngNotes:notes,ngDate:new Date().toISOString()});
+  S.plants=S.plants.filter(x=>x.id!==id);
+  save();closePanel();renderDash();
+  toast(`Registrat ${factor} — llavor arxivada`);
+}
+
+
 function pad(n){return String(n).padStart(3,'0');}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(m){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='tos';t.textContent=m;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
