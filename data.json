@@ -531,25 +531,6 @@
       "ec": "",
       "temp": "",
       "hum": ""
-    },
-    {
-      "id": 29,
-      "env": "indoor",
-      "name": "jno",
-      "strain": "",
-      "phase": "clon",
-      "phaseStart": "2026-03-10",
-      "notes": "",
-      "florDays": null,
-      "health": "bo",
-      "log": [],
-      "photos": [],
-      "substrate": "",
-      "potSize": "",
-      "ph": "",
-      "ec": "",
-      "temp": "",
-      "hum": ""
     }
   ],
   "nextId": 30,
