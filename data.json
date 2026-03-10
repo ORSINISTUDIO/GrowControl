@@ -531,9 +531,28 @@
       "ec": "",
       "temp": "",
       "hum": ""
+    },
+    {
+      "id": 30,
+      "env": "indoor",
+      "name": "hh",
+      "strain": "",
+      "phase": "germ",
+      "phaseStart": "2026-03-10",
+      "notes": "",
+      "florDays": null,
+      "health": "bo",
+      "log": [],
+      "photos": [],
+      "substrate": "",
+      "potSize": "",
+      "ph": "",
+      "ec": "",
+      "temp": "",
+      "hum": ""
     }
   ],
-  "nextId": 30,
+  "nextId": 31,
   "seeds": [
     {
       "id": 1,
