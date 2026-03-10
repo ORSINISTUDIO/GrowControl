@@ -158,7 +158,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
 @media(max-width:600px){.sg.indoor{grid-template-columns:1fr}.pp{width:100vw}.eh{flex-direction:column;align-items:flex-start}.dc,.vc,.pcc{padding-left:16px;padding-right:16px}.wg{grid-template-columns:repeat(2,1fr)}}
-</style>
+#screen-nutrients{padding-bottom:80px}
+.env-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
+@media(min-width:700px){.env-cards{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:520px){.env-cards{grid-template-columns:1fr}}</style>
 </head>
 <body>
 
@@ -205,6 +208,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
         <div class="ei"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <div class="el">Post-Collita</div><div class="ed">Secat, curació, hash, extraccions i processament.</div>
         <div class="ecount" id="count-pc"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>0 lots</div>
+      </div>
+      <div class="ec" onclick="showNutrients()" style="border-color:#e8e8e4;">
+        <div class="ei" style="background:#f0fdf4;color:#166534;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg></div>
+        <div class="el">Nutrients & VPD</div>
+        <div class="ed">Formulador per genètica i fase. Calculadora VPD.</div>
+        <div class="ecount"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>Coco + Terra · Multi-marca</div>
       </div>
     </div>
   </div>
@@ -258,6 +267,214 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
     <div class="bc"><a onclick="showWelcome()">Inici</a><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>Post-Collita</span></div>
     <div class="eh"><div class="eh-l"><h1>Post-<strong>Collita</strong></h1></div></div>
     <div class="pcs" id="pc-sections"></div>
+  </div>
+</div>
+
+<!-- NUTRIENTS & VPD -->
+<div id="screen-nutrients" class="screen">
+  <header class="app-header">
+    <div class="logo">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+      Nutrients & VPD
+    </div>
+    <div class="hdr-act">
+      <button class="btn-i" onclick="showWelcome()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
+    </div>
+  </header>
+  <div class="dc" style="max-width:960px;">
+    <div class="bc"><a onclick="showWelcome()">Inici</a><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>Nutrients & VPD</span></div>
+    <div class="eh"><div class="eh-l"><h1>Nutrients <strong>&amp; VPD</strong></h1></div></div>
+
+    <!-- TABS -->
+    <div style="display:flex;gap:2px;background:#f4f4f0;border-radius:10px;padding:3px;margin-bottom:28px;width:fit-content;">
+      <button id="tab-btn-nutrients" onclick="switchNTab('nutrients')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:#fff;color:#1a1a18;box-shadow:0 1px 3px rgba(0,0,0,.08);">Formulador</button>
+      <button id="tab-btn-vpd" onclick="switchNTab('vpd')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">VPD</button>
+      <button id="tab-btn-ia" onclick="switchNTab('ia')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">IA · Consell</button>
+    </div>
+
+    <!-- TAB: FORMULADOR -->
+    <div id="ntab-nutrients">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <!-- Configuració -->
+        <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;">Configuració</div>
+          <div class="fld"><label>Genètica / varietat</label>
+            <input type="text" id="nf-strain" placeholder="ex: OG Kush, Gelato, WW..." oninput="nfUpdate()" list="strain-dl">
+          </div>
+          <div class="fld"><label>Fase</label>
+            <select id="nf-phase" onchange="nfUpdate()">
+              <option value="germ">Germinació</option>
+              <option value="clon">Clonació / Arrelament</option>
+              <option value="veg-early">Vegetatiu inicial (S1–S3)</option>
+              <option value="veg-mid">Vegetatiu actiu (S4–S7)</option>
+              <option value="flor-early">Floració inicial (S1–S2)</option>
+              <option value="flor-mid">Floració plena (S3–S6)</option>
+              <option value="flor-late">Floració tardana (S7–S9)</option>
+              <option value="flush">Flushing final</option>
+            </select>
+          </div>
+          <div class="fld"><label>Substrat</label>
+            <select id="nf-substrate" onchange="nfUpdate()">
+              <option value="coco">Coco pur</option>
+              <option value="mix" selected>Mixt coco + terra</option>
+              <option value="soil">Terra orgànica</option>
+            </select>
+          </div>
+          <div class="fld"><label>Volum reg (L)</label>
+            <input type="number" id="nf-vol" value="10" min="1" max="200" step="1" oninput="nfUpdate()">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="fld"><label>EC target (mS/cm)</label>
+              <input type="number" id="nf-ec" step=".1" min=".2" max="3.5" placeholder="auto" oninput="nfUpdate()">
+            </div>
+            <div class="fld"><label>pH target</label>
+              <input type="number" id="nf-ph" step=".1" min="5.5" max="7" placeholder="auto" oninput="nfUpdate()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Productes actius -->
+        <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;">Productes disponibles</div>
+          <div id="nf-products-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+          <button onclick="nfAddProduct()" style="margin-top:10px;width:100%;padding:8px;border:1.5px dashed #d0d0cb;border-radius:8px;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;color:#9a9a93;cursor:pointer;" onmouseover="this.style.borderColor='#2d6a4f';this.style.color='#2d6a4f'" onmouseout="this.style.borderColor='#d0d0cb';this.style.color='#9a9a93'">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Afegir producte
+          </button>
+        </div>
+      </div>
+
+      <!-- Resultat -->
+      <div id="nf-result" style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px;">Taula de dosi recomanada</div>
+        <div id="nf-table-body"></div>
+        <div id="nf-summary" style="margin-top:14px;padding-top:14px;border-top:1px solid #f0f0eb;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
+      </div>
+
+      <!-- Historial de barreges -->
+      <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;">Historial de barreges</div>
+          <button onclick="nfSaveMix()" class="btn btn-g" style="font-size:11px;padding:5px 12px;">Desar barreja actual</button>
+        </div>
+        <div id="nf-history"></div>
+      </div>
+    </div>
+
+    <!-- TAB: VPD -->
+    <div id="ntab-vpd" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;">
+          <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;">Paràmetres actuals</div>
+          <div class="fld"><label>Temperatura aire (°C)</label>
+            <input type="number" id="vpd-temp" value="24" step=".5" min="10" max="40" oninput="calcVPD()">
+          </div>
+          <div class="fld"><label>Humitat relativa (%)</label>
+            <input type="range" id="vpd-hr" min="20" max="90" value="55" step="1" oninput="document.getElementById('vpd-hr-val').textContent=this.value+'%';calcVPD()" style="width:100%;accent-color:#2d6a4f;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#9a9a93;margin-top:2px;"><span>20%</span><span id="vpd-hr-val" style="font-weight:600;color:#1a1a18;">55%</span><span>90%</span></div>
+          </div>
+          <div class="fld"><label>Temperatura fulla (°C) <span style="color:#9a9a93;font-weight:400;">— opcional</span></label>
+            <input type="number" id="vpd-tleaf" step=".5" min="10" max="40" placeholder="si tens el làser" oninput="calcVPD()">
+          </div>
+          <div class="fld"><label>Fase del cultiu</label>
+            <select id="vpd-phase" onchange="calcVPD()">
+              <option value="clon">Clonació / Arrelament</option>
+              <option value="veg">Vegetatiu</option>
+              <option value="flor-early">Floració inicial</option>
+              <option value="flor-mid" selected>Floració plena</option>
+              <option value="flor-late">Floració tardana</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- VPD Gauge -->
+        <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:20px;">VPD actual</div>
+          <div id="vpd-gauge" style="width:160px;height:160px;position:relative;margin-bottom:16px;">
+            <svg viewBox="0 0 160 160" width="160" height="160">
+              <circle cx="80" cy="80" r="68" fill="none" stroke="#f0f0eb" stroke-width="14" stroke-dasharray="340 427" stroke-dashoffset="-43" stroke-linecap="round"/>
+              <circle id="vpd-arc" cx="80" cy="80" r="68" fill="none" stroke="#2d6a4f" stroke-width="14" stroke-dasharray="0 427" stroke-dashoffset="-43" stroke-linecap="round" style="transition:stroke-dasharray .6s ease,stroke .4s ease;"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <div id="vpd-value" style="font-size:32px;font-weight:300;letter-spacing:-1px;color:#1a1a18;">—</div>
+              <div style="font-size:11px;color:#9a9a93;margin-top:2px;">kPa</div>
+            </div>
+          </div>
+          <div id="vpd-status" style="text-align:center;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;width:100%;"></div>
+          <div id="vpd-leaf-info" style="margin-top:10px;font-size:12px;color:#6b6b65;text-align:center;display:none;"></div>
+        </div>
+      </div>
+
+      <!-- VPD Reference Table -->
+      <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px;">Taula de referència VPD per fase</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead><tr style="border-bottom:1px solid #f0f0eb;">
+              <th style="text-align:left;padding:8px 12px;color:#9a9a93;font-weight:500;">Fase</th>
+              <th style="text-align:center;padding:8px 12px;color:#9a9a93;font-weight:500;">VPD òptim</th>
+              <th style="text-align:center;padding:8px 12px;color:#9a9a93;font-weight:500;">Temp. recomanada</th>
+              <th style="text-align:center;padding:8px 12px;color:#9a9a93;font-weight:500;">HR recomanada</th>
+            </tr></thead>
+            <tbody>
+              ${[
+                ['Clonació','0.4 – 0.8 kPa','22–24°C','70–80%','#dbeafe','#1e3a8a'],
+                ['Vegetatiu','0.8 – 1.2 kPa','22–26°C','55–70%','#dcfce7','#14532d'],
+                ['Floració inicial','1.0 – 1.4 kPa','23–26°C','50–60%','#fef3c7','#78350f'],
+                ['Floració plena','1.2 – 1.6 kPa','23–26°C','45–55%','#fef3c7','#78350f'],
+                ['Floració tardana','1.4 – 1.8 kPa','22–24°C','40–50%','#fee2e2','#991b1b'],
+              ].map(([fase,vpd,temp,hr,bg,tx])=>`<tr style="border-bottom:1px solid #f8f8f6;">
+                <td style="padding:9px 12px;font-weight:500;">${fase}</td>
+                <td style="padding:9px 12px;text-align:center;"><span style="background:${bg};color:${tx};padding:2px 10px;border-radius:100px;font-weight:600;">${vpd}</span></td>
+                <td style="padding:9px 12px;text-align:center;color:#6b6b65;">${temp}</td>
+                <td style="padding:9px 12px;text-align:center;color:#6b6b65;">${hr}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div id="vpd-recommendation" style="margin-top:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6;display:none;"></div>
+      </div>
+    </div>
+
+    <!-- TAB: IA -->
+    <div id="ntab-ia" style="display:none;">
+      <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:24px;margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px;">Consell per genètica</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div class="fld" style="margin:0;"><label>Genètica</label>
+            <input type="text" id="ia-strain" placeholder="ex: OG Kush, Gelato, Amnesia..." list="strain-dl">
+          </div>
+          <div class="fld" style="margin:0;"><label>Fase actual</label>
+            <select id="ia-phase">
+              <option value="germ">Germinació</option>
+              <option value="clon">Clonació</option>
+              <option value="veg">Vegetatiu</option>
+              <option value="flor-early">Floració inicial (S1–S3)</option>
+              <option value="flor-mid">Floració plena (S4–S6)</option>
+              <option value="flor-late">Floració tardana (S7+)</option>
+            </select>
+          </div>
+          <div class="fld" style="margin:0;"><label>EC actual (mS/cm)</label>
+            <input type="number" id="ia-ec" step=".1" placeholder="1.6">
+          </div>
+          <div class="fld" style="margin:0;"><label>Setmana en fase</label>
+            <input type="number" id="ia-week" min="1" max="16" placeholder="4">
+          </div>
+        </div>
+        <div class="fld"><label>Observacions (opcional)</label>
+          <textarea id="ia-notes" rows="2" placeholder="Punta de fulles grogues, EC puja poc, aroma intensa..."></textarea>
+        </div>
+        <button onclick="iaGetAdvice()" class="btn btn-p" style="width:100%;justify-content:center;padding:11px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Generar consell específic
+        </button>
+      </div>
+      <div id="ia-result" style="display:none;background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:24px;">
+        <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;">Anàlisi i recomanacions</div>
+        <div id="ia-content" style="font-size:13px;line-height:1.8;color:#1a1a18;white-space:pre-wrap;"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1339,7 +1556,344 @@ function deletePCLot(id){
 }
 
 // UTILS
-// ── c) PASSAR A FLORACIÓ ──────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════
+// NUTRIENTS & VPD MODULE
+// ══════════════════════════════════════════════════════════════════
+
+function showNutrients(){showScr('nutrients');initNutrients();}
+
+// Default products (user's setup)
+const NF_DEFAULTS=[
+  {id:'grow',   name:'Grow (N)',         role:'grow',   ml:0, active:true,  color:'#166534'},
+  {id:'bloom',  name:'Bloom (P+K)',      role:'bloom',  ml:0, active:true,  color:'#92400e'},
+  {id:'calmag', name:'CalMag',           role:'calmag', ml:0, active:true,  color:'#1e3a8a'},
+  {id:'root',   name:'Root Stimulator',  role:'root',   ml:0, active:true,  color:'#5b21b6'},
+  {id:'pk',     name:'PK Booster',       role:'pk',     ml:0, active:true,  color:'#b45309'},
+  {id:'enz',    name:'Enzymes',          role:'enz',    ml:0, active:true,  color:'#0369a1'},
+  {id:'estim',  name:'Estimulador flor', role:'estim',  ml:0, active:true,  color:'#be123c'},
+];
+
+// Dose tables per phase + substrate (ml/10L base)
+// Format: {grow, bloom, calmag, root, pk, enz, estim, ec, ph}
+const NF_DOSES={
+  'germ':     {coco:{grow:0,   bloom:0,   calmag:0.5,root:1,  pk:0,  enz:1,  estim:0,  ec:0.4, ph:5.8},
+               mix: {grow:0,   bloom:0,   calmag:0.3,root:0.8,pk:0,  enz:1,  estim:0,  ec:0.3, ph:6.2},
+               soil:{grow:0,   bloom:0,   calmag:0,  root:0.5,pk:0,  enz:0.5,estim:0,  ec:0.2, ph:6.4}},
+  'clon':     {coco:{grow:0.5, bloom:0,   calmag:1,  root:2,  pk:0,  enz:1,  estim:0,  ec:0.6, ph:5.8},
+               mix: {grow:0.3, bloom:0,   calmag:0.8,root:1.5,pk:0,  enz:1,  estim:0,  ec:0.5, ph:6.2},
+               soil:{grow:0,   bloom:0,   calmag:0.5,root:1,  pk:0,  enz:0.5,estim:0,  ec:0.4, ph:6.4}},
+  'veg-early':{coco:{grow:2,   bloom:1,   calmag:1.5,root:1,  pk:0,  enz:1,  estim:0,  ec:1.2, ph:5.8},
+               mix: {grow:1.5, bloom:0.5, calmag:1,  root:0.5,pk:0,  enz:0.5,estim:0,  ec:1.0, ph:6.2},
+               soil:{grow:1,   bloom:0.5, calmag:0.5,root:0.5,pk:0,  enz:0.5,estim:0,  ec:0.8, ph:6.4}},
+  'veg-mid':  {coco:{grow:3,   bloom:1.5, calmag:2,  root:0,  pk:0,  enz:1,  estim:0,  ec:1.6, ph:5.9},
+               mix: {grow:2,   bloom:1,   calmag:1.5,root:0,  pk:0,  enz:0.5,estim:0,  ec:1.3, ph:6.2},
+               soil:{grow:1.5, bloom:1,   calmag:0.5,root:0,  pk:0,  enz:0.5,estim:0,  ec:1.1, ph:6.4}},
+  'flor-early':{coco:{grow:1.5,bloom:3,   calmag:1.5,root:0,  pk:0,  enz:1,  estim:2,  ec:1.6, ph:5.9},
+                mix: {grow:1,  bloom:2,   calmag:1,  root:0,  pk:0,  enz:0.5,estim:1.5,ec:1.4, ph:6.2},
+                soil:{grow:0.5,bloom:1.5, calmag:0.5,root:0,  pk:0,  enz:0.5,estim:1,  ec:1.2, ph:6.4}},
+  'flor-mid': {coco:{grow:0.5, bloom:4,   calmag:1.5,root:0,  pk:1.5,enz:1,  estim:0,  ec:1.8, ph:5.9},
+               mix: {grow:0.5, bloom:3,   calmag:1,  root:0,  pk:1,  enz:0.5,estim:0,  ec:1.6, ph:6.2},
+               soil:{grow:0,   bloom:2,   calmag:0.5,root:0,  pk:0.5,enz:0.5,estim:0,  ec:1.4, ph:6.4}},
+  'flor-late':{coco:{grow:0,   bloom:3,   calmag:1,  root:0,  pk:2,  enz:1,  estim:0,  ec:1.6, ph:5.8},
+               mix: {grow:0,   bloom:2,   calmag:0.8,root:0,  pk:1.5,enz:0.5,estim:0,  ec:1.4, ph:6.2},
+               soil:{grow:0,   bloom:1.5, calmag:0,  root:0,  pk:1,  enz:0.5,estim:0,  ec:1.2, ph:6.4}},
+  'flush':    {coco:{grow:0,   bloom:0,   calmag:0,  root:0,  pk:0,  enz:2,  estim:0,  ec:0.3, ph:5.8},
+               mix: {grow:0,   bloom:0,   calmag:0,  root:0,  pk:0,  enz:1,  estim:0,  ec:0.2, ph:6.2},
+               soil:{grow:0,   bloom:0,   calmag:0,  root:0,  pk:0,  enz:0.5,estim:0,  ec:0.1, ph:6.5}},
+};
+
+let nfProducts=[...NF_DEFAULTS.map(p=>({...p}))];
+let nfMixHistory=[];
+let nCurrentTab='nutrients';
+
+function initNutrients(){
+  if(!S.nfMixHistory)S.nfMixHistory=[];
+  nfMixHistory=S.nfMixHistory;
+  renderNFProducts();
+  nfUpdate();
+  renderNFHistory();
+  calcVPD();
+}
+
+function switchNTab(tab){
+  nCurrentTab=tab;
+  ['nutrients','vpd','ia'].forEach(t=>{
+    const el=document.getElementById(`ntab-${t}`);
+    const btn=document.getElementById(`tab-btn-${t}`);
+    if(!el||!btn)return;
+    const active=t===tab;
+    el.style.display=active?'block':'none';
+    btn.style.background=active?'#fff':'transparent';
+    btn.style.color=active?'#1a1a18':'#6b6b65';
+    btn.style.boxShadow=active?'0 1px 3px rgba(0,0,0,.08)':'none';
+  });
+}
+
+function renderNFProducts(){
+  const el=document.getElementById('nf-products-list');if(!el)return;
+  el.innerHTML=nfProducts.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f8f8f6;">
+      <div style="width:3px;height:28px;border-radius:2px;background:${p.color};flex-shrink:0;"></div>
+      <input type="text" value="${esc(p.name)}" onchange="nfProducts[${i}].name=this.value;nfUpdate()"
+        style="flex:1;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:#1a1a18;outline:none;">
+      <label style="display:flex;align-items:center;gap:4px;cursor:pointer;flex-shrink:0;">
+        <input type="checkbox" ${p.active?'checked':''} onchange="nfProducts[${i}].active=this.checked;nfUpdate()"
+          style="accent-color:#2d6a4f;width:14px;height:14px;">
+        <span style="font-size:11px;color:#9a9a93;">actiu</span>
+      </label>
+      <button onclick="nfProducts.splice(${i},1);renderNFProducts();nfUpdate()"
+        style="border:none;background:none;cursor:pointer;color:#d0d0cb;padding:2px;" title="Eliminar">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+function nfAddProduct(){
+  const colors=['#166534','#92400e','#1e3a8a','#5b21b6','#b45309','#0369a1','#be123c'];
+  nfProducts.push({id:'p'+Date.now(),name:'Nou producte',role:'other',ml:0,active:true,color:colors[nfProducts.length%colors.length]});
+  renderNFProducts();nfUpdate();
+}
+
+function nfUpdate(){
+  const phase=document.getElementById('nf-phase')?.value||'veg-mid';
+  const sub=document.getElementById('nf-substrate')?.value||'mix';
+  const vol=parseFloat(document.getElementById('nf-vol')?.value)||10;
+  const ecOverride=parseFloat(document.getElementById('nf-ec')?.value)||null;
+  const phOverride=parseFloat(document.getElementById('nf-ph')?.value)||null;
+
+  const base=NF_DOSES[phase]?.[sub]||NF_DOSES['veg-mid']['mix'];
+  const ec=ecOverride||base.ec;
+  const ph=phOverride||base.ph;
+  const factor=vol/10;
+
+  const tbl=document.getElementById('nf-table-body');
+  const sum=document.getElementById('nf-summary');
+  if(!tbl||!sum)return;
+
+  const roleMap={grow:'grow',bloom:'bloom',calmag:'calmag',root:'root',pk:'pk',enz:'enz',estim:'estim'};
+  let totalMl=0;
+  let rows='';
+
+  nfProducts.filter(p=>p.active).forEach(p=>{
+    const baseMl=base[roleMap[p.role]]??0;
+    const ml=parseFloat((baseMl*factor).toFixed(1));
+    totalMl+=ml;
+    const note=ml===0?'No aplicar en aquesta fase':'';
+    rows+=`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f8f8f6;">
+      <div style="width:3px;height:32px;border-radius:2px;background:${p.color};flex-shrink:0;"></div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;color:${ml===0?'#c0c0bb':'#1a1a18'}">${esc(p.name)}</div>
+        ${note?`<div style="font-size:10px;color:#b0b0a8;">${note}</div>`:''}
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:18px;font-weight:600;letter-spacing:-.5px;color:${ml===0?'#d0d0cb':p.color}">${ml===0?'—':ml}</div>
+        ${ml>0?`<div style="font-size:10px;color:#9a9a93;">ml / ${vol}L</div>`:''}
+      </div>
+    </div>`;
+  });
+
+  tbl.innerHTML=rows||'<div style="color:#9a9a93;font-size:13px;padding:10px 0;">Cap producte actiu.</div>';
+
+  const ecColor=ec<=0.8?'#1e3a8a':ec<=1.4?'#166534':ec<=1.8?'#92400e':'#991b1b';
+  const phColor=ph<5.8?'#991b1b':ph>6.8?'#b45309':'#166534';
+  sum.innerHTML=`
+    <div style="background:#f8f8f6;border-radius:10px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#9a9a93;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">EC target</div>
+      <div style="font-size:22px;font-weight:600;color:${ecColor};letter-spacing:-.5px;">${ec.toFixed(1)}</div>
+      <div style="font-size:10px;color:#9a9a93;">mS/cm</div>
+    </div>
+    <div style="background:#f8f8f6;border-radius:10px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#9a9a93;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">pH target</div>
+      <div style="font-size:22px;font-weight:600;color:${phColor};letter-spacing:-.5px;">${ph.toFixed(1)}</div>
+      <div style="font-size:10px;color:#9a9a93;">${sub==='coco'?'coco':'terra/mix'}</div>
+    </div>
+    <div style="background:#f8f8f6;border-radius:10px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:#9a9a93;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Total additius</div>
+      <div style="font-size:22px;font-weight:600;color:#1a1a18;letter-spacing:-.5px;">${totalMl.toFixed(1)}</div>
+      <div style="font-size:10px;color:#9a9a93;">ml / ${vol}L</div>
+    </div>`;
+}
+
+function nfSaveMix(){
+  const phase=document.getElementById('nf-phase')?.value||'';
+  const strain=document.getElementById('nf-strain')?.value||'';
+  const sub=document.getElementById('nf-substrate')?.value||'mix';
+  const vol=document.getElementById('nf-vol')?.value||10;
+  const entry={date:new Date().toISOString(),phase,strain,sub,vol,products:nfProducts.filter(p=>p.active).map(p=>({...p}))};
+  if(!S.nfMixHistory)S.nfMixHistory=[];
+  S.nfMixHistory.unshift(entry);
+  if(S.nfMixHistory.length>20)S.nfMixHistory.pop();
+  save();renderNFHistory();toast('Barreja desada');
+}
+
+function renderNFHistory(){
+  const el=document.getElementById('nf-history');if(!el)return;
+  const hist=(S.nfMixHistory||[]);
+  if(!hist.length){el.innerHTML='<div style="font-size:13px;color:#9a9a93;padding:8px 0;">Cap barreja desada.</div>';return;}
+  el.innerHTML=hist.slice(0,8).map((h,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #f8f8f6;">
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:500;">${h.strain||'Sense genètica'} · ${h.phase}</div>
+        <div style="font-size:11px;color:#9a9a93;">${h.vol}L · ${h.sub} · ${h.products.length} productes</div>
+      </div>
+      <div style="font-size:11px;color:#9a9a93;">${new Date(h.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short'})}</div>
+    </div>`).join('');
+}
+
+// ── VPD CALCULATOR ──────────────────────────────────────────────
+function calcVPD(){
+  const T=parseFloat(document.getElementById('vpd-temp')?.value)||24;
+  const HR=parseFloat(document.getElementById('vpd-hr')?.value)||55;
+  const Tl=parseFloat(document.getElementById('vpd-tleaf')?.value)||null;
+  const phase=document.getElementById('vpd-phase')?.value||'flor-mid';
+
+  // Tetens formula: SVP (kPa)
+  const svp=t=>0.6108*Math.exp((17.27*t)/(t+237.3));
+  const svpAir=svp(T);
+  const avp=svpAir*(HR/100);
+  const vpdAir=parseFloat((svpAir-avp).toFixed(2));
+
+  // Leaf VPD if sensor available
+  let vpdLeaf=null;
+  if(Tl){
+    const svpLeaf=svp(Tl);
+    vpdLeaf=parseFloat((svpLeaf-avp).toFixed(2));
+  }
+
+  // Phase targets
+  const targets={
+    clon:    {min:0.4,max:0.8,label:'Clonació'},
+    veg:     {min:0.8,max:1.2,label:'Vegetatiu'},
+    'flor-early':{min:1.0,max:1.4,label:'Floració inicial'},
+    'flor-mid':  {min:1.2,max:1.6,label:'Floració plena'},
+    'flor-late': {min:1.4,max:1.8,label:'Floració tardana'},
+  };
+  const tgt=targets[phase]||targets['flor-mid'];
+  const vpd=vpdLeaf??vpdAir;
+
+  // Gauge (arc: 0–2.5 kPa range → 340° arc)
+  const maxVPD=2.5;
+  const pct=Math.min(vpd/maxVPD,1);
+  const arcLen=pct*340;
+  const arc=document.getElementById('vpd-arc');
+  const low=vpd<tgt.min, high=vpd>tgt.max, ok=!low&&!high;
+  const col=low?'#3b82f6':ok?'#22c55e':'#ef4444';
+  if(arc){arc.style.stroke=col;arc.setAttribute('stroke-dasharray',`${arcLen} 427`);}
+
+  const vEl=document.getElementById('vpd-value');
+  if(vEl)vEl.textContent=vpd.toFixed(2);
+
+  const st=document.getElementById('vpd-status');
+  if(st){
+    const msgs={low:{bg:'#dbeafe',tx:'#1e3a8a',label:'Massa baix',sub:'Redueix HR o augmenta temperatura'},
+                ok: {bg:'#dcfce7',tx:'#14532d',label:'Òptim',sub:`${tgt.label}: ${tgt.min}–${tgt.max} kPa`},
+                high:{bg:'#fee2e2',tx:'#991b1b',label:'Massa alt',sub:'Augmenta HR o redueix temperatura'}};
+    const m=low?msgs.low:ok?msgs.ok:msgs.high;
+    st.style.background=m.bg;st.style.color=m.tx;
+    st.innerHTML=`<div style="font-weight:600;">${m.label}</div><div style="font-size:11px;margin-top:2px;opacity:.8;">${m.sub}</div>`;
+  }
+
+  const li=document.getElementById('vpd-leaf-info');
+  if(li&&vpdLeaf!==null){
+    li.style.display='block';
+    li.innerHTML=`VPD fulla (làser): <strong>${vpdLeaf.toFixed(2)} kPa</strong> · VPD aire: ${vpdAir.toFixed(2)} kPa · Diferencial: ${(T-Tl).toFixed(1)}°C`;
+  } else if(li){li.style.display='none';}
+
+  // Dynamic recommendation
+  const rec=document.getElementById('vpd-recommendation');
+  if(rec){
+    rec.style.display='block';
+    let advice='';
+    if(low) advice=`VPD actual (${vpd} kPa) per sota del rang òptim per ${tgt.label} (${tgt.min}–${tgt.max} kPa). La planta transpira poc — risc d'excés d'humitat i patògens. Redueix HR ${Math.ceil((HR-70)*0.8)}% o augmenta temperatura 1–2°C.`;
+    else if(ok) advice=`VPD perfecte per ${tgt.label}. La planta transpira correctament, absorció de nutrients òptima.${vpdLeaf?` Diferencial fulla-aire ${(T-Tl).toFixed(1)}°C confirma transpiració activa.`:''}`;
+    else advice=`VPD actual (${vpd} kPa) per sobre del rang òptim per ${tgt.label} (${tgt.min}–${tgt.max} kPa). La planta pateix estrès hídric — tanca estomes, atura creixement. Augmenta HR fins ${Math.round(HR+10)}% o redueix temperatura a ${(T-2).toFixed(0)}°C.`;
+    const bg=low?'#eff6ff':ok?'#f0fdf4':'#fff5f5';
+    const bd=low?'#bfdbfe':ok?'#bbf7d0':'#fecaca';
+    rec.style.background=bg;rec.style.border=`1px solid ${bd}`;
+    rec.innerHTML=advice;
+  }
+}
+
+// ── IA CONSELL ──────────────────────────────────────────────────
+async function iaGetAdvice(){
+  const strain=document.getElementById('ia-strain')?.value?.trim();
+  const phase=document.getElementById('ia-phase')?.value;
+  const ec=document.getElementById('ia-ec')?.value;
+  const week=document.getElementById('ia-week')?.value;
+  const notes=document.getElementById('ia-notes')?.value?.trim();
+
+  if(!strain){toast('Introdueix la genètica');return;}
+
+  const btn=document.querySelector('#ntab-ia .btn-p');
+  if(btn){btn.disabled=true;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.2-8.6"/></svg> Analitzant...';}
+
+  const phaseLabels={'germ':'Germinació','clon':'Clonació','veg':'Vegetatiu','flor-early':'Floració inicial (S1–S3)','flor-mid':'Floració plena (S4–S6)','flor-late':'Floració tardana (S7+)'};
+  const subLabel='Mixt coco + terra';
+
+  const prompt=`Ets un expert en cultiu de cànnabis. L'usuari cultiva en ${subLabel} amb els següents productes: Grow (N), Bloom (P+K), CalMag, Root Stimulator, PK Booster, Enzimes i Estimulador de floració.
+
+Genètica: ${strain}
+Fase: ${phaseLabels[phase]||phase}
+${week?`Setmana en fase: ${week}`:''}
+${ec?`EC actual: ${ec} mS/cm`:''}
+${notes?`Observacions: ${notes}`:''}
+
+Dona una anàlisi i recomanació específica per a AQUESTA genètica en AQUESTA fase. Estructura la resposta en:
+
+1. PERFIL DE LA GENÈTICA — característiques de nutrició específiques d'aquesta varietat, sensibilitats conegudes, temps de floració
+2. NUTRIENTS RECOMANATS — dosi orientativa dels productes disponibles per a aquesta fase i genètica (ml/10L aproximat)
+3. PARÀMETRES ÒPTIMS — EC, pH, temperatura, VPD i HR per a aquesta fase
+4. ALERTES — problemes freqüents en aquesta genètica en aquesta fase
+5. CONSELL SETMANAL — una acció concreta per fer aquesta setmana
+
+Respon en català. Sigues precís i pràctic, sense generalitats.`;
+
+  const res=document.getElementById('ia-result');
+  const cnt=document.getElementById('ia-content');
+  if(res)res.style.display='block';
+  if(cnt)cnt.textContent='';
+
+  try{
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        stream:true,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+
+    const reader=response.body.getReader();
+    const decoder=new TextDecoder();
+    let buffer='';
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      buffer+=decoder.decode(value,{stream:true});
+      const lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data:'))continue;
+        const data=line.slice(5).trim();
+        if(data==='[DONE]')break;
+        try{
+          const j=JSON.parse(data);
+          if(j.type==='content_block_delta'&&j.delta?.text){
+            if(cnt)cnt.textContent+=j.delta.text;
+          }
+        }catch{}
+      }
+    }
+  }catch(e){
+    if(cnt)cnt.textContent='Error de connexió. Comprova la xarxa i torna-ho a intentar.';
+  }finally{
+    if(btn){btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Generar consell específic';}
+  }
+}
+
+
 function passarAFloracio(id){
   const p=S.plants.find(x=>x.id===id);if(!p)return;
   if(!confirm(`Passar "${p.name}" a Floració?\nEs registrarà la data d'inici de fase.`))return;
