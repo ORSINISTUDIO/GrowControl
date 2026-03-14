@@ -14,7 +14,7 @@
         {
           "type": "fase",
           "date": "2026-03-14T10:08:54.896Z",
-          "detail": "Canvi de fase: vegâflor"
+          "detail": "Canvi de fase: vegÃ¢ÂÂflor"
         }
       ],
       "photos": [],
@@ -39,7 +39,7 @@
         {
           "type": "fase",
           "date": "2026-03-14T10:09:22.397Z",
-          "detail": "Canvi de fase: veg→flor"
+          "detail": "Canvi de fase: vegâflor"
         }
       ],
       "photos": [],
@@ -64,7 +64,7 @@
         {
           "type": "fase",
           "date": "2026-03-14T10:09:17.706Z",
-          "detail": "Canvi de fase: veg→flor"
+          "detail": "Canvi de fase: vegâflor"
         }
       ],
       "photos": [],
@@ -89,7 +89,7 @@
         {
           "type": "fase",
           "date": "2026-03-14T10:09:12.272Z",
-          "detail": "Canvi de fase: veg→flor"
+          "detail": "Canvi de fase: vegâflor"
         }
       ],
       "photos": [],
@@ -356,14 +356,22 @@
       "notes": "",
       "florDays": 63,
       "health": "bo",
-      "log": [],
+      "log": [
+        {
+          "type": "preharvest",
+          "date": "2026-03-14T18:39:41.327Z",
+          "detail": "Inici 24h foscor pre-collita"
+        }
+      ],
       "photos": [],
       "substrate": "",
       "potSize": "",
       "ph": "",
       "ec": "",
       "temp": "",
-      "hum": ""
+      "hum": "",
+      "preHarvest": true,
+      "preHarvestDate": "2026-03-14T18:39:41.327Z"
     },
     {
       "id": 18,
