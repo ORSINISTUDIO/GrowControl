@@ -3,36 +3,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GrowControl</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff;--sf:#f8f8f6;--sf2:#f0f0ed;--bd:#e8e8e4;--bd2:#d0d0cb;--tx:#1a1a18;--tx2:#6b6b65;--tx3:#9a9a93;--gn:#2d6a4f;--gnl:#52b788;--gnp:#d8f3dc;--am:#b5810c;--amp:#fef3c7;--bl:#1d4e89;--blp:#dbeafe;--pu:#5b21b6;--pup:#ede9fe;--ro:#9d174d;--rop:#fce7f3;--r:12px;--rs:8px;--s0:0 1px 3px rgba(0,0,0,.06);--s:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.04);--s2:0 12px 40px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.06);--t:.2s cubic-bezier(.4,0,.2,1)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .screen{display:none;min-height:100vh}.screen.active{display:flex;flex-direction:column}
 .app-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid #f0f0eb;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:15px;font-weight:600;letter-spacing:-.3px;display:flex;align-items:center;gap:8px;color:var(--tx)}.logo svg{color:var(--gn)}
+.logo{font-size:15px;font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:-.2px;display:flex;align-items:center;gap:6px;color:var(--tx)}.logo em{font-style:italic;color:#2d6a4f}
 .hdr-act{display:flex;gap:8px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all var(--t);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all var(--t);white-space:nowrap}
 .btn-p{background:var(--gn);color:#fff}.btn-p:hover{background:#235a42;transform:translateY(-1px)}
 .btn-g{background:transparent;color:var(--tx2);border:1px solid var(--bd)}.btn-g:hover{background:var(--sf);color:var(--tx)}
 .btn-i{padding:0;width:36px;height:36px;border-radius:var(--rs);background:transparent;border:1px solid var(--bd);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--t)}.btn-i:hover{background:var(--sf);color:var(--tx)}
 .btn-d{background:transparent;color:#dc2626;border:1px solid #fecaca;font-size:12px;padding:6px 12px}.btn-d:hover{background:#fee2e2}
 /* WELCOME */
-#screen-welcome{justify-content:center;align-items:center;padding:40px 24px;background:#fff}
+#screen-welcome{justify-content:center;align-items:center;padding:40px 24px;background:#fff;position:relative}
 .wi{max-width:700px;width:100%;text-align:center}
 .wb{display:inline-flex;align-items:center;gap:6px;background:#f0f9f4;color:#2d6a4f;padding:5px 12px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.2px;margin-bottom:28px;border:1px solid #c8e6d2}
 .wt{font-size:clamp(26px,5vw,46px);font-weight:300;line-height:1.08;letter-spacing:-1.8px;margin-bottom:12px;color:#1a1a18}.wt strong{font-weight:600}
 .ws{font-size:15px;color:var(--tx2);margin-bottom:44px}
 .env-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left}
 @media(max-width:520px){.env-cards{grid-template-columns:1fr}}
-.ec{background:#fff;border:1px solid #e8e8e4;border-radius:16px;padding:24px 20px;cursor:pointer;transition:all var(--t);box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.ec:hover{border-color:#c0c0bb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.04)}
-.ei{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ec{background:#fff;border:1px solid #ebebeb;border-radius:14px;padding:20px 18px;cursor:pointer;transition:all var(--t)}
+.ec:hover{border-color:#1a1a18;transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.ei{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;background:#f4f4f2}
 .ec.indoor .ei{background:var(--gnp);color:var(--gn)}.ec.outdoor .ei{background:var(--amp);color:var(--am)}
 .ec.vault .ei{background:var(--pup);color:var(--pu)}.ec.postcollita .ei{background:var(--rop);color:var(--ro)}
-.el{font-size:15px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px}
-.ed{font-size:12px;color:var(--tx2);line-height:1.5}
-.ecount{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:11px;font-weight:500;color:var(--tx3)}
+.el{font-size:14px;font-weight:600;letter-spacing:-.2px;margin-bottom:3px;font-family:'Geist',sans-serif}
+.ed{font-size:12px;color:#9a9a93;line-height:1.5;font-weight:400}
+.ecount{display:flex;align-items:center;gap:4px;margin-top:auto;padding-top:10px;font-size:10px;font-weight:500;color:#b0b0a8;letter-spacing:.2px}
 /* BREADCRUMB */
 .bc{display:flex;align-items:center;gap:8px;padding:18px 0 0;font-size:13px;color:var(--tx3)}
 .bc a{color:var(--tx3);text-decoration:none;cursor:pointer}.bc a:hover{color:var(--tx2)}.bc span{color:var(--tx2);font-weight:500}
@@ -53,7 +53,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .pg{padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px}
 .pc2{aspect-ratio:1;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:all var(--t);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;overflow:hidden}
 .pc2:hover{transform:translateY(-2px);box-shadow:var(--s0)}
-.pid{font-size:9px;font-family:'DM Mono',monospace;font-weight:500;opacity:.75}
+.pid{font-size:9px;font-family:'Geist Mono',monospace;font-weight:500;opacity:.75}
 .psdot{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%}
 .padot{position:absolute;top:5px;left:5px;width:7px;height:7px;border-radius:50%;background:#ef4444;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
@@ -73,17 +73,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .ic{background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:10px 12px}
 .icl{font-size:10px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .icv{font-size:13px;font-weight:600;color:var(--tx)}
-.icv input,.icv select{width:100%;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx);background:transparent;border:none;outline:none}
+.icv input,.icv select{width:100%;font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:var(--tx);background:transparent;border:none;outline:none}
 .na{background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:12px;margin-bottom:16px}
 .nl{font-size:10px;color:var(--tx3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
-.na textarea{width:100%;min-height:75px;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);resize:vertical;line-height:1.6}
+.na textarea{width:100%;min-height:75px;background:transparent;border:none;outline:none;font-family:'Geist',sans-serif;font-size:13px;color:var(--tx);resize:vertical;line-height:1.6}
 .na textarea::placeholder{color:var(--tx3)}
 .mr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd)}.mr:last-child{border-bottom:none}
 .ml{font-size:13px;color:var(--tx2);display:flex;align-items:center;gap:5px}
 .mv{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px}
 .le{display:flex;align-items:center;gap:7px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}.le:last-child{border-bottom:none}
 .li{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.lt{color:var(--tx2);flex:1}.ld{font-family:'DM Mono',monospace;color:var(--tx3);font-size:10px}
+.lt{color:var(--tx2);flex:1}.ld{font-family:'Geist Mono',monospace;color:var(--tx3);font-size:10px}
 .dz{border-top:1px solid var(--bd);padding-top:14px;margin-top:4px}
 /* FLOR COUNTDOWN */
 .fc{background:linear-gradient(135deg,#fef3c7,#fff7ed);border:1px solid #fde68a;border-radius:10px;padding:14px;margin-bottom:16px}
@@ -112,8 +112,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .wri{font-size:12px;color:#0c4a6e;padding:2px 0;display:flex;align-items:flex-start;gap:5px;line-height:1.5}
 /* VAULT */
 #screen-vault{padding-bottom:80px}.vc{max-width:1000px;margin:0 auto;padding:0 24px}
-.seed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-top:0}
-.skc{background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:16px;cursor:pointer;transition:all var(--t)}.skc:hover{box-shadow:var(--s);transform:translateY(-1px)}
+.seed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:10px;margin-top:0}
+.skc{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all var(--t);display:flex;flex-direction:column;gap:6px}.skc:hover{box-shadow:var(--s);transform:translateY(-1px)}
 .skn{font-size:15px;font-weight:600;letter-spacing:-.3px}.skb{font-size:12px;color:var(--tx2);margin-top:1px}
 .skbdg{padding:3px 8px;border-radius:100px;font-size:10px;font-weight:600}
 .skmeta{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
@@ -129,12 +129,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .pcin{font-size:13px;font-weight:500}.pcim{font-size:11px;color:var(--tx3);margin-top:1px}
 /* PHOTOS */
 .pwt{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
-.wktab{padding:3px 9px;border-radius:100px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all var(--t)}.wktab:hover{border-color:var(--gnl);color:var(--gn)}.wktab.active{background:var(--gn);color:#fff;border-color:var(--gn)}
+.wktab{padding:3px 9px;border-radius:100px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-family:'Geist',sans-serif;transition:all var(--t)}.wktab:hover{border-color:var(--gnl);color:var(--gn)}.wktab.active{background:var(--gn);color:#fff;border-color:var(--gn)}
 .phg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .pht{aspect-ratio:1;border-radius:7px;overflow:hidden;border:1px solid var(--bd);position:relative;cursor:pointer;background:var(--sf)}
 .pht img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}.pht:hover img{transform:scale(1.04)}
 .phtd{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center}.pht:hover .phtd{display:flex}
-.pub{aspect-ratio:1;border-radius:7px;border:1.5px dashed var(--bd2);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--tx3);font-size:10px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all var(--t)}.pub:hover{border-color:var(--gnl);color:var(--gn);background:var(--gnp)}
+.pub{aspect-ratio:1;border-radius:7px;border:1.5px dashed var(--bd2);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--tx3);font-size:10px;font-weight:500;font-family:'Geist',sans-serif;transition:all var(--t)}.pub:hover{border-color:var(--gnl);color:var(--gn);background:var(--gnp)}
 .up{background:var(--sf);border:1px solid var(--bd);border-radius:7px;padding:8px 11px;font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:6px;margin-bottom:6px}
 .ubw{flex:1;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}.ub{height:100%;background:var(--gn);width:0%;transition:width .3s ease;border-radius:2px}
 /* LIGHTBOX */
@@ -149,7 +149,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 .mh{padding:16px 16px 13px;border-bottom:1px solid var(--bd)}.mt{font-size:15px;font-weight:600;letter-spacing:-.2px}
 .mb{padding:13px 16px}.mf{padding:10px 16px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
 .fld{margin-bottom:12px}.fld label{display:block;font-size:11px;font-weight:500;color:var(--tx2);margin-bottom:4px}
-.fld input,.fld select,.fld textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--tx);background:var(--bg);outline:none;transition:border-color var(--t)}
+.fld input,.fld select,.fld textarea{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:var(--rs);font-family:'Geist',sans-serif;font-size:13px;color:var(--tx);background:var(--bg);outline:none;transition:border-color var(--t)}
 .fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--gnl);box-shadow:0 0 0 3px rgba(82,183,136,.1)}
 /* TOAST */
 .tc{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none}
@@ -167,13 +167,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 
 <!-- WELCOME -->
 <div id="screen-welcome" class="screen active">
-  <div class="wi">
+  <div class="wi" style="max-width:880px;">
     <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:28px">
-      <div class="wb" style="margin-bottom:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22c5 0 9-1.8 9-4V6c0-2.2-4-4-9-4S3 3.8 3 6v12c0 2.2 4 4 9 4z"/></svg>GrowControl</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:16px;font-weight:400;color:#1a1a18;letter-spacing:-.3px;">Grow<em style="font-style:italic;color:#2d6a4f;">Control</em></div>
       <button class="btn btn-g" style="font-size:11px;padding:5px 10px;display:flex;align-items:center;gap:5px" onclick="showTokenModal()" title="Configurar token GitHub"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>GitHub</button>
     </div>
-    <h1 class="wt">Gestió de<br><strong>cultius</strong></h1>
-    <p class="ws" style="margin-bottom:44px">Selecciona una secció per continuar.</p>
+    <h1 class="wt" style="font-family:'Instrument Serif',serif;font-size:clamp(38px,7vw,72px);font-weight:400;letter-spacing:-2px;line-height:1.0;margin-bottom:10px;color:#1a1a18;">Grow<em style="font-style:italic;color:#2d6a4f;">Control</em></h1>
+    <p class="ws" style="margin-bottom:48px;font-size:14px;letter-spacing:.3px;color:#9a9a93;font-weight:400;text-transform:uppercase;">Plataforma de cultiu · El Masnou</p>
     <div class="env-cards">
       <div class="ec indoor" onclick="enterEnv('indoor')" style="position:relative;overflow:hidden;">
         <div class="ei" style="margin-bottom:8px;width:48px;height:48px;border-radius:12px;">
@@ -215,6 +215,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
         <div class="ed">Formulador per genètica i fase. Calculadora VPD.</div>
         <div class="ecount"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>Coco + Terra · Multi-marca</div>
       </div>
+      <div class="ec" onclick="showGenetics()" style="border-color:#e8e8e4;">
+        <div class="ei" style="background:#fdf4ff;color:#7e22ce;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12h4M18 12h4M6 12a6 6 0 0112 0M6 12a6 6 0 0012 0M12 6V2M12 22v-4M9 9l-1-5M15 9l1-5M9 15l-1 5M15 15l1 5"/></svg></div>
+        <div class="el">Genètica & Breeding</div>
+        <div class="ed">Línies pròpies, creuaments, arbre genealògic.</div>
+        <div class="ecount" id="count-genetics"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>0 línies</div>
+      </div>
     </div>
   </div>
 </div>
@@ -222,7 +228,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 <!-- DASHBOARD -->
 <div id="screen-dashboard" class="screen">
   <header class="app-header">
-    <div class="logo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5 0 9-1.8 9-4V6c0-2.2-4-4-9-4S3 3.8 3 6v12c0 2.2 4 4 9 4z"/><path d="M3 6c0 2.2 4 4 9 4s9-1.8 9-4"/><path d="M3 12c0 2.2 4 4 9 4s9-1.8 9-4"/></svg>GrowControl</div>
+    <div class="logo">Grow<em>Control</em></div>
     <div class="hdr-act">
       <button class="btn btn-p" onclick="showAddPlantModal()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nova planta</button>
       <button class="btn-i" onclick="showWelcome()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
@@ -287,9 +293,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 
     <!-- TABS -->
     <div style="display:flex;gap:2px;background:#f4f4f0;border-radius:10px;padding:3px;margin-bottom:28px;width:fit-content;">
-      <button id="tab-btn-nutrients" onclick="switchNTab('nutrients')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:#fff;color:#1a1a18;box-shadow:0 1px 3px rgba(0,0,0,.08);">Formulador</button>
-      <button id="tab-btn-vpd" onclick="switchNTab('vpd')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">VPD</button>
-      <button id="tab-btn-ia" onclick="switchNTab('ia')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">IA · Consell</button>
+      <button id="tab-btn-nutrients" onclick="switchNTab('nutrients')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:#fff;color:#1a1a18;box-shadow:0 1px 3px rgba(0,0,0,.08);">Formulador</button>
+      <button id="tab-btn-vpd" onclick="switchNTab('vpd')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">VPD</button>
+      <button id="tab-btn-ia" onclick="switchNTab('ia')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">IA · Consell</button>
     </div>
 
     <!-- TAB: FORMULADOR -->
@@ -337,7 +343,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
         <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;">
           <div style="font-size:11px;font-weight:600;color:#9a9a93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;">Productes disponibles</div>
           <div id="nf-products-list" style="display:flex;flex-direction:column;gap:6px;"></div>
-          <button onclick="nfAddProduct()" style="margin-top:10px;width:100%;padding:8px;border:1.5px dashed #d0d0cb;border-radius:8px;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;color:#9a9a93;cursor:pointer;" onmouseover="this.style.borderColor='#2d6a4f';this.style.color='#2d6a4f'" onmouseout="this.style.borderColor='#d0d0cb';this.style.color='#9a9a93'">
+          <button onclick="nfAddProduct()" style="margin-top:10px;width:100%;padding:8px;border:1.5px dashed #d0d0cb;border-radius:8px;background:transparent;font-family:'Geist',sans-serif;font-size:12px;color:#9a9a93;cursor:pointer;" onmouseover="this.style.borderColor='#2d6a4f';this.style.color='#2d6a4f'" onmouseout="this.style.borderColor='#d0d0cb';this.style.color='#9a9a93'">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Afegir producte
           </button>
@@ -478,6 +484,136 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
   </div>
 </div>
 
+<!-- GENETICS & BREEDING -->
+<div id="screen-genetics" class="screen">
+  <header class="app-header">
+    <div class="logo">Grow<em>Control</em></div>
+    <div class="hdr-act">
+      <button class="btn btn-p" onclick="showAddLineModal()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nova línia
+      </button>
+      <button class="btn-i" onclick="showWelcome()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></button>
+    </div>
+  </header>
+  <div class="dc" style="max-width:1100px;">
+    <div class="bc"><a onclick="showWelcome()">Inici</a><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg><span>Genètica & Breeding</span></div>
+    <div class="eh"><div class="eh-l"><h1>Genètica <strong>&amp; Breeding</strong></h1></div></div>
+
+    <!-- TABS -->
+    <div style="display:flex;gap:2px;background:#f4f4f0;border-radius:10px;padding:3px;margin-bottom:28px;width:fit-content;">
+      <button id="gtab-btn-lines" onclick="switchGTab('lines')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:#fff;color:#1a1a18;box-shadow:0 1px 3px rgba(0,0,0,.08);">Línies</button>
+      <button id="gtab-btn-crosses" onclick="switchGTab('crosses')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">Creuaments</button>
+      <button id="gtab-btn-tree" onclick="switchGTab('tree')" style="padding:7px 18px;border-radius:8px;border:none;font-family:'Geist',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:#6b6b65;">Arbre genealògic</button>
+    </div>
+
+    <!-- TAB: LÍNIES -->
+    <div id="gtab-lines">
+      <div id="genetics-lines-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;"></div>
+      <div id="genetics-empty" style="display:none;text-align:center;padding:60px 0;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d0d0cb" stroke-width="1.2" style="margin-bottom:14px;"><path d="M2 12h4M18 12h4M6 12a6 6 0 0112 0M6 12a6 6 0 0012 0M12 6V2M12 22v-4"/></svg>
+        <div style="font-size:15px;font-weight:500;color:#9a9a93;margin-bottom:6px;">Cap línia registrada</div>
+        <div style="font-size:13px;color:#b0b0a8;">Afegeix la teva primera línia genètica</div>
+      </div>
+    </div>
+
+    <!-- TAB: CREUAMENTS -->
+    <div id="gtab-crosses" style="display:none;">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+        <button class="btn btn-p" onclick="showAddCrossModal()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nou creuament
+        </button>
+      </div>
+      <div id="genetics-crosses-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px;"></div>
+      <div id="crosses-empty" style="display:none;text-align:center;padding:60px 0;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d0d0cb" stroke-width="1.2" style="margin-bottom:14px;"><circle cx="8" cy="12" r="3"/><circle cx="16" cy="12" r="3"/><path d="M11 12h2"/></svg>
+        <div style="font-size:15px;font-weight:500;color:#9a9a93;margin-bottom:6px;">Cap creuament registrat</div>
+        <div style="font-size:13px;color:#b0b0a8;">Registra un creuament entre dues línies</div>
+      </div>
+    </div>
+
+    <!-- TAB: ARBRE -->
+    <div id="gtab-tree" style="display:none;">
+      <div style="background:#fff;border:1px solid #e8e8e4;border-radius:14px;padding:20px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <div class="fld" style="margin:0;flex:1;min-width:180px;"><label>Línia / creuament arrel</label>
+            <select id="tree-root-select" onchange="renderTree()">
+              <option value="">Selecciona una línia...</option>
+            </select>
+          </div>
+        </div>
+        <div id="tree-container" style="overflow-x:auto;padding:10px 0;min-height:200px;">
+          <div style="text-align:center;padding:60px;color:#9a9a93;font-size:13px;">Selecciona una línia per veure el seu arbre genealògic</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Nova línia -->
+<div class="mo" id="modal-add-line">
+  <div class="md" style="max-width:480px;">
+    <div class="mh"><div class="mt">Nova línia genètica</div></div>
+    <div class="mb">
+      <div class="fld"><label>Nom de la línia</label><input type="text" id="gl-name" placeholder="ex: White Widow IBL, OG Kush F3..."></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="fld"><label>Tipus</label>
+          <select id="gl-type">
+            <option value="ibl">IBL (Inbred Line)</option>
+            <option value="f1">F1 Híbrid</option>
+            <option value="f2">F2</option>
+            <option value="f3">F3</option>
+            <option value="bx1">Bx1 (Backcross 1)</option>
+            <option value="bx2">Bx2</option>
+            <option value="s1">S1 (Autofeminitzada)</option>
+            <option value="regular">Regular comercial</option>
+            <option value="own">Línia pròpia</option>
+          </select>
+        </div>
+        <div class="fld"><label>Origen / Breeder</label><input type="text" id="gl-origin" placeholder="ex: Sensi Seeds, propi..."></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="fld"><label>Dies floració est.</label><input type="number" id="gl-flor" placeholder="63" min="40" max="120"></div>
+        <div class="fld"><label>Estabilitat (%)</label><input type="number" id="gl-stability" placeholder="85" min="0" max="100"></div>
+      </div>
+      <div class="fld"><label>Trets dominants / fenotip</label><input type="text" id="gl-traits" placeholder="ex: alta resina, sativa-dominant, limonè..."></div>
+      <div class="fld"><label>Historial / notes de selecció</label><textarea id="gl-notes" rows="2" placeholder="Generacions fetes, criteris de selecció, keepers..."></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-g" onclick="closeModal('modal-add-line')">Cancel·lar</button><button class="btn btn-p" onclick="addGeneticLine()">Afegir línia</button></div>
+  </div>
+</div>
+
+<!-- MODAL: Nou creuament -->
+<div class="mo" id="modal-add-cross">
+  <div class="md" style="max-width:480px;">
+    <div class="mh"><div class="mt">Nou creuament</div></div>
+    <div class="mb">
+      <div class="fld"><label>Nom del creuament</label><input type="text" id="gc-name" placeholder="ex: OG Kush × White Widow F1"></div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:12px;">
+        <div class="fld" style="margin:0;"><label>Mare (F)</label>
+          <select id="gc-mother"><option value="">Selecciona...</option></select>
+        </div>
+        <div style="font-size:18px;color:#9a9a93;padding-top:18px;">×</div>
+        <div class="fld" style="margin:0;"><label>Pare (M)</label>
+          <select id="gc-father"><option value="">Selecciona...</option></select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="fld"><label>Generació resultant</label>
+          <select id="gc-gen">
+            <option value="F1">F1</option><option value="F2">F2</option><option value="F3">F3</option>
+            <option value="Bx1">Bx1</option><option value="Bx2">Bx2</option><option value="Bx3">Bx3</option>
+            <option value="S1">S1</option><option value="IBL">IBL</option>
+          </select>
+        </div>
+        <div class="fld"><label>Data del creuament</label><input type="date" id="gc-date"></div>
+      </div>
+      <div class="fld"><label>Nombre de llavors obtingudes</label><input type="number" id="gc-seeds" placeholder="30" min="1"></div>
+      <div class="fld"><label>Notes / objectiu del creuament</label><textarea id="gc-notes" rows="2" placeholder="Objectiu de selecció, trets buscats..."></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-g" onclick="closeModal('modal-add-cross')">Cancel·lar</button><button class="btn btn-p" onclick="addGeneticCross()">Registrar creuament</button></div>
+  </div>
+</div>
+
 <!-- PANEL -->
 <div class="po" id="panel-overlay" onclick="closePanel()"></div>
 <div class="pp" id="plant-panel">
@@ -613,7 +749,7 @@ async function save(){
 
 function showSync(msg,type='load'){
   let el=document.getElementById('sync-st');
-  if(!el){el=document.createElement('div');el.id='sync-st';el.style.cssText='position:fixed;bottom:16px;right:16px;z-index:998;padding:7px 13px;border-radius:100px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,.12)';document.body.appendChild(el);}
+  if(!el){el=document.createElement('div');el.id='sync-st';el.style.cssText='position:fixed;bottom:16px;right:16px;z-index:998;padding:7px 13px;border-radius:100px;font-family:Geist,sans-serif;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,.12)';document.body.appendChild(el);}
   const ic={load:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.2-8.6"/></svg>`,ok:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,err:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`};
   const st={load:'background:#1a1a18;color:#fff',ok:'background:#d1fae5;color:#065f46',err:'background:#fee2e2;color:#991b1b'};
   Object.assign(el.style,Object.fromEntries(st[type].split(';').map(s=>s.split(':').map(x=>x.trim()))));
@@ -640,8 +776,8 @@ function updateCounts(){
   const no=S.plants.filter(p=>p.env==='outdoor').length;
   const ns=S.seeds.length;
   const np=S.pcLots.filter(l=>l.status!=='completat').length;
-  document.getElementById('count-indoor').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${ni} planta${ni!==1?'es':''}`;
-  document.getElementById('count-outdoor').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${no} planta${no!==1?'es':''}`;
+  document.getElementById('count-indoor').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${ni} planta${ni!==1?'s':''}`;
+  document.getElementById('count-outdoor').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${no} planta${no!==1?'s':''}`;
   document.getElementById('count-vault').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg>${ns} genètica${ns!==1?'es':''}`;
   document.getElementById('count-pc').innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>${np} lot${np!==1?'s':''}`;
 }
@@ -865,7 +1001,19 @@ function openPlant(id){
   } else if(p.phase==='flor'&&!p.florDays){
     fch=`<div class="ab info"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Afegeix els dies estimats de floració per activar el comptador i rebre recomanacions.</span></div>`;
   }
-  const inp=()=>`style="width:60px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right"`;
+  // Pre-harvest block
+  if(p.preHarvest&&p.preHarvestDate){
+    const hrsElapsed=Math.floor((Date.now()-new Date(p.preHarvestDate).getTime())/3600000);
+    const hrsLeft=Math.max(0,24-hrsElapsed);
+    const done=hrsElapsed>=24;
+    fch+=`<div style="background:${done?'#f0fdf4':'#1a1a18'};border:1px solid ${done?'#86efac':'#1a1a18'};border-radius:10px;padding:14px;margin-bottom:0;">
+      <div style="font-size:10px;font-weight:600;color:${done?'#14532d':'rgba(255,255,255,.6)'};text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;">Protocol pre-collita</div>
+      <div style="font-size:20px;font-weight:600;color:${done?'#14532d':'#fff'};letter-spacing:-.5px;">${done?'Llest per collir':'Falten '+hrsLeft+'h de foscor'}</div>
+      <div style="font-size:12px;color:${done?'#166534':'rgba(255,255,255,.5)'};margin-top:3px;">${done?'24h completades — collir avui i crear lot de secat':'Mantenir foscor total fins completar les 24h'}</div>
+      ${!done?`<div style="height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:10px;overflow:hidden;"><div style="height:100%;width:${Math.min(100,Math.round(hrsElapsed/24*100))}%;background:rgba(255,255,255,.6);border-radius:2px;"></div></div>`:''}
+    </div>`;
+  }
+  const inp=()=>`style="width:60px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right"`;
   document.getElementById('panel-body').innerHTML=`
     <div class="phero" style="background:${c.bg};border-color:${c.bd}">${pSVG(p.phase,c.tx,80)}</div>
     ${fch}
@@ -901,6 +1049,11 @@ function openPlant(id){
     ${p.phase==='mare'?`<button class="btn" style="background:#ede9fe;color:#4c1d95;border:1px solid #c4b5fd;" onclick="clonarDeMare(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Clonar d'aquesta mare</button>`:''}
     ${p.phase==='clon'?`<button class="btn" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;" onclick="mortClon(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Mort del clon</button>`:''}
     ${p.phase==='germ'?`<button class="btn" style="background:#f8f0ff;color:#6b21a8;border:1px solid #e9d5ff;" onclick="noGermina(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>No Germina (NG)</button>`:''}
+    ${p.phase==='flor'&&!p.preHarvest?`<button class="btn" style="background:#1a1a18;color:#fff;border:1px solid #1a1a18;" onclick="iniciarPreHarvest(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>24h Foscor pre-collita</button>`:''}
+    ${p.phase==='flor'&&p.preHarvest?`<button class="btn" style="background:#f0fdf4;color:#14532d;border:1px solid #86efac;" onclick="passarASecat(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Passar a Secat</button>`:''}
+    ${p.env==='indoor'?`<button class="btn" style="background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;" onclick="passarAOutdoor(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Passar a Outdoor</button>`:''}
+    ${p.env==='outdoor'?`<button class="btn" style="background:#f0f9ff;color:#0c4a6e;border:1px solid #bae6fd;" onclick="passarAIndoor(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Passar a Indoor</button>`:''}
+    ${p.env==='outdoor'?`<button class="btn" style="background:#ede9fe;color:#4c1d95;border:1px solid #c4b5fd;" onclick="clonarDeMare(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Clonar</button>`:''}
   `;
   document.getElementById('panel-overlay').classList.add('open');
   document.getElementById('plant-panel').classList.add('open');
@@ -1200,7 +1353,7 @@ function renderVault(){
   g.innerHTML=S.seeds.map(s=>{
     const t=SEED_TYPES[s.type]||SEED_TYPES.regular;
     const inUse=S.plants.filter(p=>p.strain===s.name).length;
-    return`<div class="skc" onclick="openSeedPanel(${s.id})">
+    return`<div class="skc" onclick="openSeedPanel(${s.id})" style="position:relative;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px">
         <div>
           <div class="skn">${esc(s.name)}</div>
@@ -1459,11 +1612,11 @@ function openPCPanel(id){
       <div class="nl">Control de pes</div>
       <div class="mr">
         <span class="ml"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.3 6.9.6-5 5 1.2 6.9L12 17l-6.1 3.8 1.2-6.9-5-5 6.9-.6z"/></svg>Pes inicial (g)</span>
-        <input type="number" step="0.1" value="${l.weight||''}" placeholder="100" style="width:72px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'weight',parseFloat(this.value)||0)">
+        <input type="number" step="0.1" value="${l.weight||''}" placeholder="100" style="width:72px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right" onchange="updatePC(${id},'weight',parseFloat(this.value)||0)">
       </div>
       <div class="mr">
         <span class="ml"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Pes final (g)</span>
-        <input type="number" step="0.1" value="${l.weightFinal||''}" placeholder="0" style="width:72px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'weightFinal',parseFloat(this.value)||0)">
+        <input type="number" step="0.1" value="${l.weightFinal||''}" placeholder="0" style="width:72px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right" onchange="updatePC(${id},'weightFinal',parseFloat(this.value)||0)">
       </div>
       ${l.weight&&l.weightFinal?`<div class="mr">
         <span class="ml">Rendiment</span>
@@ -1476,11 +1629,11 @@ function openPCPanel(id){
       <div class="nl">Paràmetres de ${m.l.toLowerCase()}</div>
       <div class="mr">
         <span class="ml">Temperatura (°C)</span>
-        <input type="number" step="0.5" value="${l.tempParam||''}" placeholder="${l.type==='secat'?18:20}" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'tempParam',parseFloat(this.value)||null)">
+        <input type="number" step="0.5" value="${l.tempParam||''}" placeholder="${l.type==='secat'?18:20}" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right" onchange="updatePC(${id},'tempParam',parseFloat(this.value)||null)">
       </div>
       <div class="mr">
         <span class="ml">Humitat (%)</span>
-        <input type="number" step="1" value="${l.humParam||''}" placeholder="${l.type==='secat'?50:62}" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'humParam',parseFloat(this.value)||null)">
+        <input type="number" step="1" value="${l.humParam||''}" placeholder="${l.type==='secat'?50:62}" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right" onchange="updatePC(${id},'humParam',parseFloat(this.value)||null)">
       </div>
     </div>`:''}
 
@@ -1488,11 +1641,11 @@ function openPCPanel(id){
       <div class="nl">Paràmetres d'extracció</div>
       <div class="mr">
         <span class="ml">Temperatura pressió (°C)</span>
-        <input type="number" step="1" value="${l.pressTemp||''}" placeholder="75" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;text-align:right" onchange="updatePC(${id},'pressTemp',parseFloat(this.value)||null)">
+        <input type="number" step="1" value="${l.pressTemp||''}" placeholder="75" style="width:64px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right" onchange="updatePC(${id},'pressTemp',parseFloat(this.value)||null)">
       </div>
       <div class="mr">
         <span class="ml">Malla / microns</span>
-        <input type="text" value="${l.microns||''}" placeholder="73µ, 90µ..." style="width:80px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif" onchange="updatePC(${id},'microns',this.value)">
+        <input type="text" value="${l.microns||''}" placeholder="73µ, 90µ..." style="width:80px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif" onchange="updatePC(${id},'microns',this.value)">
       </div>
     </div>`:''}
 
@@ -1635,7 +1788,7 @@ function renderNFProducts(){
     <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f8f8f6;">
       <div style="width:3px;height:28px;border-radius:2px;background:${p.color};flex-shrink:0;"></div>
       <input type="text" value="${esc(p.name)}" onchange="nfProducts[${i}].name=this.value;nfUpdate()"
-        style="flex:1;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:#1a1a18;outline:none;">
+        style="flex:1;border:none;background:transparent;font-family:'Geist',sans-serif;font-size:13px;color:#1a1a18;outline:none;">
       <label style="display:flex;align-items:center;gap:4px;cursor:pointer;flex-shrink:0;">
         <input type="checkbox" ${p.active?'checked':''} onchange="nfProducts[${i}].active=this.checked;nfUpdate()"
           style="accent-color:#2d6a4f;width:14px;height:14px;">
@@ -1894,6 +2047,89 @@ Respon en català. Sigues precís i pràctic, sense generalitats.`;
 }
 
 
+// ── 1) PRE-HARVEST: 24h foscor ───────────────────────────────────
+function iniciarPreHarvest(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Iniciar 24h de foscor pre-collita per "${p.name}"?\n\nAixò atura el reg i registra l'inici del protocol de collita.`))return;
+  p.preHarvest=true;
+  p.preHarvestDate=new Date().toISOString();
+  if(!p.log)p.log=[];
+  p.log.push({type:'preharvest',date:new Date().toISOString(),detail:'Inici 24h foscor pre-collita — reg aturat'});
+  save();renderDash();openPlant(id);
+  toast('24h foscor iniciades');
+}
+
+function passarASecat(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Passar "${p.name}" a Secat?\n\nLa planta s'arxivarà del cultiu actiu i es crearà un lot a Post-Collita.`))return;
+  if(!S.pcLots)S.pcLots=[];
+  if(!S.nextPCId)S.nextPCId=1;
+  const lot={
+    id:S.nextPCId++,
+    name:`${p.strain||p.name} · Collita ${new Date().toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'})}`,
+    strain:p.strain||p.name,type:'secat',
+    startDate:new Date().toISOString().split('T')[0],days:14,weight:null,
+    sourcePlantId:id,sourcePlantName:p.name,
+    notes:`Procedent de ${p.env==='indoor'?'Indoor':'Outdoor'} · ${p.florDays?p.florDays+'d estimats':''}`,
+    log:[{type:'inici',date:new Date().toISOString(),detail:`Collita de ${p.name}`}]
+  };
+  S.pcLots.push(lot);
+  if(!p.log)p.log=[];
+  p.log.push({type:'collita',date:new Date().toISOString(),detail:'Planta collida'});
+  S.plants=S.plants.filter(x=>x.id!==id);
+  save();closePanel();renderDash();
+  toast('Lot de secat creat a Post-Collita');
+}
+
+// ── 2) PASSAR A OUTDOOR ──────────────────────────────────────────
+function passarAOutdoor(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm(`Passar "${p.name}" a Outdoor?\n\nLa planta passarà a la zona exterior d'El Masnou.`))return;
+  p.env='outdoor';p.phase='flor';
+  if(!p.log)p.log=[];
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Indoor → Outdoor (El Masnou)'});
+  save();closePanel();curEnv='outdoor';showScr('dashboard');renderDash();
+  toast(`${p.name} passada a Outdoor`);
+}
+
+// ── 3) PASSAR A INDOOR / CLONAR OUTDOOR ──────────────────────────
+function passarAIndoor(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  const mo=document.createElement('div');
+  mo.className='mo open';mo.id='modal-to-indoor';
+  mo.innerHTML=`<div class="md" style="max-width:380px;">
+    <div class="mh"><div class="mt">Passar a Indoor</div></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>${esc(p.name)}</strong></p>
+      <div class="fld"><label>Fase de destí</label>
+        <select id="indoor-dest-phase">
+          <option value="veg">Vegetatiu</option>
+          <option value="flor">Floració</option>
+          <option value="mare">Mares</option>
+          <option value="clon">Clonació</option>
+        </select>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-g" onclick="document.getElementById('modal-to-indoor').remove()">Cancel·lar</button>
+      <button class="btn btn-p" onclick="confirmarPassarAIndoor(${id})">Confirmar</button>
+    </div>
+  </div>`;
+  document.body.appendChild(mo);
+}
+
+function confirmarPassarAIndoor(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  const phase=document.getElementById('indoor-dest-phase')?.value||'veg';
+  document.getElementById('modal-to-indoor')?.remove();
+  p.env='indoor';p.phase=phase;
+  p.phaseStart=new Date().toISOString().split('T')[0];
+  if(!p.log)p.log=[];
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:`Trasllat Outdoor → Indoor · fase ${phase}`});
+  save();closePanel();curEnv='indoor';showScr('dashboard');renderDash();
+  toast(`${p.name} passada a Indoor`);
+}
+
 function passarAFloracio(id){
   const p=S.plants.find(x=>x.id===id);if(!p)return;
   if(!confirm(`Passar "${p.name}" a Floració?\nEs registrarà la data d'inici de fase.`))return;
@@ -2055,7 +2291,286 @@ function confirmarNG(id){
 }
 
 
-function pad(n){return String(n).padStart(3,'0');}
+// ══════════════════════════════════════════════════════════════════
+// GENETICS & BREEDING MODULE
+// ══════════════════════════════════════════════════════════════════
+
+function showGenetics(){showScr('genetics');renderGenetics();updateGeneticsCount();}
+
+function switchGTab(tab){
+  ['lines','crosses','tree'].forEach(t=>{
+    const el=document.getElementById(`gtab-${t}`);
+    const btn=document.getElementById(`gtab-btn-${t}`);
+    if(!el||!btn)return;
+    const active=t===tab;
+    el.style.display=active?'block':'none';
+    btn.style.background=active?'#fff':'transparent';
+    btn.style.color=active?'#1a1a18':'#6b6b65';
+    btn.style.boxShadow=active?'0 1px 3px rgba(0,0,0,.08)':'none';
+  });
+  if(tab==='tree')populateTreeSelect();
+}
+
+function updateGeneticsCount(){
+  const el=document.getElementById('count-genetics');if(!el)return;
+  const n=(S.geneticLines||[]).length;
+  el.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4M18 12h4M6 12a6 6 0 0112 0M6 12a6 6 0 0012 0M12 6V2M12 22v-4"/></svg>${n} líni${n!==1?'es':'a'}`;
+}
+
+function renderGenetics(){
+  if(!S.geneticLines)S.geneticLines=[];
+  if(!S.geneticCrosses)S.geneticCrosses=[];
+  const grid=document.getElementById('genetics-lines-grid');
+  const empty=document.getElementById('genetics-empty');
+  if(!grid)return;
+  if(!S.geneticLines.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  const typeColors={ibl:{bg:'#f0fdf4',bd:'#86efac',tx:'#14532d'},f1:{bg:'#fef3c7',bd:'#fcd34d',tx:'#78350f'},f2:{bg:'#fef9c3',bd:'#fde047',tx:'#713f12'},f3:{bg:'#fff7ed',bd:'#fdba74',tx:'#9a3412'},bx1:{bg:'#ede9fe',bd:'#c4b5fd',tx:'#4c1d95'},bx2:{bg:'#f5f3ff',bd:'#ddd6fe',tx:'#5b21b6'},s1:{bg:'#fce7f3',bd:'#f9a8d4',tx:'#9d174d'},regular:{bg:'#f8f8f6',bd:'#d0d0cb',tx:'#6b6b65'},own:{bg:'#ecfeff',bd:'#a5f3fc',tx:'#164e63'}};
+  grid.innerHTML=S.geneticLines.map(l=>{
+    const tc=typeColors[l.type]||typeColors.regular;
+    const crosses=(S.geneticCrosses||[]).filter(c=>c.motherId===l.id||c.fatherId===l.id);
+    const stability=l.stability?`<div style="margin-top:8px;"><div style="display:flex;justify-content:space-between;font-size:10px;color:#9a9a93;margin-bottom:3px;"><span>Estabilitat</span><span style="font-weight:600;color:#1a1a18;">${l.stability}%</span></div><div style="height:3px;background:#f0f0eb;border-radius:2px;overflow:hidden;"><div style="height:100%;width:${l.stability}%;background:${l.stability>80?'#22c55e':l.stability>60?'#f59e0b':'#ef4444'};border-radius:2px;"></div></div></div>`:'';
+    return`<div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;" onclick="openLinePanel(${l.id})" onmouseover="this.style.borderColor='#1a1a18'" onmouseout="this.style.borderColor='#ebebeb'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;">
+        <div style="font-size:15px;font-weight:600;letter-spacing:-.3px;color:#1a1a18;">${esc(l.name)}</div>
+        <span style="flex-shrink:0;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;background:${tc.bg};color:${tc.tx};border:1px solid ${tc.bd};">${l.type?.toUpperCase()||'—'}</span>
+      </div>
+      ${l.origin?`<div style="font-size:12px;color:#9a9a93;margin-bottom:6px;">${esc(l.origin)}</div>`:''}
+      ${l.traits?`<div style="font-size:12px;color:#6b6b65;line-height:1.5;margin-bottom:6px;">${esc(l.traits)}</div>`:''}
+      ${stability}
+      <div style="display:flex;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid #f8f8f6;">
+        ${l.florDays?`<span style="font-size:11px;color:#9a9a93;">${l.florDays}d flor.</span>`:''}
+        ${crosses.length?`<span style="font-size:11px;color:#9a9a93;">${crosses.length} creuament${crosses.length!==1?'s':''}</span>`:''}
+        <span style="font-size:11px;color:#9a9a93;margin-left:auto;">${new Date(l.created||Date.now()).toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'})}</span>
+      </div>
+    </div>`;
+  }).join('');
+  renderCrosses();
+}
+
+function renderCrosses(){
+  const grid=document.getElementById('genetics-crosses-grid');
+  const empty=document.getElementById('crosses-empty');
+  if(!grid)return;
+  if(!(S.geneticCrosses||[]).length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  const genColors={F1:'#fef3c7',F2:'#fef9c3',F3:'#fff7ed',Bx1:'#ede9fe',Bx2:'#f5f3ff',S1:'#fce7f3',IBL:'#f0fdf4'};
+  grid.innerHTML=S.geneticCrosses.map(cr=>{
+    const mom=S.geneticLines?.find(l=>l.id===cr.motherId);
+    const dad=S.geneticLines?.find(l=>l.id===cr.fatherId);
+    return`<div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;" onclick="openCrossPanel(${cr.id})" onmouseover="this.style.borderColor='#1a1a18'" onmouseout="this.style.borderColor='#ebebeb'">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:14px;font-weight:600;letter-spacing:-.2px;">${esc(cr.name)}</div>
+        <span style="padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700;background:${genColors[cr.gen]||'#f8f8f6'};color:#1a1a18;">${cr.gen}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px;background:#fafaf8;border-radius:8px;margin-bottom:10px;">
+        <div style="flex:1;text-align:center;"><div style="font-size:10px;color:#9a9a93;margin-bottom:2px;">Mare (F)</div><div style="font-size:12px;font-weight:600;color:#1a1a18;">${mom?esc(mom.name):'Desconeguda'}</div></div>
+        <div style="color:#c0c0b8;font-size:16px;">×</div>
+        <div style="flex:1;text-align:center;"><div style="font-size:10px;color:#9a9a93;margin-bottom:2px;">Pare (M)</div><div style="font-size:12px;font-weight:600;color:#1a1a18;">${dad?esc(dad.name):'Desconegut'}</div></div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;color:#9a9a93;">
+        ${cr.seeds?`<span>${cr.seeds} llavors</span>`:''}
+        ${cr.date?`<span>${new Date(cr.date).toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'})}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function populateTreeSelect(){
+  const sel=document.getElementById('tree-root-select');if(!sel)return;
+  const lines=S.geneticLines||[];
+  const crosses=S.geneticCrosses||[];
+  sel.innerHTML='<option value="">Selecciona una línia...</option>'+
+    [...lines.map(l=>`<option value="L${l.id}">${esc(l.name)} (${l.type?.toUpperCase()})</option>`),
+     ...crosses.map(c=>`<option value="C${c.id}">${esc(c.name)} (${c.gen})</option>`)].join('');
+}
+
+function renderTree(){
+  const sel=document.getElementById('tree-root-select')?.value;
+  const container=document.getElementById('tree-container');
+  if(!sel||!container)return;
+  const lines=S.geneticLines||[];
+  const crosses=S.geneticCrosses||[];
+  function buildNode(type,id,depth=0){
+    if(depth>6)return null;
+    if(type==='L'){
+      const l=lines.find(x=>x.id===parseInt(id));if(!l)return null;
+      const tc={ibl:'#22c55e',f1:'#f59e0b',f2:'#eab308',f3:'#f97316',bx1:'#a855f7',bx2:'#8b5cf6',s1:'#ec4899',own:'#06b6d4',regular:'#94a3b8'};
+      return{label:l.name,sub:l.type?.toUpperCase(),color:tc[l.type]||'#94a3b8',children:[]};
+    } else {
+      const cr=crosses.find(x=>x.id===parseInt(id));if(!cr)return null;
+      const mom=cr.motherId?buildNode('L',cr.motherId,depth+1):null;
+      const dad=cr.fatherId?buildNode('L',cr.fatherId,depth+1):null;
+      return{label:cr.name,sub:cr.gen,color:'#1a1a18',children:[mom,dad].filter(Boolean)};
+    }
+  }
+  const rootType=sel[0],rootId=sel.slice(1);
+  const tree=buildNode(rootType,rootId);
+  if(!tree){container.innerHTML='<div style="padding:40px;text-align:center;color:#9a9a93;font-size:13px;">No s\'ha pogut construir l\'arbre</div>';return;}
+  function renderNode(node,isRoot=false){
+    const hasChildren=node.children&&node.children.length;
+    return`<div style="display:flex;flex-direction:column;align-items:center;">
+      <div style="background:#fff;border:2px solid ${node.color};border-radius:10px;padding:10px 16px;text-align:center;min-width:130px;max-width:180px;${isRoot?'box-shadow:0 4px 16px rgba(0,0,0,.08);':''}">
+        <div style="font-size:12px;font-weight:600;color:#1a1a18;line-height:1.3;">${esc(node.label)}</div>
+        <div style="font-size:10px;font-weight:600;color:${node.color};margin-top:2px;">${node.sub||''}</div>
+      </div>
+      ${hasChildren?`<div style="width:2px;height:20px;background:#e8e8e4;"></div>
+      <div style="display:flex;gap:20px;align-items:flex-start;position:relative;">
+        ${node.children.map(ch=>`<div style="display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:20px;background:#e8e8e4;"></div>${renderNode(ch)}</div>`).join('')}
+      </div>`:''}
+    </div>`;
+  }
+  container.innerHTML=`<div style="display:flex;justify-content:center;padding:20px;">${renderNode(tree,true)}</div>`;
+}
+
+function openLinePanel(id){
+  const l=(S.geneticLines||[]).find(x=>x.id===id);if(!l)return;
+  const crosses=(S.geneticCrosses||[]).filter(c=>c.motherId===id||c.fatherId===id);
+  const typeColors={ibl:{bg:'#f0fdf4',bd:'#86efac',tx:'#14532d'},f1:{bg:'#fef3c7',bd:'#fcd34d',tx:'#78350f'},f2:{bg:'#fef9c3',bd:'#fde047',tx:'#713f12'},f3:{bg:'#fff7ed',bd:'#fdba74',tx:'#9a3412'},bx1:{bg:'#ede9fe',bd:'#c4b5fd',tx:'#4c1d95'},bx2:{bg:'#f5f3ff',bd:'#ddd6fe',tx:'#5b21b6'},s1:{bg:'#fce7f3',bd:'#f9a8d4',tx:'#9d174d'},regular:{bg:'#f8f8f6',bd:'#d0d0cb',tx:'#6b6b65'},own:{bg:'#ecfeff',bd:'#a5f3fc',tx:'#164e63'}};
+  const tc=typeColors[l.type]||typeColors.regular;
+  document.getElementById('panel-title').textContent=l.name;
+  document.getElementById('panel-subtitle').textContent=`Línia genètica · ${l.type?.toUpperCase()}`;
+  document.getElementById('panel-body').innerHTML=`
+    <div style="background:${tc.bg};border:1px solid ${tc.bd};border-radius:12px;padding:20px;margin-bottom:16px;text-align:center;">
+      <div style="font-size:11px;font-weight:600;color:${tc.tx};text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;">${l.type?.toUpperCase()}</div>
+      <div style="font-size:22px;font-weight:600;letter-spacing:-.5px;color:#1a1a18;">${esc(l.name)}</div>
+      ${l.origin?`<div style="font-size:12px;color:#9a9a93;margin-top:4px;">${esc(l.origin)}</div>`:''}
+    </div>
+    <div class="ig">
+      <div class="ic"><div class="icl">Nom</div><div class="icv"><input type="text" value="${esc(l.name)}" onchange="updateLine(${id},'name',this.value)"></div></div>
+      <div class="ic"><div class="icl">Tipus</div><div class="icv"><select onchange="updateLine(${id},'type',this.value)">${['ibl','f1','f2','f3','bx1','bx2','s1','regular','own'].map(t=>`<option value="${t}"${t===l.type?' selected':''}>${t.toUpperCase()}</option>`).join('')}</select></div></div>
+      <div class="ic"><div class="icl">Origen</div><div class="icv"><input type="text" value="${esc(l.origin||'')}" placeholder="Breeder..." onchange="updateLine(${id},'origin',this.value)"></div></div>
+      <div class="ic"><div class="icl">Dies floració</div><div class="icv"><input type="number" value="${l.florDays||''}" placeholder="63" onchange="updateLine(${id},'florDays',parseInt(this.value)||null)"></div></div>
+      <div class="ic"><div class="icl">Estabilitat %</div><div class="icv"><input type="number" value="${l.stability||''}" placeholder="85" min="0" max="100" onchange="updateLine(${id},'stability',parseInt(this.value)||null)"></div></div>
+    </div>
+    <div class="na"><div class="nl">Trets / Fenotip</div><textarea onchange="updateLine(${id},'traits',this.value)" placeholder="Trets dominants, aromes, morfologia...">${esc(l.traits||'')}</textarea></div>
+    <div class="na"><div class="nl">Notes de selecció</div><textarea onchange="updateLine(${id},'notes',this.value)" placeholder="Historial de selecció, generacions, keepers...">${esc(l.notes||'')}</textarea></div>
+    ${crosses.length?`<div class="na"><div class="nl">Creuaments</div>${crosses.map(cr=>`<div class="le"><div class="li" style="background:#ede9fe;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" stroke-width="2"><circle cx="8" cy="12" r="3"/><circle cx="16" cy="12" r="3"/><path d="M11 12h2"/></svg></div><span class="lt">${esc(cr.name)} · ${cr.gen}</span><span class="ld">${cr.seeds||0} llavors</span></div>`).join('')}</div>`:''}
+    <div class="dz"><button class="btn btn-d" onclick="deleteGeneticLine(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar línia</button></div>`;
+  document.getElementById('panel-actions').innerHTML='';
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('plant-panel').classList.add('open');
+}
+
+function openCrossPanel(id){
+  const cr=(S.geneticCrosses||[]).find(x=>x.id===id);if(!cr)return;
+  const mom=(S.geneticLines||[]).find(l=>l.id===cr.motherId);
+  const dad=(S.geneticLines||[]).find(l=>l.id===cr.fatherId);
+  document.getElementById('panel-title').textContent=cr.name;
+  document.getElementById('panel-subtitle').textContent=`Creuament · ${cr.gen}`;
+  document.getElementById('panel-body').innerHTML=`
+    <div style="background:#fafaf8;border:1px solid #ebebeb;border-radius:12px;padding:16px;margin-bottom:16px;">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;">
+        <div style="text-align:center;padding:12px;background:#fff;border-radius:8px;border:1px solid #ebebeb;">
+          <div style="font-size:10px;color:#9a9a93;margin-bottom:4px;">Mare (F)</div>
+          <div style="font-size:14px;font-weight:600;">${mom?esc(mom.name):'Desconeguda'}</div>
+          ${mom?.type?`<div style="font-size:10px;color:#9a9a93;margin-top:2px;">${mom.type.toUpperCase()}</div>`:''}
+        </div>
+        <div style="font-size:20px;color:#c0c0b8;text-align:center;">×</div>
+        <div style="text-align:center;padding:12px;background:#fff;border-radius:8px;border:1px solid #ebebeb;">
+          <div style="font-size:10px;color:#9a9a93;margin-bottom:4px;">Pare (M)</div>
+          <div style="font-size:14px;font-weight:600;">${dad?esc(dad.name):'Desconegut'}</div>
+          ${dad?.type?`<div style="font-size:10px;color:#9a9a93;margin-top:2px;">${dad.type.toUpperCase()}</div>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="ig">
+      <div class="ic"><div class="icl">Nom</div><div class="icv"><input type="text" value="${esc(cr.name)}" onchange="updateCross(${id},'name',this.value)"></div></div>
+      <div class="ic"><div class="icl">Generació</div><div class="icv"><select onchange="updateCross(${id},'gen',this.value)">${['F1','F2','F3','Bx1','Bx2','Bx3','S1','IBL'].map(g=>`<option value="${g}"${g===cr.gen?' selected':''}>${g}</option>`).join('')}</select></div></div>
+      <div class="ic"><div class="icl">Llavors obtingudes</div><div class="icv"><input type="number" value="${cr.seeds||''}" placeholder="30" onchange="updateCross(${id},'seeds',parseInt(this.value)||0)"></div></div>
+      <div class="ic"><div class="icl">Data creuament</div><div class="icv"><input type="date" value="${cr.date||''}" onchange="updateCross(${id},'date',this.value)"></div></div>
+    </div>
+    <div class="na"><div class="nl">Objectiu / Notes</div><textarea onchange="updateCross(${id},'notes',this.value)" placeholder="Objectiu de selecció, trets buscats...">${esc(cr.notes||'')}</textarea></div>
+    <div class="dz"><button class="btn btn-d" onclick="deleteGeneticCross(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar creuament</button></div>`;
+  document.getElementById('panel-actions').innerHTML='';
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('plant-panel').classList.add('open');
+}
+
+function showAddLineModal(){
+  ['gl-name','gl-origin','gl-traits','gl-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['gl-flor','gl-stability'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('modal-add-line').classList.add('open');
+}
+
+function addGeneticLine(){
+  const name=document.getElementById('gl-name').value.trim();
+  if(!name){toast('Introdueix un nom');return;}
+  if(!S.geneticLines)S.geneticLines=[];
+  if(!S.nextGLId)S.nextGLId=1;
+  const line={id:S.nextGLId++,name,type:document.getElementById('gl-type').value,
+    origin:document.getElementById('gl-origin').value.trim(),
+    florDays:parseInt(document.getElementById('gl-flor').value)||null,
+    stability:parseInt(document.getElementById('gl-stability').value)||null,
+    traits:document.getElementById('gl-traits').value.trim(),
+    notes:document.getElementById('gl-notes').value.trim(),
+    created:new Date().toISOString()};
+  S.geneticLines.push(line);
+  save();closeModal('modal-add-line');renderGenetics();updateGeneticsCount();
+  toast('Línia afegida');
+}
+
+function updateLine(id,field,value){
+  const l=(S.geneticLines||[]).find(x=>x.id===id);if(!l)return;
+  l[field]=value;save();renderGenetics();toast('Guardat');
+}
+
+function deleteGeneticLine(id){
+  if(!confirm('Eliminar aquesta línia genètica?'))return;
+  S.geneticLines=(S.geneticLines||[]).filter(x=>x.id!==id);
+  save();closePanel();renderGenetics();updateGeneticsCount();toast('Línia eliminada');
+}
+
+function showAddCrossModal(){
+  const lines=S.geneticLines||[];
+  const opts=lines.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join('');
+  document.getElementById('gc-mother').innerHTML='<option value="">Selecciona...</option>'+opts;
+  document.getElementById('gc-father').innerHTML='<option value="">Selecciona...</option>'+opts;
+  ['gc-name','gc-seeds','gc-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('gc-date').value=new Date().toISOString().split('T')[0];
+  ['gc-mother','gc-father'].forEach(sid=>{
+    document.getElementById(sid).onchange=()=>{
+      const mId=parseInt(document.getElementById('gc-mother').value)||null;
+      const fId=parseInt(document.getElementById('gc-father').value)||null;
+      const gen=document.getElementById('gc-gen').value;
+      if(mId&&fId){const m=lines.find(l=>l.id===mId),f=lines.find(l=>l.id===fId);if(m&&f)document.getElementById('gc-name').value=`${m.name} × ${f.name} ${gen}`;}
+    };
+  });
+  document.getElementById('modal-add-cross').classList.add('open');
+}
+
+function addGeneticCross(){
+  const name=document.getElementById('gc-name').value.trim();
+  if(!name){toast('Introdueix un nom');return;}
+  if(!S.geneticCrosses)S.geneticCrosses=[];
+  if(!S.nextGCId)S.nextGCId=1;
+  const cross={id:S.nextGCId++,name,
+    motherId:parseInt(document.getElementById('gc-mother').value)||null,
+    fatherId:parseInt(document.getElementById('gc-father').value)||null,
+    gen:document.getElementById('gc-gen').value,
+    date:document.getElementById('gc-date').value,
+    seeds:parseInt(document.getElementById('gc-seeds').value)||null,
+    notes:document.getElementById('gc-notes').value.trim(),
+    created:new Date().toISOString()};
+  S.geneticCrosses.push(cross);
+  save();closeModal('modal-add-cross');renderGenetics();updateGeneticsCount();
+  toast('Creuament registrat');
+}
+
+function updateCross(id,field,value){
+  const cr=(S.geneticCrosses||[]).find(x=>x.id===id);if(!cr)return;
+  cr[field]=value;save();renderGenetics();toast('Guardat');
+}
+
+function deleteGeneticCross(id){
+  if(!confirm('Eliminar aquest creuament?'))return;
+  S.geneticCrosses=(S.geneticCrosses||[]).filter(x=>x.id!==id);
+  save();closePanel();renderGenetics();toast('Creuament eliminat');
+}
+
+function closeModal(id){document.getElementById(id)?.classList.remove('open');}
+
+
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(m){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='tos';t.textContent=m;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
 
