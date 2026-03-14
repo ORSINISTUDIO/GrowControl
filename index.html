@@ -860,12 +860,12 @@ function renderCard(p){
   const dip2=p.phaseStart?Math.floor((Date.now()-new Date(p.phaseStart).getTime())/86400000):0;
   const alert=p.phase==='flor'&&p.florDays&&(p.florDays-dip2)<=14&&(p.florDays-dip2)>=0;
   // Tooltip complet
-  const tip=`${esc(p.name)}${p.strain?' · '+p.strain:''}${p.florDays&&p.phase==='flor'?' · '+(p.florDays-dip2)+'d collita':''}`;
+  const tip=`${esc(p.name||p.strain||"#"+p.id)}${p.strain?' · '+p.strain:''}${p.florDays&&p.phase==='flor'?' · '+(p.florDays-dip2)+'d collita':''}`;
   return`<div class="pc2" onclick="openPlant(${p.id})" title="${tip}" style="background:${c.bg};border-color:${c.bd}">
     ${alert?'<div class="padot"></div>':''}
     <div class="psdot" style="background:${hc}"></div>
     ${pSVG(p.phase,c.tx,26)}
-    <div class="pid" style="color:${c.tx}">#${pad(p.id)}</div>
+    <div class="pid" style="color:${c.tx}">${p.name?esc(p.name):'#'+pad(p.id)}</div>
   </div>`;
 }
 
@@ -961,7 +961,7 @@ function openPlant(id){
   if(openPId!==id)activeWeek=null;openPId=id;
   const ph=(p.env==='indoor'?PI:PO).find(x=>x.id===p.phase)||PI[0];
   const c=colFor(p.strain);
-  document.getElementById('panel-title').textContent=p.name;
+  document.getElementById('panel-title').textContent=p.name||('#'+pad(p.id));
   document.getElementById('panel-subtitle').textContent=`${ph.name} · ${p.env==='indoor'?'Indoor':'Outdoor'}${p.strain?' · '+p.strain:''}`;
   const started=p.phaseStart?new Date(p.phaseStart):null;
   const dip=started?Math.floor((Date.now()-started.getTime())/86400000):0;
@@ -2476,39 +2476,35 @@ function deleteGeneticCross(id){
 function iniciarPreHarvest(id){
   var p=S.plants.find(function(x){return x.id===id;});
   if(!p)return;
-  if(!confirm('Iniciar 24h foscor per '+p.name+'?'))return;
-  p.preHarvest=true;
-  p.preHarvestDate=new Date().toISOString();
+  if(!confirm('Iniciar 24h foscor per '+(p.name||'planta')+'?'))return;
+  p.preHarvest=true;p.preHarvestDate=new Date().toISOString();
   if(!p.log)p.log=[];
   p.log.push({type:'preharvest',date:new Date().toISOString(),detail:'Inici 24h foscor pre-collita'});
-  save();renderDash();openPlant(id);
-  toast('24h foscor iniciades');
+  save();renderDash();openPlant(id);toast('24h foscor iniciades');
 }
 function passarASecat(id){
   var p=S.plants.find(function(x){return x.id===id;});
   if(!p)return;
-  if(!confirm('Passar '+p.name+' a Secat?'))return;
-  if(!S.pcLots)S.pcLots=[];
-  if(!S.nextPCId)S.nextPCId=1;
+  if(!confirm('Passar '+(p.name||'planta')+' a Secat?'))return;
+  if(!S.pcLots)S.pcLots=[];if(!S.nextPCId)S.nextPCId=1;
   var d=new Date().toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'});
-  S.pcLots.push({id:S.nextPCId++,name:(p.strain||p.name)+' Collita '+d,
-    strain:p.strain||p.name,type:'secat',
+  S.pcLots.push({id:S.nextPCId++,name:(p.strain||p.name||'Planta')+' Collita '+d,
+    strain:p.strain||p.name||'',type:'secat',
     startDate:new Date().toISOString().split('T')[0],days:14,weight:null,
     notes:'Procedent de '+(p.env==='indoor'?'Indoor':'Outdoor'),
-    log:[{type:'inici',date:new Date().toISOString(),detail:'Collita de '+p.name}]});
+    log:[{type:'inici',date:new Date().toISOString(),detail:'Collita de '+(p.name||'planta')}]});
   S.plants=S.plants.filter(function(x){return x.id!==id;});
-  save();closePanel();renderDash();
-  toast('Lot de secat creat a Post-Collita');
+  save();closePanel();renderDash();toast('Lot de secat creat a Post-Collita');
 }
 function passarAOutdoor(id){
   var p=S.plants.find(function(x){return x.id===id;});
   if(!p)return;
-  if(!confirm('Passar '+p.name+' a Outdoor?'))return;
+  if(!confirm('Passar '+(p.name||'planta')+' a Outdoor?'))return;
   p.env='outdoor';p.phase='flor';
   if(!p.log)p.log=[];
   p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Indoor a Outdoor'});
   save();closePanel();curEnv='outdoor';showScr('dashboard');renderDash();
-  toast(p.name+' passada a Outdoor');
+  toast((p.name||'Planta')+' passada a Outdoor');
 }
 function passarAIndoor(id){
   var p=S.plants.find(function(x){return x.id===id;});
@@ -2519,10 +2515,10 @@ function passarAIndoor(id){
   mo.className='mo open';mo.id='modal-to-indoor';
   var html='<div class="md" style="max-width:380px;">';
   html+='<div class="mh"><div class="mt">Passar a Indoor</div></div>';
-  html+='<div class="mb"><p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>'+esc(p.name)+'</strong></p>';
-  html+='<div class="fld"><label>Fase destí</label><select id="indoor-dest-phase">';
-  html+='<option value="veg">Vegetatiu</option><option value="flor">Floració</option>';
-  html+='<option value="mare">Mares</option><option value="clon">Clonació</option>';
+  html+='<div class="mb"><p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>'+esc(p.name||'#'+p.id)+'</strong></p>';
+  html+='<div class="fld"><label>Fase desti</label><select id="indoor-dest-phase">';
+  html+='<option value="veg">Vegetatiu</option><option value="flor">Floracio</option>';
+  html+='<option value="mare">Mares</option><option value="clon">Clonacio</option>';
   html+='</select></div></div>';
   html+='<div class="mf"><button class="btn btn-g" onclick="this.closest(\'.mo\').remove()">Cancel·lar</button>';
   html+='<button class="btn btn-p" onclick="confirmarPassarAIndoor('+id+')">Confirmar</button></div></div>';
@@ -2540,7 +2536,7 @@ function confirmarPassarAIndoor(id){
   if(!p.log)p.log=[];
   p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Outdoor a Indoor '+phase});
   save();closePanel();curEnv='indoor';showScr('dashboard');renderDash();
-  toast(p.name+' passada a Indoor');
+  toast((p.name||'Planta')+' passada a Indoor');
 }
 function closeModal(id){document.getElementById(id)?.classList.remove('open');}
 
