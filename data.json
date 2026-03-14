@@ -103,7 +103,7 @@
     {
       "id": 5,
       "env": "indoor",
-      "name": "WT01",
+      "name": "Sc01",
       "strain": "WIZRD TREES ?",
       "phase": "veg",
       "phaseStart": "2025-11-09",
