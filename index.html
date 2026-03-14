@@ -784,16 +784,6 @@ function updateCounts(){
 
 // DASHBOARD
 function renderDash(){
-  // Normalize plant data from GitHub (fix any env/phase inconsistencies)
-  S.plants.forEach(function(p){
-    if(!p.env)p.env='indoor';
-    if(!p.phase)p.phase='veg';
-    if(p.env!=='indoor'&&p.env!=='outdoor')p.env='indoor';
-    var validIndoor=['germ','clon','veg','mare','flor'];
-    var validOutdoor=['flor'];
-    if(p.env==='indoor'&&validIndoor.indexOf(p.phase)===-1)p.phase='veg';
-    if(p.env==='outdoor'&&validOutdoor.indexOf(p.phase)===-1)p.phase='flor';
-  });
   rebuildGC();
   const phases=curEnv==='indoor'?PI:PO;
   const lbl=curEnv==='indoor'?'Indoor':'Outdoor';
@@ -801,7 +791,7 @@ function renderDash(){
   document.getElementById('dash-env-label').textContent=lbl;
   document.getElementById('dash-title').innerHTML=`Cultiu <strong>${lbl}</strong>`;
   document.getElementById('dash-date-el').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${new Date().toLocaleDateString('ca-ES',{weekday:'short',day:'numeric',month:'long'})}`;
-  document.getElementById('dash-total-plants').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${ep.length} planta${ep.length!==1?'s':''}`;
+  document.getElementById('dash-total-plants').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 21H5a2 2 0 01-2-2v-1a5 5 0 015-5h8a5 5 0 015 5v1a2 2 0 01-2 2h-4"/></svg>${ep.length} planta${ep.length!==1?'es':''}`;
   document.getElementById('stats-bar').innerHTML=phases.map(ph=>{const c=S.plants.filter(p=>p.env===curEnv&&p.phase===ph.id).length;return`<div class="si"><div class="sn" style="color:${ph.color}">${c}</div><div class="sl">${ph.name}</div></div>`;}).join('');
 
   // ---- E: Llegenda global de genètiques ----
@@ -2483,13 +2473,10 @@ function deleteGeneticCross(id){
   save();closePanel();renderGenetics();toast('Creuament eliminat');
 }
 
-function closeModal(id){document.getElementById(id)?.classList.remove('open');}
-
-
-
 function iniciarPreHarvest(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  if(!confirm('Iniciar 24h de foscor pre-collita per "'+p.name+'"?'))return;
+  var p=S.plants.find(function(x){return x.id===id;});
+  if(!p)return;
+  if(!confirm('Iniciar 24h foscor per '+p.name+'?'))return;
   p.preHarvest=true;
   p.preHarvestDate=new Date().toISOString();
   if(!p.log)p.log=[];
@@ -2497,75 +2484,66 @@ function iniciarPreHarvest(id){
   save();renderDash();openPlant(id);
   toast('24h foscor iniciades');
 }
-
 function passarASecat(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  if(!confirm('Passar "'+p.name+'" a Secat? Es creara un lot a Post-Collita.'))return;
+  var p=S.plants.find(function(x){return x.id===id;});
+  if(!p)return;
+  if(!confirm('Passar '+p.name+' a Secat?'))return;
   if(!S.pcLots)S.pcLots=[];
   if(!S.nextPCId)S.nextPCId=1;
   var d=new Date().toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'});
-  var lot={
-    id:S.nextPCId++,
-    name:(p.strain||p.name)+' Collita '+d,
+  S.pcLots.push({id:S.nextPCId++,name:(p.strain||p.name)+' Collita '+d,
     strain:p.strain||p.name,type:'secat',
     startDate:new Date().toISOString().split('T')[0],days:14,weight:null,
     notes:'Procedent de '+(p.env==='indoor'?'Indoor':'Outdoor'),
-    log:[{type:'inici',date:new Date().toISOString(),detail:'Collita de '+p.name}]
-  };
-  S.pcLots.push(lot);
-  S.plants=S.plants.filter(x=>x.id!==id);
+    log:[{type:'inici',date:new Date().toISOString(),detail:'Collita de '+p.name}]});
+  S.plants=S.plants.filter(function(x){return x.id!==id;});
   save();closePanel();renderDash();
   toast('Lot de secat creat a Post-Collita');
 }
-
 function passarAOutdoor(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  if(!confirm('Passar "'+p.name+'" a Outdoor?'))return;
+  var p=S.plants.find(function(x){return x.id===id;});
+  if(!p)return;
+  if(!confirm('Passar '+p.name+' a Outdoor?'))return;
   p.env='outdoor';p.phase='flor';
   if(!p.log)p.log=[];
   p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Indoor a Outdoor'});
   save();closePanel();curEnv='outdoor';showScr('dashboard');renderDash();
   toast(p.name+' passada a Outdoor');
 }
-
 function passarAIndoor(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  var p=S.plants.find(function(x){return x.id===id;});
+  if(!p)return;
   var existing=document.getElementById('modal-to-indoor');
   if(existing)existing.remove();
   var mo=document.createElement('div');
-  mo.className='mo open';
-  mo.id='modal-to-indoor';
-  mo.innerHTML=[
-    '<div class="md" style="max-width:380px;">',
-    '<div class="mh"><div class="mt">Passar a Indoor</div></div>',
-    '<div class="mb">',
-    '<p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>'+esc(p.name)+'</strong></p>',
-    '<div class="fld"><label>Fase de desti</label>',
-    '<select id="indoor-dest-phase">',
-    '<option value="veg">Vegetatiu</option>',
-    '<option value="flor">Floracio</option>',
-    '<option value="mare">Mares</option>',
-    '<option value="clon">Clonacio</option>',
-    '</select></div></div>',
-    '<div class="mf">',
-    '<button class="btn btn-g" onclick="this.closest(\'.mo\').remove()">Cancel·lar</button>',
-    '<button class="btn btn-p" onclick="confirmarPassarAIndoor('+id+')">Confirmar</button>',
-    '</div></div>'
-  ].join('');
-  document.body.appendChild(mo);
+  mo.className='mo open';mo.id='modal-to-indoor';
+  var html='<div class="md" style="max-width:380px;">';
+  html+='<div class="mh"><div class="mt">Passar a Indoor</div></div>';
+  html+='<div class="mb"><p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>'+esc(p.name)+'</strong></p>';
+  html+='<div class="fld"><label>Fase destí</label><select id="indoor-dest-phase">';
+  html+='<option value="veg">Vegetatiu</option><option value="flor">Floració</option>';
+  html+='<option value="mare">Mares</option><option value="clon">Clonació</option>';
+  html+='</select></div></div>';
+  html+='<div class="mf"><button class="btn btn-g" onclick="this.closest(\'.mo\').remove()">Cancel·lar</button>';
+  html+='<button class="btn btn-p" onclick="confirmarPassarAIndoor('+id+')">Confirmar</button></div></div>';
+  mo.innerHTML=html;document.body.appendChild(mo);
 }
-
 function confirmarPassarAIndoor(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  var phase=document.getElementById('indoor-dest-phase').value||'veg';
-  document.getElementById('modal-to-indoor').remove();
+  var p=S.plants.find(function(x){return x.id===id;});
+  if(!p)return;
+  var sel=document.getElementById('indoor-dest-phase');
+  var phase=sel?sel.value:'veg';
+  var mo=document.getElementById('modal-to-indoor');
+  if(mo)mo.remove();
   p.env='indoor';p.phase=phase;
   p.phaseStart=new Date().toISOString().split('T')[0];
   if(!p.log)p.log=[];
-  p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Outdoor a Indoor fase '+phase});
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Outdoor a Indoor '+phase});
   save();closePanel();curEnv='indoor';showScr('dashboard');renderDash();
   toast(p.name+' passada a Indoor');
 }
+function closeModal(id){document.getElementById(id)?.classList.remove('open');}
+
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(m){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='tos';t.textContent=m;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
