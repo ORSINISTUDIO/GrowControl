@@ -252,33 +252,6 @@
       "hum": ""
     },
     {
-      "id": 14,
-      "env": "indoor",
-      "name": "HC03",
-      "strain": "HELLCAT",
-      "phase": "flor",
-      "phaseStart": "2026-01-09",
-      "notes": "",
-      "florDays": 63,
-      "health": "bo",
-      "log": [
-        {
-          "type": "preharvest",
-          "date": "2026-03-14T18:40:26.870Z",
-          "detail": "Inici 24h foscor pre-collita"
-        }
-      ],
-      "photos": [],
-      "substrate": "",
-      "potSize": "",
-      "ph": "",
-      "ec": "",
-      "temp": "",
-      "hum": "",
-      "preHarvest": true,
-      "preHarvestDate": "2026-03-14T18:40:26.870Z"
-    },
-    {
       "id": 15,
       "env": "indoor",
       "name": "HC04",
@@ -878,7 +851,24 @@
           "detail": "Collita de HC02"
         }
       ]
+    },
+    {
+      "id": 3,
+      "name": "HELLCAT Collita 14 de març del 2026",
+      "strain": "HELLCAT",
+      "type": "secat",
+      "startDate": "2026-03-14",
+      "days": 14,
+      "weight": null,
+      "notes": "Procedent de Indoor",
+      "log": [
+        {
+          "type": "inici",
+          "date": "2026-03-14T18:40:29.491Z",
+          "detail": "Collita de HC03"
+        }
+      ]
     }
   ],
-  "nextPCId": 3
+  "nextPCId": 4
 }
