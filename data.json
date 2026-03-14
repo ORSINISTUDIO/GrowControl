@@ -261,14 +261,22 @@
       "notes": "",
       "florDays": 63,
       "health": "bo",
-      "log": [],
+      "log": [
+        {
+          "type": "preharvest",
+          "date": "2026-03-14T18:40:26.870Z",
+          "detail": "Inici 24h foscor pre-collita"
+        }
+      ],
       "photos": [],
       "substrate": "",
       "potSize": "",
       "ph": "",
       "ec": "",
       "temp": "",
-      "hum": ""
+      "hum": "",
+      "preHarvest": true,
+      "preHarvestDate": "2026-03-14T18:40:26.870Z"
     },
     {
       "id": 15,
