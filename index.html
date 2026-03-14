@@ -1001,18 +1001,6 @@ function openPlant(id){
   } else if(p.phase==='flor'&&!p.florDays){
     fch=`<div class="ab info"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>Afegeix els dies estimats de floració per activar el comptador i rebre recomanacions.</span></div>`;
   }
-  // Pre-harvest block
-  if(p.preHarvest&&p.preHarvestDate){
-    const hrsElapsed=Math.floor((Date.now()-new Date(p.preHarvestDate).getTime())/3600000);
-    const hrsLeft=Math.max(0,24-hrsElapsed);
-    const done=hrsElapsed>=24;
-    fch+=`<div style="background:${done?'#f0fdf4':'#1a1a18'};border:1px solid ${done?'#86efac':'#1a1a18'};border-radius:10px;padding:14px;margin-bottom:0;">
-      <div style="font-size:10px;font-weight:600;color:${done?'#14532d':'rgba(255,255,255,.6)'};text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;">Protocol pre-collita</div>
-      <div style="font-size:20px;font-weight:600;color:${done?'#14532d':'#fff'};letter-spacing:-.5px;">${done?'Llest per collir':'Falten '+hrsLeft+'h de foscor'}</div>
-      <div style="font-size:12px;color:${done?'#166534':'rgba(255,255,255,.5)'};margin-top:3px;">${done?'24h completades — collir avui i crear lot de secat':'Mantenir foscor total fins completar les 24h'}</div>
-      ${!done?`<div style="height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:10px;overflow:hidden;"><div style="height:100%;width:${Math.min(100,Math.round(hrsElapsed/24*100))}%;background:rgba(255,255,255,.6);border-radius:2px;"></div></div>`:''}
-    </div>`;
-  }
   const inp=()=>`style="width:60px;padding:4px 8px;border:1px solid var(--bd);border-radius:6px;font-size:13px;font-family:'Geist',sans-serif;text-align:right"`;
   document.getElementById('panel-body').innerHTML=`
     <div class="phero" style="background:${c.bg};border-color:${c.bd}">${pSVG(p.phase,c.tx,80)}</div>
@@ -1049,10 +1037,10 @@ function openPlant(id){
     ${p.phase==='mare'?`<button class="btn" style="background:#ede9fe;color:#4c1d95;border:1px solid #c4b5fd;" onclick="clonarDeMare(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Clonar d'aquesta mare</button>`:''}
     ${p.phase==='clon'?`<button class="btn" style="background:#fee2e2;color:#991b1b;border:1px solid #fecaca;" onclick="mortClon(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Mort del clon</button>`:''}
     ${p.phase==='germ'?`<button class="btn" style="background:#f8f0ff;color:#6b21a8;border:1px solid #e9d5ff;" onclick="noGermina(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>No Germina (NG)</button>`:''}
-    ${p.phase==='flor'&&!p.preHarvest?`<button class="btn" style="background:#1a1a18;color:#fff;border:1px solid #1a1a18;" onclick="iniciarPreHarvest(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>24h Foscor pre-collita</button>`:''}
-    ${p.phase==='flor'&&p.preHarvest?`<button class="btn" style="background:#f0fdf4;color:#14532d;border:1px solid #86efac;" onclick="passarASecat(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Passar a Secat</button>`:''}
+    ${p.phase==='flor'&&!p.preHarvest?`<button class="btn" style="background:#1a1a18;color:#fff;" onclick="iniciarPreHarvest(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>24h Foscor pre-collita</button>`:''}
+    ${p.phase==='flor'&&p.preHarvest?`<button class="btn" style="background:#f0fdf4;color:#14532d;border:1px solid #86efac;" onclick="passarASecat(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Passar a Secat</button>`:''}
     ${p.env==='indoor'?`<button class="btn" style="background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;" onclick="passarAOutdoor(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Passar a Outdoor</button>`:''}
-    ${p.env==='outdoor'?`<button class="btn" style="background:#f0f9ff;color:#0c4a6e;border:1px solid #bae6fd;" onclick="passarAIndoor(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Passar a Indoor</button>`:''}
+    ${p.env==='outdoor'?`<button class="btn" style="background:#f0f9ff;color:#0c4a6e;border:1px solid #bae6fd;" onclick="passarAIndoor(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Passar a Indoor</button>`:''}
     ${p.env==='outdoor'?`<button class="btn" style="background:#ede9fe;color:#4c1d95;border:1px solid #c4b5fd;" onclick="clonarDeMare(${id})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg>Clonar</button>`:''}
   `;
   document.getElementById('panel-overlay').classList.add('open');
@@ -2047,89 +2035,6 @@ Respon en català. Sigues precís i pràctic, sense generalitats.`;
 }
 
 
-// ── 1) PRE-HARVEST: 24h foscor ───────────────────────────────────
-function iniciarPreHarvest(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  if(!confirm(`Iniciar 24h de foscor pre-collita per "${p.name}"?\n\nAixò atura el reg i registra l'inici del protocol de collita.`))return;
-  p.preHarvest=true;
-  p.preHarvestDate=new Date().toISOString();
-  if(!p.log)p.log=[];
-  p.log.push({type:'preharvest',date:new Date().toISOString(),detail:'Inici 24h foscor pre-collita — reg aturat'});
-  save();renderDash();openPlant(id);
-  toast('24h foscor iniciades');
-}
-
-function passarASecat(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  if(!confirm(`Passar "${p.name}" a Secat?\n\nLa planta s'arxivarà del cultiu actiu i es crearà un lot a Post-Collita.`))return;
-  if(!S.pcLots)S.pcLots=[];
-  if(!S.nextPCId)S.nextPCId=1;
-  const lot={
-    id:S.nextPCId++,
-    name:`${p.strain||p.name} · Collita ${new Date().toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'})}`,
-    strain:p.strain||p.name,type:'secat',
-    startDate:new Date().toISOString().split('T')[0],days:14,weight:null,
-    sourcePlantId:id,sourcePlantName:p.name,
-    notes:`Procedent de ${p.env==='indoor'?'Indoor':'Outdoor'} · ${p.florDays?p.florDays+'d estimats':''}`,
-    log:[{type:'inici',date:new Date().toISOString(),detail:`Collita de ${p.name}`}]
-  };
-  S.pcLots.push(lot);
-  if(!p.log)p.log=[];
-  p.log.push({type:'collita',date:new Date().toISOString(),detail:'Planta collida'});
-  S.plants=S.plants.filter(x=>x.id!==id);
-  save();closePanel();renderDash();
-  toast('Lot de secat creat a Post-Collita');
-}
-
-// ── 2) PASSAR A OUTDOOR ──────────────────────────────────────────
-function passarAOutdoor(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  if(!confirm(`Passar "${p.name}" a Outdoor?\n\nLa planta passarà a la zona exterior d'El Masnou.`))return;
-  p.env='outdoor';p.phase='flor';
-  if(!p.log)p.log=[];
-  p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Indoor → Outdoor (El Masnou)'});
-  save();closePanel();curEnv='outdoor';showScr('dashboard');renderDash();
-  toast(`${p.name} passada a Outdoor`);
-}
-
-// ── 3) PASSAR A INDOOR / CLONAR OUTDOOR ──────────────────────────
-function passarAIndoor(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  const mo=document.createElement('div');
-  mo.className='mo open';mo.id='modal-to-indoor';
-  mo.innerHTML=`<div class="md" style="max-width:380px;">
-    <div class="mh"><div class="mt">Passar a Indoor</div></div>
-    <div class="mb">
-      <p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>${esc(p.name)}</strong></p>
-      <div class="fld"><label>Fase de destí</label>
-        <select id="indoor-dest-phase">
-          <option value="veg">Vegetatiu</option>
-          <option value="flor">Floració</option>
-          <option value="mare">Mares</option>
-          <option value="clon">Clonació</option>
-        </select>
-      </div>
-    </div>
-    <div class="mf">
-      <button class="btn btn-g" onclick="document.getElementById('modal-to-indoor').remove()">Cancel·lar</button>
-      <button class="btn btn-p" onclick="confirmarPassarAIndoor(${id})">Confirmar</button>
-    </div>
-  </div>`;
-  document.body.appendChild(mo);
-}
-
-function confirmarPassarAIndoor(id){
-  const p=S.plants.find(x=>x.id===id);if(!p)return;
-  const phase=document.getElementById('indoor-dest-phase')?.value||'veg';
-  document.getElementById('modal-to-indoor')?.remove();
-  p.env='indoor';p.phase=phase;
-  p.phaseStart=new Date().toISOString().split('T')[0];
-  if(!p.log)p.log=[];
-  p.log.push({type:'fase',date:new Date().toISOString(),detail:`Trasllat Outdoor → Indoor · fase ${phase}`});
-  save();closePanel();curEnv='indoor';showScr('dashboard');renderDash();
-  toast(`${p.name} passada a Indoor`);
-}
-
 function passarAFloracio(id){
   const p=S.plants.find(x=>x.id===id);if(!p)return;
   if(!confirm(`Passar "${p.name}" a Floració?\nEs registrarà la data d'inici de fase.`))return;
@@ -2570,6 +2475,87 @@ function deleteGeneticCross(id){
 
 function closeModal(id){document.getElementById(id)?.classList.remove('open');}
 
+
+
+function iniciarPreHarvest(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm('Iniciar 24h de foscor pre-collita per "'+p.name+'"?'))return;
+  p.preHarvest=true;
+  p.preHarvestDate=new Date().toISOString();
+  if(!p.log)p.log=[];
+  p.log.push({type:'preharvest',date:new Date().toISOString(),detail:'Inici 24h foscor pre-collita'});
+  save();renderDash();openPlant(id);
+  toast('24h foscor iniciades');
+}
+
+function passarASecat(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm('Passar "'+p.name+'" a Secat? Es creara un lot a Post-Collita.'))return;
+  if(!S.pcLots)S.pcLots=[];
+  if(!S.nextPCId)S.nextPCId=1;
+  var d=new Date().toLocaleDateString('ca-ES',{day:'2-digit',month:'short',year:'numeric'});
+  var lot={
+    id:S.nextPCId++,
+    name:(p.strain||p.name)+' Collita '+d,
+    strain:p.strain||p.name,type:'secat',
+    startDate:new Date().toISOString().split('T')[0],days:14,weight:null,
+    notes:'Procedent de '+(p.env==='indoor'?'Indoor':'Outdoor'),
+    log:[{type:'inici',date:new Date().toISOString(),detail:'Collita de '+p.name}]
+  };
+  S.pcLots.push(lot);
+  S.plants=S.plants.filter(x=>x.id!==id);
+  save();closePanel();renderDash();
+  toast('Lot de secat creat a Post-Collita');
+}
+
+function passarAOutdoor(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  if(!confirm('Passar "'+p.name+'" a Outdoor?'))return;
+  p.env='outdoor';p.phase='flor';
+  if(!p.log)p.log=[];
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Indoor a Outdoor'});
+  save();closePanel();curEnv='outdoor';showScr('dashboard');renderDash();
+  toast(p.name+' passada a Outdoor');
+}
+
+function passarAIndoor(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  var existing=document.getElementById('modal-to-indoor');
+  if(existing)existing.remove();
+  var mo=document.createElement('div');
+  mo.className='mo open';
+  mo.id='modal-to-indoor';
+  mo.innerHTML=[
+    '<div class="md" style="max-width:380px;">',
+    '<div class="mh"><div class="mt">Passar a Indoor</div></div>',
+    '<div class="mb">',
+    '<p style="font-size:13px;color:var(--tx2);margin-bottom:14px;">Planta: <strong>'+esc(p.name)+'</strong></p>',
+    '<div class="fld"><label>Fase de desti</label>',
+    '<select id="indoor-dest-phase">',
+    '<option value="veg">Vegetatiu</option>',
+    '<option value="flor">Floracio</option>',
+    '<option value="mare">Mares</option>',
+    '<option value="clon">Clonacio</option>',
+    '</select></div></div>',
+    '<div class="mf">',
+    '<button class="btn btn-g" onclick="this.closest(\'.mo\').remove()">Cancel·lar</button>',
+    '<button class="btn btn-p" onclick="confirmarPassarAIndoor('+id+')">Confirmar</button>',
+    '</div></div>'
+  ].join('');
+  document.body.appendChild(mo);
+}
+
+function confirmarPassarAIndoor(id){
+  const p=S.plants.find(x=>x.id===id);if(!p)return;
+  var phase=document.getElementById('indoor-dest-phase').value||'veg';
+  document.getElementById('modal-to-indoor').remove();
+  p.env='indoor';p.phase=phase;
+  p.phaseStart=new Date().toISOString().split('T')[0];
+  if(!p.log)p.log=[];
+  p.log.push({type:'fase',date:new Date().toISOString(),detail:'Trasllat Outdoor a Indoor fase '+phase});
+  save();closePanel();curEnv='indoor';showScr('dashboard');renderDash();
+  toast(p.name+' passada a Indoor');
+}
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function toast(m){const c=document.getElementById('toasts');const t=document.createElement('div');t.className='tos';t.textContent=m;c.appendChild(t);setTimeout(()=>t.remove(),3000);}
