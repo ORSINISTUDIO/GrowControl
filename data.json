@@ -30,12 +30,18 @@
       "env": "indoor",
       "name": "HC08",
       "strain": "HELLCAT",
-      "phase": "veg",
-      "phaseStart": "2025-12-21",
+      "phase": "flor",
+      "phaseStart": "2026-03-14",
       "notes": "",
       "florDays": null,
       "health": "bo",
-      "log": [],
+      "log": [
+        {
+          "type": "fase",
+          "date": "2026-03-14T10:09:22.397Z",
+          "detail": "Canvi de fase: veg→flor"
+        }
+      ],
       "photos": [],
       "substrate": "",
       "potSize": "",
